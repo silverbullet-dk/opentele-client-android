@@ -32,7 +32,6 @@ public class TestDelayNode implements TestSkema {
         // wdn.setNextFail(end.getNodeName());
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("Delay");
         skema.setStartNode(dn.getNodeName());

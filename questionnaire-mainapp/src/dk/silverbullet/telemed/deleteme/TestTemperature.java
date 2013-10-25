@@ -36,7 +36,6 @@ public class TestTemperature implements TestSkema {
         tdn.setEndTime(endTime);
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("Mini");
         skema.setStartNode(tdn.getNodeName());

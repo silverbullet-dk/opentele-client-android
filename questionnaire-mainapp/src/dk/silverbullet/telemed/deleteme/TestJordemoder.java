@@ -400,7 +400,6 @@ public class TestJordemoder implements TestSkema {
         Skema skema = new Skema();
         skema.setStartNode(init.getNodeName());
         skema.setEndNode(end.getNodeName());
-        skema.setCron("cron");
         skema.setName("skema-navn");
         skema.setVersion("1.0");
 

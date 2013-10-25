@@ -1,17 +1,16 @@
 package dk.silverbullet.telemed.rest;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
+import android.util.Log;
+import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.rest.listener.UploadListener;
+import dk.silverbullet.telemed.utils.Util;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.util.Log;
-import dk.silverbullet.telemed.questionnaire.Questionnaire;
-import dk.silverbullet.telemed.rest.listener.UploadListener;
-import dk.silverbullet.telemed.utils.Util;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class PostQuestionnaireTask extends RetrieveTask {
     private final UploadListener uploadListener;

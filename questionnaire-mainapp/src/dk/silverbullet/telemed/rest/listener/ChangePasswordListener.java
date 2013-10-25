@@ -1,12 +1,9 @@
 package dk.silverbullet.telemed.rest.listener;
 
-public interface ChangePasswordListener extends Listener {
+import java.util.List;
 
-    void response(String response);
-
-    String getCurrentPassword();
-
-    String getPassword();
-
-    String getPasswordRepeat();
+public interface ChangePasswordListener {
+    void changePasswordSucceeded();
+    void changePasswordFailed(List<String> errorTexts);
+    void communicationError();
 }

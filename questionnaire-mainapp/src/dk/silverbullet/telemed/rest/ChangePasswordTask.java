@@ -1,7 +1,15 @@
 package dk.silverbullet.telemed.rest;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
+import android.os.AsyncTask;
+import dk.silverbullet.telemed.questionnaire.expression.Constant;
+import dk.silverbullet.telemed.rest.bean.ChangePasswordError;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -17,58 +25,80 @@ import dk.silverbullet.telemed.rest.bean.ChangePasswordResponse;
 import dk.silverbullet.telemed.rest.listener.ChangePasswordListener;
 import dk.silverbullet.telemed.utils.Util;
 
-public class ChangePasswordTask extends RetrieveTask {
-
+public class ChangePasswordTask extends AsyncTask<String, Void, ChangePasswordTask.Result> {
     private static final String TAG = Util.getTag(ChangePasswordTask.class);
-    public static final String CHANGE_PASSWORD_URL_PREFIX = "rest/password/update";
-    private final ChangePasswordListener changePasswordListener;
+    private static final String CHANGE_PASSWORD_URL_PREFIX = "rest/password/update";
 
-    public ChangePasswordTask(Questionnaire questionnaire, ChangePasswordListener changePasswordListener) {
+    static enum Result { SUCCESS, ERROR, COMMUNICATION_ERROR }
+
+    private final ChangePasswordListener changePasswordListener;
+    private final Questionnaire questionnaire;
+    private final String password;
+    private final String passwordRepeat;
+
+    private List<String> errorTexts;
+
+    public ChangePasswordTask(Questionnaire questionnaire, ChangePasswordListener changePasswordListener,
+                              String password, String passwordRepeat) {
         this.questionnaire = questionnaire;
         this.changePasswordListener = changePasswordListener;
+        this.password = password;
+        this.passwordRepeat = passwordRepeat;
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected Result doInBackground(String... params) {
         Log.d(TAG, "changePasswordListener....");
         ChangePasswordBean changePasswordBean = new ChangePasswordBean();
-        changePasswordBean.setCurrentPassword(changePasswordListener.getCurrentPassword());
-        changePasswordBean.setPassword(changePasswordListener.getPassword());
-        changePasswordBean.setPasswordRepeat(changePasswordListener.getPasswordRepeat());
+        changePasswordBean.setCurrentPassword(Util.getStringVariableValue(questionnaire, Util.VARIABLE_PASSWORD));
+        changePasswordBean.setPassword(password);
+        changePasswordBean.setPasswordRepeat(passwordRepeat);
 
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(Util.getServerUrl(questionnaire) + CHANGE_PASSWORD_URL_PREFIX);
-        Log.d(TAG, "Serverurl..:" + httppost.getURI());
-
-        httppost.setHeader("Content-type", "application/json");
-        httppost.setHeader("Accept", "application/json");
-        httppost.setHeader("X-Requested-With", "json");
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(Util.getServerUrl(questionnaire) + CHANGE_PASSWORD_URL_PREFIX);
+        Util.setHeaders(httpPost, questionnaire);
 
         try {
-            setHeaders(httppost);
-            httppost.setEntity(new StringEntity(new Gson().toJson(changePasswordBean), "UTF-8"));
+            httpPost.setEntity(new StringEntity(new Gson().toJson(changePasswordBean), "UTF-8"));
 
-            String schemaResponse = httpclient.execute(httppost, new BasicResponseHandler());
-            Log.d(TAG, "Response..:" + schemaResponse);
-            ChangePasswordResponse responseBean = new Gson().fromJson(schemaResponse, ChangePasswordResponse.class);
-
-            if (responseBean.getStatus().equals(ChangePasswordResponse.STATUS_ERROR)) {
-                // questionnaire.addVariable(new Variable<String>(Util.VARIABLE_REAL_NAME, loginBean.getFullName()));
+            HttpResponse response = httpClient.execute(httpPost);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                return Result.COMMUNICATION_ERROR;
             }
 
+            ChangePasswordResponse responseBean = new Gson().fromJson(new InputStreamReader(response.getEntity().getContent(), "UTF-8"), ChangePasswordResponse.class);
             Log.d(TAG, "Response..:" + responseBean);
 
-            return schemaResponse;
+            if (responseBean.isError()) {
+                errorTexts = new ArrayList<String>();
+                for (ChangePasswordError error : responseBean.getErrors()) {
+                    errorTexts.add(error.getError());
+                }
+                return Result.ERROR;
+            }
+
+            return Result.SUCCESS;
         } catch (IOException e) {
             Log.e(TAG, "Got exception", e);
-            changePasswordListener.sendError();
-
-            return "";
+            return Result.COMMUNICATION_ERROR;
         }
     }
 
     @Override
-    protected void onPostExecute(String result) {
-        changePasswordListener.response(result);
+    protected void onPostExecute(Result result) {
+        switch (result) {
+            case SUCCESS:
+                Util.setStringVariableValue(questionnaire, Util.VARIABLE_PASSWORD, password);
+                changePasswordListener.changePasswordSucceeded();
+                break;
+            case ERROR:
+                changePasswordListener.changePasswordFailed(errorTexts);
+                break;
+            case COMMUNICATION_ERROR:
+                changePasswordListener.communicationError();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown result: " + result);
+        }
     }
 }

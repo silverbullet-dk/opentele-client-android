@@ -42,7 +42,6 @@ public class TestSimple implements TestSkema {
         wdn.setEndTime(endTime);
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("Mini");
         skema.setStartNode(wdn.getNodeName());

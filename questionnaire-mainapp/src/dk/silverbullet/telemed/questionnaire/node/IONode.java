@@ -1,46 +1,27 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.view.ViewTreeObserver;
+import android.view.*;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
+import android.view.inputmethod.InputMethodManager;
+import android.widget.*;
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.MainQuestionnaire;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
-import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
-import dk.silverbullet.telemed.questionnaire.element.ClinicMessageBubbleElement;
-import dk.silverbullet.telemed.questionnaire.element.Element;
-import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
-import dk.silverbullet.telemed.questionnaire.element.PatientMessageBubbleElement;
-import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
-import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
+import dk.silverbullet.telemed.questionnaire.element.*;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -68,7 +49,6 @@ public class IONode extends Node {
     private LinearLayout innerLayout;
     private LinearLayout headerLayout;
     private FrameLayout menuFrame;
-    private boolean shouldShowVersionNumber;
 
     public IONode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
@@ -80,10 +60,6 @@ public class IONode extends Node {
         }
 
         elements.add(element);
-    }
-
-    public void addVersionNumber() {
-        shouldShowVersionNumber = true;
     }
 
     public void clearElements() {
@@ -98,6 +74,16 @@ public class IONode extends Node {
 
     protected void hideBackButton() {
         hideBackButton = true;
+    }
+
+    protected void showKeyboard(EditText editTextView) {
+        InputMethodManager imm = (InputMethodManager)questionnaire.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editTextView, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    protected void hideKeyboard(EditText editTextView) {
+        InputMethodManager imm = (InputMethodManager)questionnaire.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
     }
 
     @Override
@@ -205,10 +191,6 @@ public class IONode extends Node {
 
         }
 
-        if (shouldShowVersionNumber) {
-            addVersionNumberView();
-        }
-
         linkTopPanel(outerLayout);
 
         if (types.matches(".*M.*")) {
@@ -240,48 +222,40 @@ public class IONode extends Node {
         });
     }
 
-    private void addVersionNumberView() {
-        Activity activity = questionnaire.getActivity();
-
-        TextView versionTextView = new TextView(activity);
-        String versionText = activity.getString(R.string.client_version);
-
-        Variable<?> environment = getQuestionnaire().getValuePool().get(Util.SERVER_ENVIRONMENT);
-        if (environment != null) {
-            versionText = versionText + " - " + environment.evaluate();
-        }
-
-        versionTextView.setText(versionText);
-        outerLayout.addView(versionTextView, outerLayout.getChildCount() - 1);
-    }
-
-    protected void linkTopPanel(ViewGroup topBarParent) {
+    protected void linkTopPanel(View topBarParent) {
         topPanel = topBarParent.findViewById(R.id.top_panel);
 
-        if (getQuestionnaire().isLoggedIn() && !hideTopPanel) {
+        if (hideTopPanel) {
+            topPanel.setVisibility(View.GONE);
+        } else {
             TextView userId = (TextView) topBarParent.findViewById(R.id.user_id);
             userId.setText(questionnaire.getFullName());
 
-            Button back = (Button) topBarParent.findViewById(R.id.back);
+            final Button back = (Button) topBarParent.findViewById(R.id.back);
+            final Button menu = (Button) topBarParent.findViewById(R.id.main_menu);
+
             if (hideBackButton) {
                 back.setVisibility(View.GONE);
             } else {
                 back.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        IONode.this.getQuestionnaire().back();
+                        if (enterCalled) {
+                            IONode.this.getQuestionnaire().back();
+                        }
                     }
                 });
             }
 
-            Button menu = (Button) topBarParent.findViewById(R.id.main_menu);
             if (hideMenuButton) {
                 menu.setVisibility(View.GONE);
             } else {
                 menu.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        IONode.this.getQuestionnaire().setCurrentNode(MainQuestionnaire.getInstance().getMainMenu());
+                        if (enterCalled) {
+                            IONode.this.getQuestionnaire().setCurrentNode(MainQuestionnaire.getInstance().getMainMenu());
+                        }
                     }
                 });
             }
@@ -293,8 +267,6 @@ public class IONode extends Node {
                     logOut();
                 }
             });
-        } else {
-            topPanel.setVisibility(View.GONE);
         }
     }
 

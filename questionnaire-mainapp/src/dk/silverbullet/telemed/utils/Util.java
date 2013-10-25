@@ -1,17 +1,5 @@
 package dk.silverbullet.telemed.utils;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
-import java.util.TimeZone;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.SharedPreferences;
@@ -25,36 +13,35 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.Element;
 import dk.silverbullet.telemed.questionnaire.element.ElementAdapter;
-import dk.silverbullet.telemed.questionnaire.expression.Expression;
-import dk.silverbullet.telemed.questionnaire.expression.ExpressionInterfaceAdapter;
-import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
-import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.questionnaire.expression.VariableAdapter;
-import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
-import dk.silverbullet.telemed.questionnaire.expression.VariableNotDeclaredException;
-import dk.silverbullet.telemed.questionnaire.expression.VariableTypeMissing;
+import dk.silverbullet.telemed.questionnaire.expression.*;
 import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.questionnaire.node.NodeAdapter;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.auth.BasicScheme;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @SuppressLint("SimpleDateFormat")
 public final class Util {
 
     private static final String DEFAULT_SERVER_URL = "https://opentele-devel.silverbullet.dk/opentele-server/";
-    // private static final String DEFAULT_SERVER_URL = "https://teleskejby-devel.silverbullet.dk/teleskejby-server/";
-    // private static final String DEFAULT_SERVER_URL = "http://datamon-test.rn.dk:443/opentele-server/";
 
     @SuppressWarnings("unused")
     private static final String TAG = getTag(Util.class);
-
-    public static final String PREFS_NAME = "MyPrefsFile";
 
     public static final String VARIABLE_IS_LOGGED_IN = "VARIABLE_IS_LOGGED_IN";
     public static final String VARIABLE_CLIENT_SUPPORTED = "CLIENT_VERSION_SUPPORTED";
@@ -65,8 +52,6 @@ public final class Util {
     public static final String VARIABLE_SHOW_UPLOAD_DEBUG = "VARIABLE_SHOW_UPLOAD_DEBUG";
     public static final String VARIABLE_REAL_NAME = "VARIABLE_REAL_NAME";
     public static final String VARIABLE_USER_ID = "VARIABLE_USER_ID";
-    public static final String VARIABLE_CHANGE_PASSWORD = "VARIABLE_CHANGE_PASSWORD";
-    public static final String VARIABLE_CURRENT_PASSWORD = "VARIABLE_CURRENT_PASSWORD";
     public static final String VARIABLE_ALARM_TEST = "VARIABLE_ALARM_TEST";
     public static final String VARIABLE_MESSAGE_TEXT = "VARIABLE_MESSAGE_TEXT";
 
@@ -309,13 +294,19 @@ public final class Util {
         editor.commit();
     }
 
-    public static final String getStringVariableValue(Questionnaire questionnaire, String name) {
+    public static String getStringVariableValue(Questionnaire questionnaire, String name) {
         String result = null;
         Variable<?> variable = questionnaire.getValuePool().get(name);
-        if (null != variable && null != variable.getExpressionValue())
+        if (null != variable && null != variable.getExpressionValue()) {
             result = variable.getExpressionValue().toString();
+        }
 
         return result;
+    }
+
+    public static void setStringVariableValue(Questionnaire questionnaire, String name, String value) {
+        Variable<String> variable = (Variable<String>) questionnaire.getValuePool().get(name);
+        variable.setValue(value);
     }
 
     public static String toHexString(byte[] bytes) {
@@ -367,4 +358,34 @@ public final class Util {
         return new SimpleDateFormat("d/M HH:mm").format(date);
     }
 
+    public static void setHeaders(HttpRequestBase request, Questionnaire questionnaire) {
+        String clientVersion = questionnaire.getActivity().getString(R.string.client_version);
+        String userName = Util.getStringVariableValue(questionnaire, Util.VARIABLE_USERNAME);
+        String password = Util.getStringVariableValue(questionnaire, Util.VARIABLE_PASSWORD);
+
+        setHeaders(request, clientVersion, userName, password);
+    }
+
+    public static void setHeaders(HttpRequestBase request, String clientVersion, String userName, String password) {
+        request.setHeader("Content-type", "application/json");
+        request.setHeader("Accept", "application/json");
+        request.setHeader("X-Requested-With", "json");
+        request.setHeader("Client-version", clientVersion);
+
+        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(userName, password);
+        request.setHeader(BasicScheme.authenticate(credentials, "UTF-8", false));
+    }
+
+    public static String join(List<String> strings, String separator) {
+        StringBuilder builder = new StringBuilder();
+        boolean isFirst = true;
+        for (String s : strings) {
+            if (!isFirst) {
+                builder.append(separator);
+            }
+            isFirst = false;
+            builder.append(s);
+        }
+        return builder.toString();
+    }
 }

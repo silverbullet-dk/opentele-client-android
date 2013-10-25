@@ -35,7 +35,6 @@ public class SetShowUploadDebugNodeSkema implements SkemaDef {
         setShow.setShowUploadDebugNode((Variable<Boolean>) showUploadDebugNode);
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("SERVERIP");
         skema.setStartNode(setShow.getNodeName());

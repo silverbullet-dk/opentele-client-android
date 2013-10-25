@@ -127,17 +127,4 @@ public class WebViewNode extends IONode {
     public void goBack() {
         webView.goBack();
     }
-
-    @Override
-    public void leave() {
-    }
-
-    @Override
-    public void linkNodes(Map<String, Node> map) throws UnknownNodeException {
-    }
-
-    @Override
-    public void linkVariables(Map<String, Variable<?>> map) throws VariableLinkFailedException {
-    }
-
 }

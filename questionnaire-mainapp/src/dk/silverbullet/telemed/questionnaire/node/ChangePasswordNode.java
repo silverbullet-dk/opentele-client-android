@@ -1,119 +1,129 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import android.graphics.Color;
+import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
-import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
-import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
-import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
-import dk.silverbullet.telemed.questionnaire.expression.Constant;
-import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
+import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.rest.ChangePasswordTask;
+import dk.silverbullet.telemed.rest.listener.ChangePasswordListener;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-public class ChangePasswordNode extends IONode {
+import java.util.List;
 
+public class ChangePasswordNode extends IONode implements ChangePasswordListener {
     private Node next;
 
-    private Variable<String> currentPassword;
-    private Variable<String> password;
-    private Variable<String> passwordRepeat;
-    private Variable<String> currentPasswordErrorText;
-    private Variable<String> passwordErrorText;
-    private Variable<String> passwordRepeatErrorText;
+    private View inProgressText;
+    private View form;
+    private EditText passwordInput;
+    private EditText passwordRepeatInput;
+    private TextView errorTextView;
 
     public ChangePasswordNode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
     }
 
+    public void setNext(Node next) {
+        this.next = next;
+    }
+
     @Override
     public void enter() {
-        Variable<?> chpass = questionnaire.getValuePool().get(Util.VARIABLE_CHANGE_PASSWORD);
-        if (null != chpass.getExpressionValue().getValue() && (Boolean) chpass.getExpressionValue().getValue())
-            hideMenuButton();
-
-        hideBackButton();
         setView();
-        questionnaire.clearStack();
         super.enter();
     }
 
-    public void setView() {
-        clearElements();
+    private void setView() {
+        ViewGroup rootLayout = questionnaire.getRootLayout();
+        LayoutInflater inflater = (LayoutInflater) questionnaire.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View changePasswordView = inflater.inflate(R.layout.change_password, rootLayout, false);
+        rootLayout.addView(changePasswordView);
 
-        addElement(new TextViewElement(this, "Skift adgangskode"));
+        linkTopPanel(changePasswordView);
 
-        addElement(new TextViewElement(this, "Aktuel adgangskode"));
-        EditTextElement ete = new EditTextElement(this);
-        ete.setOutputVariable(currentPassword);
-        ete.setPassword(true);
-        addElement(ete);
+        inProgressText = changePasswordView.findViewById(R.id.change_password_in_progress_text);
+        form = changePasswordView.findViewById(R.id.change_password_form);
+        passwordInput = (EditText) changePasswordView.findViewById(R.id.password_input);
+        passwordRepeatInput = (EditText) changePasswordView.findViewById(R.id.password_repeat_input);
+        errorTextView = (TextView) changePasswordView.findViewById(R.id.change_password_error_text);
 
-        if (null != currentPasswordErrorText && null != currentPasswordErrorText.getExpressionValue()
-                && !"null".equals(currentPasswordErrorText.getExpressionValue().toString().trim())) {
-            TextViewElement tve3 = new TextViewElement(this);
-            tve3.setColor(Color.RED);
-            tve3.setText(currentPasswordErrorText.getExpressionValue().toString());
-            addElement(tve3);
-        }
-
-        addElement(new TextViewElement(this, "Ny adgangskode"));
-        EditTextElement ete2 = new EditTextElement(this);
-        ete2.setOutputVariable(password);
-        ete2.setPassword(true);
-        addElement(ete2);
-
-        if (null != passwordErrorText && null != passwordErrorText.getExpressionValue()
-                && !"null".equals(passwordErrorText.getExpressionValue().toString().trim())) {
-            TextViewElement tve3 = new TextViewElement(this);
-            tve3.setColor(Color.RED);
-            tve3.setText(passwordErrorText.getExpressionValue().toString());
-            addElement(tve3);
-        }
-
-        addElement(new TextViewElement(this, "Gentag ny adgangskode"));
-        EditTextElement ete3 = new EditTextElement(this);
-        ete3.setOutputVariable(passwordRepeat);
-        ete3.setPassword(true);
-        addElement(ete3);
-
-        if (null != passwordRepeatErrorText && null != passwordRepeatErrorText.getExpressionValue()
-                && !"null".equals(passwordRepeatErrorText.getExpressionValue().toString().trim())) {
-            TextViewElement tve3 = new TextViewElement(this);
-            tve3.setColor(Color.RED);
-            tve3.setText(passwordRepeatErrorText.getExpressionValue().toString());
-            addElement(tve3);
-        }
-
-        ButtonElement be = new ButtonElement(this);
-        be.setText("Opdater");
-        be.setNextNode(getNext());
-        addElement(be);
-    }
-
-    @Override
-    public void linkVariables(Map<String, Variable<?>> map) throws VariableLinkFailedException {
-        currentPassword = Util.linkVariable(map, currentPassword);
-        currentPasswordErrorText = Util.linkVariable(map, currentPasswordErrorText);
-        password = Util.linkVariable(map, password);
-        passwordErrorText = Util.linkVariable(map, passwordErrorText);
-        passwordRepeat = Util.linkVariable(map, passwordRepeat);
-        passwordRepeatErrorText = Util.linkVariable(map, passwordRepeatErrorText);
-
-        super.linkVariables(map);
+        changePasswordOnButtonClick(changePasswordView);
+        clearErrorTextWhenFieldsAreChanged();
+        showKeyboard(passwordInput);
     }
 
     @Override
     public void leave() {
-        currentPasswordErrorText.setValue(new Constant<String>(""));
-        passwordErrorText.setValue(new Constant<String>(""));
-        passwordRepeatErrorText.setValue(new Constant<String>(""));
-
         super.leave();
+        hideKeyboard(passwordInput);
+    }
+
+    @Override
+    public void changePasswordFailed(List<String> errorTexts) {
+        errorTextView.setText(Util.join(errorTexts, "\n"));
+        showForm();
+    }
+
+    @Override
+    public void changePasswordSucceeded() {
+        getQuestionnaire().setCurrentNode(next);
+    }
+
+    @Override
+    public void communicationError() {
+        errorTextView.setText("Fejl ved kommunikation med serveren");
+        showForm();
+    }
+
+    private void showProgressText() {
+        form.setVisibility(View.GONE);
+        inProgressText.setVisibility(View.VISIBLE);
+    }
+
+    private void showForm() {
+        form.setVisibility(View.VISIBLE);
+        inProgressText.setVisibility(View.GONE);
+    }
+
+    private void changePasswordOnButtonClick(View changePasswordView) {
+        Button changePasswordButton = (Button) changePasswordView.findViewById(R.id.change_password_button);
+        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String password = passwordInput.getText().toString();
+                String passwordRepeat = passwordRepeatInput.getText().toString();
+
+                showProgressText();
+                new ChangePasswordTask(questionnaire, ChangePasswordNode.this, password, passwordRepeat).execute();
+            }
+        });
+    }
+
+    private void clearErrorTextWhenFieldsAreChanged() {
+        TextWatcher passwordAlteredListener = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                // Nothing to do
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                errorTextView.setText("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // Nothing to do
+            }
+        };
+        passwordInput.addTextChangedListener(passwordAlteredListener);
+        passwordRepeatInput.addTextChangedListener(passwordAlteredListener);
     }
 }

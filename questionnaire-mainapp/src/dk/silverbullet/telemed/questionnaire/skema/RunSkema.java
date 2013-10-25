@@ -69,7 +69,6 @@ public class RunSkema implements SkemaDef {
         ioSkemaMenuNode.setSkemaName(skemaName);
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("RUN-SKEMA");
         skema.setStartNode(ioSkemaMenuNode.getNodeName());

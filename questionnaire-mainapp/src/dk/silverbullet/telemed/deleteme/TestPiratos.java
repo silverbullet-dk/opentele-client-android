@@ -172,7 +172,6 @@ public class TestPiratos implements TestSkema {
         Skema skema = new Skema();
         skema.setStartNode(aeldreEnd18.getNodeName());
         skema.setEndNode(end.getNodeName());
-        skema.setCron("cron");
         skema.setName("skema-navn");
         skema.setVersion("1.0");
 

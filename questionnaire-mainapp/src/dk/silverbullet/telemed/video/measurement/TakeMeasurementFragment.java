@@ -3,33 +3,35 @@ package dk.silverbullet.telemed.video.measurement;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import dk.silverbullet.telemed.device.DeviceController;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
+import dk.silverbullet.telemed.device.andbloodpressure.AndBloodPressureController;
+import dk.silverbullet.telemed.device.andbloodpressure.BloodPressureAndPulse;
+import dk.silverbullet.telemed.device.continua.ContinuaListener;
+import dk.silverbullet.telemed.device.continua.android.AndroidHdpController;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMeasurement;
-import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMonitorController;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMonitorListener;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.VitalographLungMonitorController;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.utils.Util;
 import dk.silverbullet.telemed.video.VideoActivity;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-public class TakeMeasurementFragment extends Fragment implements LungMonitorListener {
+public class TakeMeasurementFragment extends Fragment implements LungMonitorListener, ContinuaListener<BloodPressureAndPulse> {
     private TextView statusText;
-    private LungMonitorController controller;
+    private DeviceController controller;
     private TextView measurementTypeText;
     private PendingMeasurementPoller pendingMeasurementPoller;
     private ViewGroup takeMeasurementViewGroup;
@@ -66,10 +68,14 @@ public class TakeMeasurementFragment extends Fragment implements LungMonitorList
 
     public void takeMeasurement(PendingMeasurement pendingMeasurement) {
         pendingMeasurementPoller.stop();
+        reveal();
+
         switch (pendingMeasurement.type) {
             case LUNG_FUNCTION:
-                reveal();
                 handleLungFunctionMeasurement();
+                break;
+            case BLOOD_PRESSURE:
+                handleBloodPressureMeasurement();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown measurement type: '" + pendingMeasurement.type + "'");
@@ -98,25 +104,50 @@ public class TakeMeasurementFragment extends Fragment implements LungMonitorList
         try {
             setMeasurementTypeText("Lungefunktion");
             setStatusText("Tænd for apparatet og udfør lungefunktionstest.");
-            controller = createController();
+            controller = createLungMonitorController();
         } catch (DeviceInitialisationException e) {
             setStatusText("Kunne ikke forbinde til lungefunktionsmåler.");
         }
     }
 
-    private LungMonitorController createController() throws DeviceInitialisationException {
+    private void handleBloodPressureMeasurement() {
+        try {
+            setMeasurementTypeText("Blodtryk og puls");
+            setStatusText("Tænd for apparatet og udfør blodtryksmåling");
+            controller = createBloodPressureController();
+        } catch (DeviceInitialisationException e) {
+            setStatusText("Kunne ikke forbinde til blodtryksmåler.");
+        }
+    }
+
+    private DeviceController createLungMonitorController() throws DeviceInitialisationException {
         return VitalographLungMonitorController.create(this);
     }
 
+    private DeviceController createBloodPressureController() throws DeviceInitialisationException {
+        return AndBloodPressureController.create(this, new AndroidHdpController(getActivity()));
+    }
+
     @Override
-    public void measurementReceived(String systemId, LungMeasurement measurement) {
+    public void measurementReceived(String deviceId, LungMeasurement measurement) {
         if (measurement.isGoodTest()) {
             setStatusText("Måling modtaget.");
             controller.close();
-            new SubmitMeasurementAndRestartPollingTask().execute(measurement);
+
+            DeviceIdAndMeasurement<LungMeasurement> deviceIdAndMeasurement = new DeviceIdAndMeasurement<LungMeasurement>(deviceId, measurement);
+            new SubmitLungMeasurementAndRestartPollingTask().execute(deviceIdAndMeasurement);
         } else {
             setStatusText("Dårlig måling modtaget. Prøv igen.");
         }
+    }
+
+    @Override
+    public void measurementReceived(String deviceId, BloodPressureAndPulse measurement) {
+        setStatusText("Måling modtaget.");
+        controller.close();
+
+        DeviceIdAndMeasurement<BloodPressureAndPulse> deviceIdAndMeasurement = new DeviceIdAndMeasurement<BloodPressureAndPulse>(deviceId, measurement);
+        new SubmitBloodPressureMeasurementAndRestartPollingTask().execute(deviceIdAndMeasurement);
     }
 
     private void restartPendingMeasurementPolling() {
@@ -126,7 +157,12 @@ public class TakeMeasurementFragment extends Fragment implements LungMonitorList
 
     @Override
     public void connected() {
-        setStatusText("Udfør lungefunktionstest.");
+        setStatusText("Udfør måling.");
+    }
+
+    @Override
+    public void disconnected() {
+        setStatusText("Afkoblet.");
     }
 
     @Override
@@ -136,7 +172,7 @@ public class TakeMeasurementFragment extends Fragment implements LungMonitorList
 
     @Override
     public void temporaryProblem() {
-        setStatusText("Kunne ikke hente data. Prøv evt. igen.");
+        setStatusText("Kunne ikke modtage data. Prøv evt. igen.");
     }
 
     private void setStatusText(final String text) {
@@ -157,15 +193,35 @@ public class TakeMeasurementFragment extends Fragment implements LungMonitorList
         });
     }
 
-    private class SubmitMeasurementAndRestartPollingTask extends AsyncTask<LungMeasurement, Void, Void> {
+    private class DeviceIdAndMeasurement<T> {
+        private final String deviceId;
+        private final T measurement;
+
+        public DeviceIdAndMeasurement(String deviceId, T measurement) {
+            this.deviceId = deviceId;
+            this.measurement = measurement;
+        }
+
+        public String getDeviceId() {
+            return deviceId;
+        }
+
+        public T getMeasurement() {
+            return measurement;
+        }
+    }
+
+    private abstract class SubmitMeasurementAndRestartPollingTask<T> extends AsyncTask<DeviceIdAndMeasurement<T>, Void, Void> {
+        private final String TAG = Util.getTag(SubmitMeasurementAndRestartPollingTask.class);
+
+        protected abstract String createJson(DeviceIdAndMeasurement<T> measurement);
 
         @Override
-        protected Void doInBackground(LungMeasurement... lungMeasurements) {
+        protected Void doInBackground(DeviceIdAndMeasurement<T>... measurements) {
             VideoActivity activity = (VideoActivity)getActivity();
-            LungMeasurement measurement = lungMeasurements[0];
-            String measurementJson = new MeasurementResult(measurement).toJson();
-
-            submitLungFunctionMeasurement(activity, measurementJson);
+            DeviceIdAndMeasurement<T> measurement = measurements[0];
+            String measurementJson = createJson(measurement);
+            submitMeasurement(activity, measurementJson);
 
             return null;
         }
@@ -176,12 +232,10 @@ public class TakeMeasurementFragment extends Fragment implements LungMonitorList
             hide();
         }
 
-
-        private void submitLungFunctionMeasurement(VideoActivity activity, String measurementJson) {
+        private void submitMeasurement(VideoActivity activity, String measurementJson) {
             DefaultHttpClient httpClient = new DefaultHttpClient();
             URL url;
             try {
-
                 String serverUrl = activity.getServerURL();
 
                 url = new URL(serverUrl);
@@ -191,24 +245,31 @@ public class TakeMeasurementFragment extends Fragment implements LungMonitorList
                 setHeaders(httpPost, activity);
 
                 httpClient.execute(httpPost, new BasicResponseHandler());
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (ClientProtocolException e) {
-                e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Could not submit measurement", e);
             }
         }
 
-        private void setHeaders(HttpRequestBase requestBase, VideoActivity activity) {
-            requestBase.setHeader("Content-type", "application/json");
-            requestBase.setHeader("Accept", "application/json");
-            requestBase.setHeader("X-Requested-With", "json");
-            requestBase.setHeader("Client-version", activity.getString(R.string.client_version));
+        private void setHeaders(HttpRequestBase request, VideoActivity activity) {
+            String clientVersion = activity.getString(R.string.client_version);
+            String userName = activity.getUsername();
+            String password = activity.getPassword();
 
-            UsernamePasswordCredentials creds = new UsernamePasswordCredentials(activity.getUsername(), activity.getPassword());
-            requestBase.setHeader(BasicScheme.authenticate(creds, "UTF-8", false));
+            Util.setHeaders(request, clientVersion, userName, password);
+        }
+    }
+
+    private class SubmitLungMeasurementAndRestartPollingTask extends SubmitMeasurementAndRestartPollingTask<LungMeasurement> {
+        @Override
+        protected String createJson(DeviceIdAndMeasurement<LungMeasurement> measurement) {
+            return new MeasurementResult(measurement.getDeviceId(), measurement.getMeasurement()).toJson();
+        }
+    }
+
+    private class SubmitBloodPressureMeasurementAndRestartPollingTask extends SubmitMeasurementAndRestartPollingTask<BloodPressureAndPulse> {
+        @Override
+        protected String createJson(DeviceIdAndMeasurement<BloodPressureAndPulse> measurement) {
+            return new MeasurementResult(measurement.getDeviceId(), measurement.getMeasurement()).toJson();
         }
     }
 }

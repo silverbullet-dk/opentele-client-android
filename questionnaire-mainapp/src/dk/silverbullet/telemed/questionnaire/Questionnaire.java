@@ -24,7 +24,6 @@ import dk.silverbullet.telemed.utils.Util;
 
 @Data
 public class Questionnaire {
-
     private static final String TAG = Util.getTag(Questionnaire.class);
 
     private boolean running;
@@ -116,10 +115,6 @@ public class Questionnaire {
         execute();
     }
 
-    public boolean isLoggedIn() {
-        return (Boolean) valuePool.get(Util.VARIABLE_IS_LOGGED_IN).getExpressionValue().getValue();
-    }
-
     public void back() {
         backPressed = true;
         if (getCurrentNode() == null) {
@@ -131,7 +126,7 @@ public class Questionnaire {
                     WebViewNode webViewNode = (WebViewNode) ioNodeStack.peek();
                     if (webViewNode.canGoBack()) {
                         webViewNode.goBack();
-                        setBackPressed(false);
+                        backPressed = false;
                         return;
                     }
                 }
@@ -155,7 +150,7 @@ public class Questionnaire {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void goBack() {
         Log.d(TAG, "goBack! stack size:" + ioNodeStack.size());
-        setBackPressed(false);
+        backPressed = false;
         if (ioNodeStack.isEmpty()) {
             Log.d(TAG, "Empty stack - terminating!");
             parentFragment.getActivity().finish();
@@ -197,8 +192,6 @@ public class Questionnaire {
 
         Variable<String> password = (Variable<String>) getValuePool().get(Util.VARIABLE_PASSWORD);
         password.setValue("");
-
-        ((Variable<Boolean>) getValuePool().get(Util.VARIABLE_CHANGE_PASSWORD)).setValue(Boolean.FALSE);
 
         MainQuestionnaire.getInstance().adviceActivityOfUserLogout();
 

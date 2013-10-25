@@ -38,7 +38,6 @@ public class TestBloodPressure implements TestSkema {
         bpdn.setNextFail(end.getNodeName());
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("Lokal :: Blodtryk");
         skema.setStartNode(bpdn.getNodeName());

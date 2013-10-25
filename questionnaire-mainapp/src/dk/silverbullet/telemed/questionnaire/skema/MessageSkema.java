@@ -67,7 +67,6 @@ public class MessageSkema implements SkemaDef {
         messageSendNode.setNext(messageListNode);
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("MESSAGE");
         skema.setStartNode(messageListNode.getNodeName());

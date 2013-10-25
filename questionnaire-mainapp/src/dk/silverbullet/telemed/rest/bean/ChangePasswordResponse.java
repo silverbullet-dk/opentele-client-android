@@ -9,15 +9,13 @@ import lombok.ToString;
 @Data
 @ToString
 public class ChangePasswordResponse implements Serializable {
-
     private static final long serialVersionUID = 4113350308594540656L;
-
-    public static final String STATUS_ERROR = "error";
+    private static final String STATUS_ERROR = "error";
 
     private String status;
     private List<ChangePasswordError> errors;
 
     public boolean isError() {
-        return null == status || STATUS_ERROR.equals(status) ? true : false;
+        return status == null || STATUS_ERROR.equals(status);
     }
 }

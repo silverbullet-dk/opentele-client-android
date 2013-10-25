@@ -3,9 +3,7 @@ package dk.silverbullet.telemed.questionnaire.element;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -46,7 +44,6 @@ public class EditTextElement extends Element {
     private boolean forMessageBody;
 
     private Integer decimals;
-    private EditTextChangedListener changedListener;
 
     public EditTextElement(final IONode node) {
         super(node);
@@ -131,8 +128,6 @@ public class EditTextElement extends Element {
                 }
             }
         }
-
-        setChangedListenerOnEditText();
         return editText;
     }
 
@@ -173,10 +168,6 @@ public class EditTextElement extends Element {
         return validates(editText.getText().toString(), outputVariable.getType(), decimals);
     }
 
-    public void addChangedListener(EditTextChangedListener listener) {
-        changedListener = listener;
-    }
-
     public static boolean validates(String text, Class<?> clazz, Integer decimals) {
         String trimmedText = text.trim();
 
@@ -211,26 +202,5 @@ public class EditTextElement extends Element {
         }
 
         return true;
-    }
-
-    private void setChangedListenerOnEditText() {
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Nothing to do
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Nothing to do
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (changedListener != null) {
-                    changedListener.textChanged();
-                }
-            }
-        });
     }
 }

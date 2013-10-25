@@ -52,8 +52,7 @@ public class IOMenuNode2 extends Node {
 
     public void getLocal(Variable<?> variable) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException, UnknownNodeException, VariableLinkFailedException {
-        Class<?> c = null;
-        c = Class.forName(variable.evaluate().toString());
+        Class<?> c = Class.forName(variable.evaluate().toString());
         SkemaDef ts = (SkemaDef) c.newInstance();
         skema = ts.getSkema(questionnaire);
     }

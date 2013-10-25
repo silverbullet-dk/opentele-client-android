@@ -41,7 +41,6 @@ public class SetAlarmSkema implements SkemaDef {
         setAlarmTestNode.setServerIP((Variable<String>) alarm);
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("ALARM_TEST");
         skema.setStartNode(setAlarmTestNode.getNodeName());

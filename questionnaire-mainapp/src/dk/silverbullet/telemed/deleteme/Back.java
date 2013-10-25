@@ -17,7 +17,6 @@ public class Back implements TestSkema {
         EndNode end = new EndNode(questionnaire, "End");
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("Mini");
         skema.setStartNode(end.getNodeName());

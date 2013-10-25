@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_gravity="center_horizontal"
+              android:background="#D9D5CC"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:padding="20dip">
+    <LinearLayout
+            android:id="@+id/header"
+            style="@style/background_style"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+
+        <TextView
+                android:id="@+id/headline"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textColor="#777"
+                android:textSize="48sp"
+                android:text="OpenTele"/>
+    </LinearLayout>
+
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  style="@style/background_style"
+                  android:layout_marginBottom="10dp"
+                  android:layout_marginTop="10dp">
+        <TextView
+                android:text="Logger ind..."
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#777"
+                android:textSize="36dp"
+                android:gravity="center_horizontal"
+                android:padding="20dp"
+                android:visibility="gone"
+                android:id="@+id/login_login_in_progress_text"
+                />
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:paddingTop="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:id="@+id/login_form">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1">
+                <TextView
+                        android:text="Brugernavn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#777"
+                        android:textSize="36dp"
+                        />
+
+                <EditText android:id="@+id/login_username_input"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="36dp"
+                          android:padding="20dp"
+                          android:singleLine="true"
+                          android:longClickable="false"
+                          android:inputType="textVisiblePassword"
+                          android:imeOptions="actionNext"
+                        >
+                    <requestFocus></requestFocus>
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    >
+                <TextView
+                        android:text="Adgangskode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#777"
+                        android:textSize="36sp"
+                        />
+                <EditText android:id="@+id/login_password_input"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="36dp"
+                          android:padding="20dp"
+                          android:singleLine="true"
+                          android:longClickable="false"
+                          android:inputType="textVisiblePassword"
+                          android:imeOptions="actionNone"
+                        />
+            </LinearLayout>
+
+            <Button style="@style/buttonstyle"
+                    android:text="Log ind"
+                    android:id="@+id/login_button"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:textSize="36dp"
+                    android:padding="20dp"/>
+        </LinearLayout>
+        <TextView android:id="@+id/login_error_text"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:textSize="36dp"
+                  android:paddingLeft="20dp"
+                  android:paddingRight="20dp"
+                  android:textColor="#FF0000"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="8dp"
+                android:paddingLeft="20dp"
+                android:id="@+id/login_debug_info"/>
+    </LinearLayout>
+</LinearLayout>

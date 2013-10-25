@@ -24,7 +24,7 @@ public class OutputSkema {
     @Expose
     private String date;
     @Expose
-    private Set<Variable<?>> output;
+    private Set<Variable<?>> output = new HashSet<Variable<?>>();
     @Expose
     private String PatientId;
     @Expose
@@ -35,9 +35,6 @@ public class OutputSkema {
     }
 
     public void addVariable(Variable<?> output) {
-        if (null == this.output)
-            this.output = new HashSet<Variable<?>>();
-
         this.output.add(output);
     }
 

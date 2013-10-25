@@ -19,7 +19,6 @@ public class PatientMeasurementSkema implements SkemaDef {
                 "Mine målinger");
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("PATIENT_MEASUREMENTS");
         skema.setStartNode(webViewNode.getNodeName());

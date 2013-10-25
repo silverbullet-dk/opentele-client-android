@@ -1,28 +1,39 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import dk.silverbullet.telemed.MainActivity;
+import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.rest.FillOutQuestionnaireWithUserDetailsTask;
+import dk.silverbullet.telemed.rest.listener.LoginListener;
+import dk.silverbullet.telemed.utils.Util;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import android.graphics.Color;
-import dk.silverbullet.telemed.questionnaire.Questionnaire;
-import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
-import dk.silverbullet.telemed.questionnaire.element.EditTextChangedListener;
-import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
-import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
-import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
-import dk.silverbullet.telemed.utils.Util;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class LoginNode extends IONode {
+public class LoginNode extends IONode implements LoginListener {
+    private static final String SHARED_PREFERENCES_LAST_USERNAME = "PREF_LAST_USERNAME";
     private Node next;
+    private Node changePasswordNode;
 
-    private Variable<String> userName;
-    private Variable<String> password;
-    private Variable<String> errorText;
-    private TextViewElement errorTextViewElement;
+    private View form;
+    private EditText passwordInput;
+    private EditText usernameInput;
+    private TextView errorTextView;
+    private Button loginButton;
+    private TextView loginInProgressTextView;
 
     public LoginNode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
@@ -35,69 +46,166 @@ public class LoginNode extends IONode {
         super.enter();
     }
 
-    public void setView() {
-        clearElements();
+    private void setView() {
+        View loginView = inflateView();
 
-        EditTextChangedListener listener = new EditTextChangedListener() {
+        loginInProgressTextView = (TextView) loginView.findViewById(R.id.login_login_in_progress_text);
+        form = loginView.findViewById(R.id.login_form);
+        usernameInput = (EditText) loginView.findViewById(R.id.login_username_input);
+        passwordInput = (EditText) loginView.findViewById(R.id.login_password_input);
+        errorTextView = (TextView) loginView.findViewById(R.id.login_error_text);
+        loginButton = (Button) loginView.findViewById(R.id.login_button);
+
+        showKeyboard(usernameInput);
+
+        TextWatcher textChangedListener = new TextWatcher() {
             @Override
-            public void textChanged() {
-                if (errorTextViewElement != null) {
-                    errorTextViewElement.setText("");
-                }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                errorTextView.setText("");
             }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
         };
 
-        addElement(new TextViewElement(this, getQuestionnaire().getActivity().getString(
-                dk.silverbullet.telemed.questionnaire.R.string.app_name)));
+        usernameInput.addTextChangedListener(textChangedListener);
+        passwordInput.addTextChangedListener(textChangedListener);
 
-        addElement(new TextViewElement(this, "Brugernavn"));
+        setLoginButtonListener();
+        showUpdatedNeededInfo();
+        setDebugInfo(loginView);
 
-        EditTextElement userNameEditTextElement = new EditTextElement(this);
-        userNameEditTextElement.setOutputVariable(userName);
-        userNameEditTextElement.addChangedListener(listener);
-        addElement(userNameEditTextElement);
+        prefillUsername();
+    }
 
-        addElement(new TextViewElement(this, "Adgangskode"));
-
-        EditTextElement passwordEditTextElement = new EditTextElement(this);
-        passwordEditTextElement.setOutputVariable(password);
-        passwordEditTextElement.setPassword(true);
-        passwordEditTextElement.addChangedListener(listener);
-        addElement(passwordEditTextElement);
-
-        if (null != errorText && null != errorText.getExpressionValue()
-                && !"null".equals(errorText.getExpressionValue().toString().trim())) {
-            errorTextViewElement = new TextViewElement(this);
-            errorTextViewElement.setColor(Color.RED);
-            errorTextViewElement.setText(errorText.getExpressionValue().toString());
-            addElement(errorTextViewElement);
+    private void prefillUsername() {
+        String lastUsedUsername = getSavedUsername();
+        if(lastUsedUsername != null) {
+            usernameInput.setText(lastUsedUsername);
+            passwordInput.requestFocus();
         }
+    }
 
-        @SuppressWarnings("unchecked")
-        Variable<String> messageText = (Variable<String>) getQuestionnaire().getValuePool().get(
-                Util.VARIABLE_MESSAGE_TEXT);
-        if (null != messageText && null != messageText.getExpressionValue()
-                && !"null".equals(messageText.getExpressionValue().toString().trim())) {
-            TextViewElement tve3 = new TextViewElement(this);
-            tve3.setColor(Color.GREEN);
-            tve3.setText(messageText.getExpressionValue().toString());
-            addElement(tve3);
+    private void setDebugInfo(View loginView) {
+        TextView debugInfo = (TextView) loginView.findViewById(R.id.login_debug_info);
+        MainActivity mainActivity = (MainActivity)questionnaire.getActivity();
+        String clientVersion = mainActivity.getResources().getString(R.string.client_version);
+        String serverUrl = mainActivity.getResources().getString(R.string.server_url);
+        boolean videoEnabled = mainActivity.clientIsVideoEnabled();
+
+        String debugText = String.format("Ver.: %s - url: %s - Video enabled: %s", clientVersion, serverUrl, videoEnabled);
+        debugInfo.setText(debugText);
+
+    }
+
+    private void setLoginButtonListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                doLogin();
+            }
+        });
+    }
+
+    private void hideLoginForm() {
+        form.setVisibility(View.GONE);
+        loginInProgressTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoginForm() {
+        form.setVisibility(View.VISIBLE);
+        loginInProgressTextView.setVisibility(View.GONE);
+
+        boolean isTryingWithPreviousUsername = getSavedUsername() != null && getSavedUsername().equalsIgnoreCase(usernameInput.getText().toString());
+        if (isTryingWithPreviousUsername) {
+            // If the user is logging in with the same user name as previously, but has entered the wrong password,
+            // then probably we want focus on the password input field
+            passwordInput.requestFocus();
         }
+    }
 
-        addVersionNumber();
+    private View inflateView() {
+        ViewGroup rootLayout = questionnaire.getRootLayout();
+        LayoutInflater inflater = (LayoutInflater) questionnaire.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View loginView = inflater.inflate(R.layout.login, rootLayout, false);
+        rootLayout.addView(loginView);
+        return loginView;
+    }
 
-        ButtonElement be = new ButtonElement(this);
-        be.setText("Login");
-        be.setNextNode(getNext());
-        addElement(be);
+    private void showUpdatedNeededInfo() {
+        Boolean clientSupported = (Boolean) questionnaire.getValuePool().get(Util.VARIABLE_CLIENT_SUPPORTED).getExpressionValue().getValue();
+
+        if(clientSupported != null && !clientSupported) {
+            showError("OpenTele skal opdateres inden du kan logge ind.");
+        }
+    }
+
+    private void doLogin() {
+        hideLoginForm();
+        new FillOutQuestionnaireWithUserDetailsTask(questionnaire, this).execute(usernameInput.getText().toString(), passwordInput.getText().toString());
+    }
+
+    private void showError(String errorText) {
+        errorTextView.setText(errorText);
     }
 
     @Override
-    public void linkVariables(Map<String, Variable<?>> map) throws VariableLinkFailedException {
-        errorText = Util.linkVariable(map, errorText);
-        password = Util.linkVariable(map, password);
-        userName = Util.linkVariable(map, userName);
+    public void loggedIn() {
+        saveUsername();
+        getQuestionnaire().setCurrentNode(next);
+    }
 
-        super.linkVariables(map);
+    @Override
+    public void loginFailed() {
+        clearPasswordText();
+        showLoginForm();
+        showError("Forkert brugernavn eller adgangskode.");
+    }
+
+    @Override
+    public void changePassword() {
+        saveUsername();
+        questionnaire.setCurrentNode(changePasswordNode);
+    }
+
+    @Override
+    public void accountLocked() {
+        clearPasswordText();
+        showLoginForm();
+        showError("Din konto er blevet låst. Henvend dig til din kontaktperson.");
+    }
+
+    @Override
+    public void sendError() {
+        showLoginForm();
+        showError("Fejl ved kommunikation med serveren.");
+    }
+
+    private void clearPasswordText() {
+        passwordInput.setText("");
+    }
+
+    @Override
+    public void leave() {
+        super.leave();
+        hideKeyboard(passwordInput);
+    }
+
+    private String getSavedUsername() {
+        Activity activity = questionnaire.getActivity();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        return preferences.getString(SHARED_PREFERENCES_LAST_USERNAME, null);
+    }
+
+    private void saveUsername() {
+        Activity activity = questionnaire.getActivity();
+        String username = Util.getStringVariableValue(questionnaire, Util.VARIABLE_USERNAME);
+
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
+        editor.putString(SHARED_PREFERENCES_LAST_USERNAME, username);
+        editor.commit();
     }
 }

@@ -36,7 +36,6 @@ public class SetServerIpSkema implements SkemaDef {
         setServerIpNode.setServerIP((Variable<String>) serverIP);
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("SERVERIP");
         skema.setStartNode(setServerIpNode.getNodeName());

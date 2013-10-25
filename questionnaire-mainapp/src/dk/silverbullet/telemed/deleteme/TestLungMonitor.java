@@ -43,7 +43,6 @@ public class TestLungMonitor implements TestSkema {
         lungMonitorDeviceNode.setNextFail(end.getNodeName());
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("Lungefunktion");
         skema.setStartNode(lungMonitorDeviceNode.getNodeName());

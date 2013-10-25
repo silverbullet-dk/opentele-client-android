@@ -141,7 +141,7 @@ public class MainActivity extends Activity implements QuestionnaireFragmentConta
     }
 
     @SuppressWarnings("rawtypes")
-    private boolean clientIsVideoEnabled() {
+    public boolean clientIsVideoEnabled() {
         try {
             this.getClassLoader().loadClass("dk.silverbullet.telemed.video.VideoProvider");
             return true;

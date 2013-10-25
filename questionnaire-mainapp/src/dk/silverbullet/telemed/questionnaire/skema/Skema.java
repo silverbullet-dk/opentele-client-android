@@ -27,8 +27,6 @@ public class Skema {
     @Expose
     private String version;
     @Expose
-    private String cron;
-    @Expose
     private String startNode;
     private Node startNodeNode;
 

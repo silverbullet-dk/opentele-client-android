@@ -57,7 +57,6 @@ public class TestRadioButtons implements TestSkema {
         ionode.addElement(be);
 
         Skema skema = new Skema();
-        skema.setCron(null);
         skema.setEndNode(end.getNodeName());
         skema.setName("Mini");
         skema.setStartNode(ionode.getNodeName());

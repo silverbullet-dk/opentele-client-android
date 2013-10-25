@@ -1,6 +1,7 @@
 */.classpath
 # /
 /x
+gen-external-apklibs/
 target
 bin
 gen
