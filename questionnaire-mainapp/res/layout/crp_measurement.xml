@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:background="#D9D5CC"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dip" >
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/top_panel" />
+
+    <LinearLayout
+        android:id="@+id/header"
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#777"
+            android:textSize="36sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1.0"
+        android:padding="0dip" >
+
+        <LinearLayout
+            android:id="@+id/inner"
+            style="@style/background_style"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dip" >
+
+           
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:padding="15dp" >
+ 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/under_5"
+                    android:textColor="#777"
+                    android:textSize="30sp"
+                    android:paddingRight="5dp" />
+
+                <CheckBox
+                    android:id="@+id/under_five"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30sp" /> <!-- textSize ensures propper vertical alignment -->
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="eller"
+                android:textColor="#777"
+                android:textSize="36sp"
+                 />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:padding="15dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/angiv_resultat_"
+                    android:textColor="#777"
+                    android:textSize="30sp"
+                    android:paddingRight="5dp" />
+
+                <EditText
+                    android:id="@+id/result"
+                    android:inputType="number"
+                    android:maxLength="9"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:textColor="#777" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/button_parent"
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+
+</LinearLayout>

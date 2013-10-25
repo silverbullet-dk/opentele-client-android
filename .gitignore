@@ -1,0 +1,12 @@
+*/.classpath
+# /
+/x
+target
+bin
+gen
+.idea
+.settings
+.DS_Store
+lint-results.xml
+*.iml
+out

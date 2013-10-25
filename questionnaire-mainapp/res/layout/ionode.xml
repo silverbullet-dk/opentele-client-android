@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:background="#D9D5CC"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dip" >
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/top_panel" />
+
+    <LinearLayout
+        android:id="@+id/header"
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:gravity="center_horizontal" />
+
+    <ScrollView
+        android:id="@+id/inner_ionode_scroll"
+        android:animationCache="true"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1.0"
+        android:padding="0dip" >
+
+        <LinearLayout
+            android:id="@+id/inner_ionode"
+            style="@style/background_style"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:padding="20dip"
+            />
+    </ScrollView>
+
+</LinearLayout>

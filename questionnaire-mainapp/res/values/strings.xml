@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="server_url">${server.url}</string>
+    <string name="server_url_locked">${server.url.locked}</string>
+    <string name="client_version">${version}</string>
+    <string name="skip_version_check">${skipVersionCheck}</string>
+    <string name="hello">Hello World, QuestionnaireActivity!</string>
+    <string name="app_name">OpenTele</string>
+    <string name="ok">OK</string>
+    <string name="monica_device">Monica device</string>
+    <string name="textSize">36sp</string>
+    <string name="yellow">Gul (Y)</string>
+    <string name="black">Sort (B)</string>
+    <string name="green">Grøn (G)</string>
+    <string name="white">Hvid (W)</string>
+    <string name="orange">Orange (O)</string>
+    <string name="checking_version_headling">Kontrollerer programversion</string>
+    <string name="checking_version_detail">Kontrollerer om programmet er opdateret</string>
+    <string name="client_server_version_mismatch">Du kan ikke logge ind. Programmet skal opdateres. Kontakt din kontaktperson for hjælp.</string>
+    <string name="client_server_version_not_checked">Kunne ikke kontakte serveren for at kontrollere versionsnummer. Tjek netværksforbindelsen.</string>
+    <string name="client_server_version_connection_problem_title">Forbindelsesproblem</string>
+    <string name="client_server_version_connection_problem_body">Kunne ikke kontakte serveren. Tjek din netværksforbindelse og prøv igen.</string>
+    <string name="client_server_version_connection_problem_button">OK</string>
+    <string name="angiv_resultat_">Angiv resultat </string>
+    <string name="under_5"> &lt;5</string>
+    <string name="m_lingen_er_">Målingen er: </string>
+    </resources>

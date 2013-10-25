@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="#D9D5CC"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dip" >
+
+    <LinearLayout
+        android:id="@+id/header"
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:padding="10dip" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/monica_device"
+            android:textSize="36sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_margin="10dp"
+        android:layout_weight="1.0"
+        android:orientation="vertical"
+        android:padding="10dip" >
+
+        <TextView
+            android:id="@+id/progressStatusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text=""
+            android:textSize="36sp" />
+
+        <LinearLayout
+            android:id="@+id/userTimeSet"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:padding="10dip" >
+
+            <TextView
+                android:id="@+id/measureTimeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textSize="36sp" />
+
+            <SeekBar
+                android:id="@+id/measureTime"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:max="60" />
+        </LinearLayout>
+<!--         </LinearLayout>
+
+    <LinearLayout
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_margin="10dp"
+        android:layout_weight="1.0"
+        android:orientation="vertical"
+        android:padding="10dip" >
+ -->
+        <CheckBox
+            android:id="@+id/buttonOrange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:clickable="false"
+            android:text="@string/orange"
+            android:textColor="#F60"
+            android:textSize="36sp" />
+
+        <CheckBox
+            android:id="@+id/buttonWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:clickable="false"
+            android:shadowColor="#000"
+            android:shadowRadius="4.0"
+            android:text="@string/white"
+            android:textColor="#FFF"
+            android:textSize="36sp" />
+
+        <CheckBox
+            android:id="@+id/buttonGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:clickable="false"
+            android:text="@string/green"
+            android:textColor="#0F0"
+            android:textSize="36sp" />
+
+        <CheckBox
+            android:id="@+id/buttonBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:clickable="false"
+            android:shadowColor="#FFF"
+            android:shadowRadius="4.0"
+            android:text="@string/black"
+            android:textColor="#000"
+            android:textSize="36sp" />
+
+        <CheckBox
+            android:id="@+id/buttonYellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:clickable="false"
+            android:text="@string/yellow"
+            android:textColor="#FF0"
+            android:textSize="36sp" />
+        
+        <TextView
+            android:id="@+id/ceDisclaimerText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textSize="24sp"
+            android:text="Ovenstående indikatorer er kun vejledende. Det er altid måleapparatets indikatorer der er gældende!"
+             />
+        
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal" >
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ProgressBar
+                android:id="@+id/mainProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="textSize" type="id"/>
+    
+    <item name="message_accu_chek_connect_to_device" type="id"/>
+    <item name="message_accu_chek_find_diary" type="id"/>
+    <item name="message_handler_stop" type="id"/>
+    <item name="message_accu_chek_parse_diary" type="id"/>
+    
+    <item name="message_conference_poll_for_conference" type="id"/>
+    <item name="message_conference_join_room" type="id"/>
+    <item name="message_conference_quit_handler" type="id"/>
+
+    <item name="message_check_for_pending_measurement" type="id"/>
+    <item name="message_check_for_pending_measurement_quit" type="id"/>
+    
+    
+</resources>

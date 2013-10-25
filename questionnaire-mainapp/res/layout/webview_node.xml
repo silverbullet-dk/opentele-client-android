@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="#D9D5CC"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dip" >
+
+    <include layout="@layout/top_panel" />
+
+    <LinearLayout
+        android:id="@+id/header"
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+		android:gravity="center_horizontal"
+		android:layout_gravity="center_horizontal"
+        android:padding="10dip" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/headlineText"
+            android:gravity="center_horizontal"
+		    android:textColor="#777"
+		    android:textSize="48sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_margin="10dp"
+        android:layout_weight="1.0"
+        android:orientation="vertical"
+        android:padding="10dip" >
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+		/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#D9D5CC"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:padding="20dip">
+
+    <LinearLayout
+            android:id="@+id/header"
+            style="@style/background_style"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="10dip">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Video-konsultation"
+                android:textColor="#777"
+                android:textSize="36sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/mainContent"
+            style="@style/background_style"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="20dip">
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="bottom|center_horizontal"
+                  android:text="Det er tid til din video-konsultation."
+                  android:textColor="#777"
+                  android:textSize="36sp"
+                  android:layout_weight="1"
+                />
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="top|center_horizontal"
+                  android:text="Tryk på OK-knappen for at starte konsultationen."
+                  android:textColor="#777"
+                  android:textSize="36sp"
+                  android:layout_weight="1"
+                />
+    </LinearLayout>
+
+    <LinearLayout
+            style="@layout/framestyle"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/frameshape"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="300dp"
+            android:paddingRight="300dp"
+            android:paddingTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:id="@+id/accept_call_button"
+                style="@style/buttonstyle"
+                android:layout_width="fill_parent"
+                android:textSize="36sp"
+                android:text="OK"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:onClick="callAccepted"/>
+    </LinearLayout>
+</LinearLayout>

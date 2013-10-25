@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>dk.silverbullet.telemed</groupId>
+    <artifactId>questionnaire-parent</artifactId>
+    <version>1.10.0</version>
+    <packaging>pom</packaging>
+    <name>Questionnaire Projects Parent</name>
+	
+    <modules>
+        <module>video-common-interfaces</module>
+        <module>questionnaire-mainapp</module>
+        <module>questionnaire-test</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.8.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>android</artifactId>
+                <version>4.1.1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>android-test</artifactId>
+                <version>4.1.1.4</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+					<artifactId>android-maven-plugin</artifactId>
+					<version>3.6.0</version>
+					<configuration>
+						<zipalign>
+							<verbose>true</verbose>
+						</zipalign>
+						<attachJar>true</attachJar>
+						<deleteConflictingFiles>false</deleteConflictingFiles>
+						<undeployBeforeDeploy>false</undeployBeforeDeploy>
+						<attachSources>true</attachSources>
+						<extensions>true</extensions>
+					</configuration>
+					<executions>	
+					   <execution>
+                            <id>generate-sources</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>generate-sources</goal>
+                            </goals>
+                        </execution>					
+						<execution>
+							<id>alignApk</id>
+							<phase>package</phase>
+							<goals>
+								<goal>zipalign</goal>
+							</goals>
+						</execution>
+					</executions>
+					<extensions>true</extensions>
+				</plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

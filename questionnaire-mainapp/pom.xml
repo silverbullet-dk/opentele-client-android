@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>dk.silverbullet.telemed</groupId>
+		<artifactId>questionnaire-parent</artifactId>
+		<version>1.10.0</version>
+	</parent>
+
+	<artifactId>questionnaire-mainapp</artifactId>
+	<packaging>apk</packaging>
+
+	<properties>
+		<server.url>http://10.0.2.2:8080/opentele-server</server.url>
+		<server.url.locked>false</server.url.locked>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.6</java.version>
+		<maven-compiler-plugin.version>2.3.3</maven-compiler-plugin.version>
+		<android.sdk.version>4.0.0</android.sdk.version>
+		<androidannotations.version>2.3-SNAPSHOT</androidannotations.version>
+		<android-maven-plugin.version>3.3.2</android-maven-plugin.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>android</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>0.11.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok-api</artifactId>
+			<version>0.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2</version>
+			<scope>compile</scope>
+		</dependency>
+        <dependency>
+            <groupId>dk.silverbullet.telemed</groupId>
+            <artifactId>video-common-interfaces</artifactId>
+            <scope>compile</scope>
+            <version>1.10.0</version>
+        </dependency>
+	</dependencies>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<sourceDirectory>src</sourceDirectory>
+
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>res</directory>
+				<targetPath>${project.build.directory}/res</targetPath>
+			</resource>
+		</resources>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+					<artifactId>android-maven-plugin</artifactId>
+					<extensions>true</extensions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<configuration>
+					<resourceDirectory>${project.build.directory}/res</resourceDirectory>
+					<!-- <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile> 
+						<assetsDirectory>${project.basedir}/assets</assetsDirectory> <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory> -->
+					<sdk>
+						<platform>16</platform>
+					</sdk>
+					<undeployBeforeDeploy>true</undeployBeforeDeploy>
+				</configuration>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>calabash</id>
+			<properties>
+				<server.url>http://10.0.2.2:8080/opentele-server/</server.url>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<id>Calabash dry-run, to save time when fiddling with new features</id>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<phase>integration-test</phase>
+								<configuration>
+									<executable>calabash-android</executable>
+									<arguments>
+										<argument>run</argument>
+										<argument>target/questionnaire-mainapp.apk</argument>
+										<argument>--dry-run</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>Calabash for real</id>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<phase>integration-test</phase>
+								<configuration>
+									<executable>calabash-android</executable>
+									<arguments>
+										<argument>run</argument>
+										<argument>target/questionnaire-mainapp.apk</argument>
+										<argument>--format</argument>
+										<argument>junit</argument>
+										<argument>--out</argument>
+										<argument>target/calabash-junit-report/</argument>
+										<argument>--format</argument>
+										<argument>pretty</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<repositories>
+		<repository>
+			<id>build.silverbullet.dk</id>
+			<name>build.silverbullet.dk-releases</name>
+			<url>http://ci.silverbullet.dk/artifactory/ext-release-local</url>
+		</repository>
+	</repositories>
+</project>

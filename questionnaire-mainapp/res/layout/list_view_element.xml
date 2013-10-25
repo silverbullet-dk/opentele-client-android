@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list"
+    android:layout_width="0dip"
+    android:layout_height="fill_parent"
+    android:layout_weight="1" 
+    android:background="@drawable/menu_item_background"
+    android:cacheColorHint="#FFFFFF"
+    android:scrollingCache="true"
+    android:smoothScrollbar="true"
+    android:fadingEdge="vertical"
+    android:fadingEdgeLength="40dp"
+    />
