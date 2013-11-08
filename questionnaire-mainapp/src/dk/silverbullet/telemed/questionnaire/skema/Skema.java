@@ -1,31 +1,21 @@
 package dk.silverbullet.telemed.questionnaire.skema;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import lombok.Data;
-import lombok.ToString;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.node.EndNode;
 import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 
-@Data
-@ToString(exclude = { "startNodeNode", "endNodeNode", "output" })
+import java.util.*;
+
 public class Skema {
 
     @Expose
     private String name;
     @Expose
     private String version;
+
     @Expose
     private String startNode;
     private Node startNodeNode;
@@ -36,6 +26,7 @@ public class Skema {
 
     @Expose
     private List<Node> nodes;
+
     @Expose
     private Set<Variable<?>> output = new HashSet<Variable<?>>();
 
@@ -76,5 +67,49 @@ public class Skema {
             // element.setNode(ioNode);
             // }
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setStartNode(String startNode) {
+        this.startNode = startNode;
+    }
+
+    public void setEndNode(String endNode) {
+        this.endNode = endNode;
+    }
+
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
+    public String getEndNode() {
+        return endNode;
+    }
+
+    public String getStartNode() {
+        return startNode;
+    }
+
+    public Node getStartNodeNode() {
+        return startNodeNode;
+    }
+
+    public EndNode getEndNodeNode() {
+        return endNodeNode;
+    }
+
+    public Set<Variable<?>> getOutput() {
+        return output;
     }
 }

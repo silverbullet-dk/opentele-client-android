@@ -34,9 +34,7 @@ class PendingMeasurementPoller {
             @Override
             public void run() {
                 PendingMeasurement pendingMeasurement = checkForPendingMeasurement();
-                if (pendingMeasurement != null) {
-                    parentFragment.takeMeasurement(pendingMeasurement);
-                }
+                parentFragment.takeMeasurement(pendingMeasurement);
             }
         };
     }

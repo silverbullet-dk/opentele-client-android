@@ -1,12 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurement;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
@@ -17,6 +11,11 @@ import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class BloodSugarManualDeviceNode extends DeviceNode {
     private EditTextElement measurementElement;
@@ -78,7 +77,7 @@ public class BloodSugarManualDeviceNode extends DeviceNode {
         Date now = new Date();
 
         BloodSugarMeasurement measurement = new BloodSugarMeasurement();
-        measurement.setTimeOfMeasurement(now);
+        measurement.timeOfMeasurement = now;
         measurement.result = measurementVariable.evaluate();
         measurement.isBeforeMeal = beforeMealVariable.evaluate();
         measurement.isAfterMeal = afterMealVariable.evaluate();
@@ -87,8 +86,8 @@ public class BloodSugarManualDeviceNode extends DeviceNode {
         listOfMeasurements.add(measurement);
 
         BloodSugarMeasurements measurements = new BloodSugarMeasurements();
-        measurements.setTransferTime(now);
-        measurements.setMeasurements(listOfMeasurements);
+        measurements.transferTime = now;
+        measurements.measurements = listOfMeasurements;
 
         bloodSugarMeasurements.setValue(measurements);
     }

@@ -1,12 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.andweightscale.AndWeightScaleController;
 import dk.silverbullet.telemed.device.andweightscale.Weight;
@@ -22,8 +16,8 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class WeightDeviceNode extends DeviceNode implements ContinuaListener<Weight> {
     @Expose
     private Variable<Float> weight;

@@ -1,23 +1,18 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Expression;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class AssignmentNode<T> extends Node {
     @Expose
     private String next;
+
     private Node nextNode;
 
     @Expose
@@ -29,7 +24,7 @@ public class AssignmentNode<T> extends Node {
             Expression<T> expression) {
 
         this(questionnaire, nodeName, Variable, expression);
-        setNextNode(next);
+        this.nextNode = next;
     }
 
     public AssignmentNode(Questionnaire questionnaire, String nodeName, Variable<T> Variable, Expression<T> expression) {
@@ -41,7 +36,7 @@ public class AssignmentNode<T> extends Node {
     @Override
     public void enter() {
         variable.setValue(expression.evaluate());
-        questionnaire.setCurrentNode(getNextNode());
+        questionnaire.setCurrentNode(nextNode);
     }
 
     @Override
@@ -73,7 +68,15 @@ public class AssignmentNode<T> extends Node {
 
     @Override
     public String toString() {
-        return "AsignmentNode(\"" + getNodeName() + "\") -> " + getNextNode().getNodeName() + " " + getVariable() + "="
-                + getExpression();
+        return "AsignmentNode(\"" + getNodeName() + "\") -> " + nextNode.getNodeName() + " " + variable + "="
+                + expression;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

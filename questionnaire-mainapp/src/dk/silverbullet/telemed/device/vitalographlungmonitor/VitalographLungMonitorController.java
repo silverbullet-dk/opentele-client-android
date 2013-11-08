@@ -48,15 +48,13 @@ public class VitalographLungMonitorController extends Thread implements PacketRe
 
     @Override
     public void run() {
-        int retries = 0;
         running = true;
         packetCollector = new LungMonitorPacketCollector();
         packetCollector.setListener(this);
 
         try {
             while (running) {
-                sleep(Math.min(100 + retries * 500, 3000));
-                retries++;
+                sleep(3000);
                 Log.d(TAG, "Connecting...");
                 try {
                     socket = device.createInsecureRfcommSocketToServiceRecord(SERIAL_SERVICE_UUID);
@@ -75,7 +73,6 @@ public class VitalographLungMonitorController extends Thread implements PacketRe
                     Log.d(TAG, "Output opened, now start working!");
                     int read = inputStream.read();
                     packetCollector.reset();
-                    retries = 0;
                     while (read >= 0 && running) {
                         packetCollector.receive((byte) read);
                         read = inputStream.read();

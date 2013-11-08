@@ -26,12 +26,12 @@ public class RetrieveMessageListTask extends RetrieveTask {
     protected String doInBackground(String... params) {
         try {
             Log.d(TAG, "list...");
-            DefaultHttpClient httpclient = new DefaultHttpClient();
+            DefaultHttpClient httpClient = new DefaultHttpClient();
             URL url = new URL(Util.getServerUrl(questionnaire));
             HttpGet httpGet = new HttpGet(new URL(url, URL_PREFIX_LIST).toExternalForm());
             setHeaders(httpGet);
 
-            return httpclient.execute(httpGet, new BasicResponseHandler());
+            return httpClient.execute(httpGet, new BasicResponseHandler());
         } catch (IOException ioe) {
             messageListListener.sendError();
             return "";

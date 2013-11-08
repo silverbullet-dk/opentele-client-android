@@ -1,10 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Arrays;
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import android.content.Context;
 import dk.silverbullet.telemed.deleteme.TestBloodSugar;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
@@ -17,8 +12,9 @@ import dk.silverbullet.telemed.rest.bean.ReminderBean;
 import dk.silverbullet.telemed.schedule.ReminderService;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Arrays;
+import java.util.Map;
+
 public class SetAlarmTestNode extends IONode {
 
     private Variable<String> serverIP;
@@ -82,5 +78,13 @@ public class SetAlarmTestNode extends IONode {
     @Override
     public String toString() {
         return "SetServerIpNode";
+    }
+
+    public void setServerIP(Variable<String> serverIP) {
+        this.serverIP = serverIP;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

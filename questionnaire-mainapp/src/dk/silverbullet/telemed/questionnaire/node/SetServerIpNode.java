@@ -1,9 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
@@ -12,8 +8,8 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class SetServerIpNode extends IONode {
     private Variable<String> serverIP;
     private Node nextNode;
@@ -62,5 +58,13 @@ public class SetServerIpNode extends IONode {
     @Override
     public String toString() {
         return "SetServerIpNode";
+    }
+
+    public void setServerIP(Variable<String> serverIP) {
+        this.serverIP = serverIP;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

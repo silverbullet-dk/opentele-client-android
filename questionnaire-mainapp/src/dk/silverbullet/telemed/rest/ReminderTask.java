@@ -19,9 +19,8 @@ import dk.silverbullet.telemed.schedule.ReminderService;
 import dk.silverbullet.telemed.utils.Util;
 
 public class ReminderTask extends RetrieveTask {
-
     private static final String TAG = Util.getTag(ReminderTask.class);
-    public static final String REMINDER_URL_PREFIX = "rest/reminder/next";
+    private static final String REMINDER_URL_PREFIX = "rest/reminder/next";
 
     public ReminderTask(Questionnaire questionnaire) {
         this.questionnaire = questionnaire;
@@ -29,33 +28,23 @@ public class ReminderTask extends RetrieveTask {
 
     @Override
     protected String doInBackground(String... params) {
-        Log.d(TAG, "ReminderTask....");
-
-        DefaultHttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(Util.getServerUrl(questionnaire) + REMINDER_URL_PREFIX);
-        Log.d(TAG, "Serverurl..:" + httpget.getURI());
-
-        httpget.setHeader("Content-type", "application/json");
-        httpget.setHeader("Accept", "application/json");
-        httpget.setHeader("X-Requested-With", "json");
-
         try {
-            setHeaders(httpget);
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(Util.getServerUrl(questionnaire) + REMINDER_URL_PREFIX);
+            Util.setHeaders(httpGet, questionnaire);
 
-            String reminderResponse = httpclient.execute(httpget, new BasicResponseHandler());
-            Log.d(TAG, "Response..:" + reminderResponse);
+            String reminderResponse = httpClient.execute(httpGet, new BasicResponseHandler());
+            Log.d(TAG, "Upcoming reminders: " + reminderResponse);
 
             return reminderResponse;
         } catch (IOException e) {
-            Log.e(TAG, "Got exception", e);
+            Log.e(TAG, "Could not get upcoming reminders", e);
             return "";
         }
     }
 
     @Override
     protected void onPostExecute(String result) {
-        Log.d(TAG, "TODO....:" + result);
-
         ReminderBean[] reminderBeans;
         try {
             reminderBeans = new Gson().fromJson(result, ReminderBean[].class);

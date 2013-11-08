@@ -1,18 +1,9 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
-
 import com.google.gson.Gson;
-
 import dk.silverbullet.telemed.deleteme.TestSkema;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
@@ -27,19 +18,16 @@ import dk.silverbullet.telemed.rest.listener.SkemaListener;
 import dk.silverbullet.telemed.schedule.ReminderService;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class RunQuestionnaireNode extends Node implements SkemaListener {
 
     private static final String TAG = Util.getTag(RunQuestionnaireNode.class);
 
     private Node nextNode;
-    @Getter(AccessLevel.PUBLIC)
-    @Setter(AccessLevel.PUBLIC)
+
     private Variable<String> skemaName;
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private ProgressDialog dialog;
 
     private Skema skema;
@@ -161,5 +149,13 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
 
     private QuestionnairListBean deserializeQuestionnaire(String skemaName) {
         return new Gson().fromJson(skemaName, QuestionnairListBean.class);
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setSkemaName(Variable<String> skemaName) {
+        this.skemaName = skemaName;
     }
 }

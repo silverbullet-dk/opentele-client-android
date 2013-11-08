@@ -1,10 +1,5 @@
 package dk.silverbullet.telemed.rest.bean.message;
 
-import lombok.Data;
-import lombok.ToString;
-
-@Data
-@ToString
 public class MessageRead {
 
     private Long id;

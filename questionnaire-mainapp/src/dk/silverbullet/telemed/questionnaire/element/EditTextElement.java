@@ -16,19 +16,14 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.questionnaire.node.IONode;
 import dk.silverbullet.telemed.questionnaire.node.Node;
-import lombok.*;
-
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import static dk.silverbullet.telemed.utils.Util.linkVariable;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class EditTextElement extends Element {
     private static Pattern floatPattern = Pattern.compile("^\\d{1,6}(\\.\\d+)?");
 
-    @Setter
     @Expose
     private Variable<?> outputVariable;
 
@@ -36,11 +31,10 @@ public class EditTextElement extends Element {
     private CharSequence[] popupItems;
     private String[] popupValues;
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private EditText editText;
 
     private boolean password;
+
     private boolean forMessageBody;
 
     private Integer decimals;
@@ -202,5 +196,17 @@ public class EditTextElement extends Element {
         }
 
         return true;
+    }
+
+    public void setDecimals(Integer decimals) {
+        this.decimals = decimals;
+    }
+
+    public void setOutputVariable(Variable<?> outputVariable) {
+        this.outputVariable = outputVariable;
+    }
+
+    public void setForMessageBody(boolean forMessageBody) {
+        this.forMessageBody = forMessageBody;
     }
 }

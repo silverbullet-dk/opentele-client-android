@@ -91,11 +91,8 @@ public class MainActivity extends Activity implements QuestionnaireFragmentConta
     }
 
     private void startConferencePoller() {
-        String username = Util.getStringVariableValue(questionnaire, Util.VARIABLE_USERNAME);
-        String password = Util.getStringVariableValue(questionnaire, Util.VARIABLE_PASSWORD);
-
         if (clientIsVideoEnabled()) {
-            conferencePoller = new JoinConferencePoller(this, username, password);
+            conferencePoller = new JoinConferencePoller(this, questionnaire);
             conferencePoller.start();
         }
     }

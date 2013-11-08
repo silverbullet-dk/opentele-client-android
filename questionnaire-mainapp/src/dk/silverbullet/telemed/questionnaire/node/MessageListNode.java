@@ -1,20 +1,8 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.ProgressDialog;
 import android.util.Log;
-
 import com.google.gson.Gson;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -25,30 +13,22 @@ import dk.silverbullet.telemed.rest.RetrieveRecipientsTask;
 import dk.silverbullet.telemed.rest.bean.message.MessageItem;
 import dk.silverbullet.telemed.rest.bean.message.MessagePerson;
 import dk.silverbullet.telemed.rest.bean.message.MessageRecipient;
+import dk.silverbullet.telemed.rest.bean.message.Messages;
 import dk.silverbullet.telemed.rest.listener.MessageListListener;
 import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
 public class MessageListNode extends IONode implements MessageListListener, MessageWriteListener {
 
     private static final String TAG = Util.getTag(MessageListNode.class);
-
-    @Getter(AccessLevel.PUBLIC)
-    @Setter(AccessLevel.PUBLIC)
     private Node readMessagesNode;
-
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private Map<Long, String> departmentNameMap;
-
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private Map<Long, Integer> departmentMessageCountMap;
-
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private ProgressDialog dialog;
 
     private Variable<Long> departmentId;
@@ -132,20 +112,19 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
 
     @Override
     public void end(String result) {
-        if (null != result && !"".equals(result)) {
-            Log.d(TAG, result);
-            for (MessageItem msg : new Gson().fromJson(result, MessageItem[].class)) {
-                if (null == msg.getResult() && null == msg.getUnread()) {
-                    MessagePerson from = msg.getFrom();
-                    if (questionnaire.getUserId() != from.getId() && !msg.isRead()) {
-                        Long key = from.getId();
-                        if (departmentMessageCountMap.containsKey(key)) {
-                            departmentMessageCountMap.put(key, departmentMessageCountMap.get(key) + 1);
-                        }
-                    }
+        Log.d(TAG, result);
+        Messages messageResult = new Gson().fromJson(result, Messages.class);
+        for (MessageItem msg : messageResult.messages) {
+            MessagePerson from = msg.getFrom();
+            boolean fromDepartment = from.getType().equals("Department");
+            if (fromDepartment && !msg.isRead()) {
+                Long key = from.getId();
+                if (departmentMessageCountMap.containsKey(key)) {
+                    departmentMessageCountMap.put(key, departmentMessageCountMap.get(key) + 1);
                 }
             }
         }
+
         setView();
         createView();
         dialog.dismiss();
@@ -175,5 +154,16 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
 
             departmentNameMap2.setValue(departmentNameMap);
         }
+    }
+    public void setDepartmentId(Variable<Long> departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public void setDepartmentNameMap2(Variable<Map> departmentNameMap2) {
+        this.departmentNameMap2 = departmentNameMap2;
+    }
+
+    public void setReadMessagesNode(Node readMessagesNode) {
+        this.readMessagesNode = readMessagesNode;
     }
 }

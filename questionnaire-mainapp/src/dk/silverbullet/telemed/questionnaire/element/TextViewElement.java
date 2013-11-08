@@ -1,29 +1,20 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.node.IONode;
 import dk.silverbullet.telemed.questionnaire.node.Node;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class TextViewElement extends Element {
 
     @Expose
@@ -32,8 +23,6 @@ public class TextViewElement extends Element {
     @Expose
     private boolean header;
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private TextView textView;
 
     private int color;
@@ -99,5 +88,9 @@ public class TextViewElement extends Element {
     @Override
     public boolean validates() {
         return true;
+    }
+
+    public void setHeader(boolean header) {
+        this.header = header;
     }
 }

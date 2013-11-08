@@ -1,44 +1,28 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
+import android.app.ProgressDialog;
+import android.util.Log;
+import com.google.gson.Gson;
+import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
+import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
+import dk.silverbullet.telemed.questionnaire.expression.Variable;
+import dk.silverbullet.telemed.questionnaire.skema.*;
+import dk.silverbullet.telemed.rest.ReminderTask;
+import dk.silverbullet.telemed.rest.RetrieveMessageListTask;
+import dk.silverbullet.telemed.rest.RetrieveRecipientsTask;
+import dk.silverbullet.telemed.rest.bean.message.MessageRecipient;
+import dk.silverbullet.telemed.rest.bean.message.Messages;
+import dk.silverbullet.telemed.rest.listener.MessageListListener;
+import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
+import dk.silverbullet.telemed.utils.Util;
+
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import android.app.ProgressDialog;
-import android.util.Log;
-
-import com.google.gson.Gson;
-
-import dk.silverbullet.telemed.questionnaire.Questionnaire;
-import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
-import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
-import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.questionnaire.skema.ChangePasswordSkema;
-import dk.silverbullet.telemed.questionnaire.skema.MessageSkema;
-import dk.silverbullet.telemed.questionnaire.skema.PatientMeasurementSkema;
-import dk.silverbullet.telemed.questionnaire.skema.RunSkema;
-import dk.silverbullet.telemed.questionnaire.skema.SetAlarmSkema;
-import dk.silverbullet.telemed.questionnaire.skema.SetServerIpSkema;
-import dk.silverbullet.telemed.questionnaire.skema.SetShowUploadDebugNodeSkema;
-import dk.silverbullet.telemed.rest.ReminderTask;
-import dk.silverbullet.telemed.rest.RetrieveMessageListTask;
-import dk.silverbullet.telemed.rest.RetrieveRecipientsTask;
-import dk.silverbullet.telemed.rest.bean.message.MessageItem;
-import dk.silverbullet.telemed.rest.bean.message.MessagePerson;
-import dk.silverbullet.telemed.rest.bean.message.MessageRecipient;
-import dk.silverbullet.telemed.rest.listener.MessageListListener;
-import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
-import dk.silverbullet.telemed.utils.Util;
-
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class IOMenuNode extends IONode implements MessageListListener, MessageWriteListener {
 
     private static final String TAG = Util.getTag(IOMenuNode.class);
@@ -49,20 +33,12 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
     private Node nextNode;
     private Variable<String> menu;
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private Map<String, String> skemaer = new LinkedHashMap<String, String>();
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private Set<String> res = new HashSet<String>();
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private ProgressDialog dialog;
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private int unreadMessages = -1;
     private boolean showMessagesMenuItem = false;
 
@@ -92,7 +68,7 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
 
     @Override
     public String toString() {
-        return "IOMenuNode(\"" + getNodeName() + "\") -> \"" + getNextNode().getNodeName() + "\"";
+        return "IOMenuNode(\"" + getNodeName() + "\") -> \"" + nextNode.getNodeName() + "\"";
     }
 
     @Override
@@ -102,21 +78,13 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
 
     @Override
     public void end(String result) {
-        int msgCount = 0;
-        if (null != result && !"".equals(result)) {
-            Log.d(TAG, result);
-            for (MessageItem msg : new Gson().fromJson(result, MessageItem[].class)) {
-                if (null == msg.getResult() && null == msg.getUnread()) {
-                    MessagePerson from = msg.getFrom();
-                    if (questionnaire.getUserId() != from.getId() && !msg.isRead()) {
-                        msgCount++;
-                    }
-                }
-            }
-        }
+        Log.d(TAG, result);
+        Messages messages = new Gson().fromJson(result, Messages.class);
+        int numberOfUnreadMessages = messages.unread;
 
-        if (msgCount != unreadMessages) {
-            unreadMessages = msgCount;
+        boolean refreshGui = numberOfUnreadMessages != unreadMessages;
+        if (refreshGui) {
+            unreadMessages = numberOfUnreadMessages;
             buildView();
             createView();
         }
@@ -190,6 +158,14 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
                 dialog.dismiss();
             }
         }
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setMenu(Variable<String> menu) {
+        this.menu = menu;
     }
 
 }

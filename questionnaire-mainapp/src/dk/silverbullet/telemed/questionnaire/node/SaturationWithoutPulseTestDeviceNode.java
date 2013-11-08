@@ -8,13 +8,9 @@ import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class SaturationWithoutPulseTestDeviceNode extends DeviceNode {
 
     @SuppressWarnings("unused")

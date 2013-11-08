@@ -1,9 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.CheckBoxElement;
@@ -12,10 +8,9 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-public class SetShowUploadDebugNode extends IONode {
+import java.util.Map;
 
+public class SetShowUploadDebugNode extends IONode {
     private Variable<Boolean> showUploadDebugNode;
     private Node nextNode;
 
@@ -64,5 +59,13 @@ public class SetShowUploadDebugNode extends IONode {
     @Override
     public String toString() {
         return "SetShowUploadDebugNode";
+    }
+
+    public void setShowUploadDebugNode(Variable<Boolean> showUploadDebugNode) {
+        this.showUploadDebugNode = showUploadDebugNode;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

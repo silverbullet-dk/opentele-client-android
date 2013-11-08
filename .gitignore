@@ -11,3 +11,5 @@ gen
 lint-results.xml
 *.iml
 out
+project.properties
+questionnaire-mainapp/project.properties

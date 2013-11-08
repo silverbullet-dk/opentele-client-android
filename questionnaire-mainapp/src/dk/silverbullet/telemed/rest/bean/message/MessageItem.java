@@ -1,14 +1,6 @@
 package dk.silverbullet.telemed.rest.bean.message;
 
-import lombok.Data;
-
-@Data
 public class MessageItem {
-
-    private String result;
-
-    private Integer unread;
-
     private Long id;
     private String title;
     private String text;
@@ -17,4 +9,34 @@ public class MessageItem {
     private boolean isRead;
     private String sendDate;
     private String readDate;
+
+
+    public String getSendDate() {
+        return sendDate;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public MessagePerson getTo() {
+        return to;
+    }
+
+    public MessagePerson getFrom() {
+        return from;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
 }

@@ -1,12 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.continua.ContinuaDeviceController;
 import dk.silverbullet.telemed.device.continua.ContinuaListener;
@@ -21,11 +15,12 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class SaturationDeviceNode extends DeviceNode implements ContinuaListener<SaturationAndPulse> {
     @Expose
     private Variable<Integer> saturation;
+
     @Expose
     private Variable<Integer> pulse;
     @Expose
@@ -134,5 +129,13 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
                 statusElement.setText(statusText);
             }
         });
+    }
+
+    public void setSaturation(Variable<Integer> saturation) {
+        this.saturation = saturation;
+    }
+
+    public void setPulse(Variable<Integer> pulse) {
+        this.pulse = pulse;
     }
 }

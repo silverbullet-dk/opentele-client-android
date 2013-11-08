@@ -1,11 +1,15 @@
 package dk.silverbullet.telemed.rest.bean;
 
-import java.util.List;
-
-import lombok.Data;
 import dk.silverbullet.telemed.schedule.bean.QuestionnaireSchedule;
 
-@Data
+import java.util.List;
+
 public class ListBean {
     private List<QuestionnaireSchedule> questionnaires;
+
+    public List<QuestionnaireSchedule> getQuestionnaires() {
+        return questionnaires;
+    }
 }
+
+

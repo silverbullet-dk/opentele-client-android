@@ -1,24 +1,16 @@
 package dk.silverbullet.telemed.questionnaire.expression;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import lombok.Data;
-
+import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import dk.silverbullet.telemed.questionnaire.node.AssignmentNode;
+import dk.silverbullet.telemed.utils.Util;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
+import java.util.*;
 
-import dk.silverbullet.telemed.questionnaire.node.AssignmentNode;
-import dk.silverbullet.telemed.utils.Util;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestExpression {
 
@@ -116,7 +108,6 @@ public class TestExpression {
 
     }
 
-    @Data
     class Blob {
         @Expose
         Expression<?> e;

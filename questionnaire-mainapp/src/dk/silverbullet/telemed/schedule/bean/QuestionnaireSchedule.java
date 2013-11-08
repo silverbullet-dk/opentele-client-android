@@ -2,11 +2,6 @@ package dk.silverbullet.telemed.schedule.bean;
 
 import java.io.Serializable;
 
-import lombok.Data;
-import lombok.ToString;
-
-@Data
-@ToString
 public class QuestionnaireSchedule implements Serializable {
     private static final long serialVersionUID = 1164198289104699427L;
 

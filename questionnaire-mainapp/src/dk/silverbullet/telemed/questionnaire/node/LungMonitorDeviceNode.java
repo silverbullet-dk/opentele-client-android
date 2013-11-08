@@ -1,12 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMeasurement;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMonitorController;
@@ -19,8 +13,8 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorListener {
     @Expose
     private Variable<Float> fev1;
@@ -158,4 +152,31 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
             }
         });
     }
+
+
+    public void setFev1(Variable<Float> fev1) {
+        this.fev1 = fev1;
+    }
+
+    public void setFev6(Variable<Float> fev6) {
+        this.fev6 = fev6;
+    }
+
+    public void setFev1Fev6Ratio(Variable<Float> fev1Fev6Ratio) {
+        this.fev1Fev6Ratio = fev1Fev6Ratio;
+    }
+
+    public void setFef2575(Variable<Float> fef2575) {
+        this.fef2575 = fef2575;
+    }
+
+    public void setGoodTest(Variable<Boolean> goodTest) {
+        this.goodTest = goodTest;
+    }
+
+    public void setSoftwareVersion(Variable<Integer> softwareVersion) {
+        this.softwareVersion = softwareVersion;
+    }
+
+
 }

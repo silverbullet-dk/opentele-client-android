@@ -1,22 +1,16 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import static dk.silverbullet.telemed.utils.Util.ISO8601_DATE_TIME_FORMAT;
-import static dk.silverbullet.telemed.utils.Util.linkVariable;
-
-import java.util.Date;
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Date;
+import java.util.Map;
+
+import static dk.silverbullet.telemed.utils.Util.ISO8601_DATE_TIME_FORMAT;
+import static dk.silverbullet.telemed.utils.Util.linkVariable;
+
 public abstract class DeviceNode extends IONode {
 
     @Expose
@@ -24,10 +18,12 @@ public abstract class DeviceNode extends IONode {
 
     @Expose
     private String next;
+
     private Node nextNode;
 
     @Expose
     private String nextFail;
+
     private Node nextFailNode;
 
     @Expose
@@ -90,5 +86,41 @@ public abstract class DeviceNode extends IONode {
     public void setEndTimeValue(Date dateTime) {
         if (null != dateTime && null != endTime)
             endTime.setValue(ISO8601_DATE_TIME_FORMAT.format(dateTime));
+    }
+
+    public Node getNextFailNode() {
+        return nextFailNode;
+    }
+
+    public Node getNextNode() {
+        return nextNode;
+    }
+
+    public Variable<String> getDeviceId() {
+        return deviceId;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setDeviceId(Variable<String> deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
+    public void setNextFail(String nextFail) {
+        this.nextFail = nextFail;
+    }
+
+    public void setStartTime(Variable<String> startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(Variable<String> endTime) {
+        this.endTime = endTime;
     }
 }

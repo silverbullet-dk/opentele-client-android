@@ -18,16 +18,12 @@ import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.rest.FillOutQuestionnaireWithUserDetailsTask;
 import dk.silverbullet.telemed.rest.listener.LoginListener;
 import dk.silverbullet.telemed.utils.Util;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class LoginNode extends IONode implements LoginListener {
     private static final String SHARED_PREFERENCES_LAST_USERNAME = "PREF_LAST_USERNAME";
+
     private Node next;
     private Node changePasswordNode;
-
     private View form;
     private EditText passwordInput;
     private EditText usernameInput;
@@ -207,5 +203,13 @@ public class LoginNode extends IONode implements LoginListener {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
         editor.putString(SHARED_PREFERENCES_LAST_USERNAME, username);
         editor.commit();
+    }
+
+    public void setNext(Node next) {
+        this.next = next;
+    }
+
+    public void setChangePasswordNode(Node changePasswordNode) {
+        this.changePasswordNode = changePasswordNode;
     }
 }

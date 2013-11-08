@@ -1,11 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -23,8 +17,10 @@ import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class DebugListPoolNode extends Node {
 
     private static final String TAG = Util.getTag(DebugListPoolNode.class);
@@ -46,7 +42,7 @@ public class DebugListPoolNode extends Node {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "*** CLICK ***");
-                questionnaire.setCurrentNode(getNextNode());
+                questionnaire.setCurrentNode(nextNode);
             }
         });
 
@@ -69,7 +65,7 @@ public class DebugListPoolNode extends Node {
         list.setAdapter(mSchedule);
 
         if (null == mylist || mylist.isEmpty()) {
-            questionnaire.setCurrentNode(getNextNode());
+            questionnaire.setCurrentNode(nextNode);
         }
     }
 
@@ -131,5 +127,9 @@ public class DebugListPoolNode extends Node {
     @Override
     public void linkVariables(Map<String, Variable<?>> map) throws UnknownVariableException {
         // Done..
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

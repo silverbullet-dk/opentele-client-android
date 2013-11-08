@@ -1,12 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -15,9 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -25,37 +16,35 @@ import dk.silverbullet.telemed.questionnaire.node.IONode;
 import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class TwoButtonElement extends Element {
 
     private static final String TAG = Util.getTag(TwoButtonElement.class);
 
     @Expose
     private String leftText;
+
     @Expose
     private String leftNext;
+
     private Node leftNextNode;
 
     @Expose
     private String rightText;
+
     @Expose
     private String rightNext;
     private Node rightNextNode;
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private Button leftButton;
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private Button rightButton;
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private LinearLayout layout;
 
     @Expose
     private boolean rightSkipValidation;
+
     @Expose
     private boolean leftSkipValidation;
 
@@ -171,5 +160,25 @@ public class TwoButtonElement extends Element {
         if (rightButton != null) {
             rightButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void setLeftNextNode(Node leftNextNode) {
+        this.leftNextNode = leftNextNode;
+    }
+
+    public void setRightNextNode(Node rightNextNode) {
+        this.rightNextNode = rightNextNode;
+    }
+
+    public void setLeftSkipValidation(boolean leftSkipValidation) {
+        this.leftSkipValidation = leftSkipValidation;
+    }
+
+    public void setLeftNext(String leftNext) {
+        this.leftNext = leftNext;
+    }
+
+    public void setRightNext(String rightNext) {
+        this.rightNext = rightNext;
     }
 }

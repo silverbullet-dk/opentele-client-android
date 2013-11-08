@@ -1,38 +1,9 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ProgressDialog;
 import android.util.Log;
-
 import com.google.gson.Gson;
-
-import dk.silverbullet.telemed.deleteme.MonicaSkemaLimited;
-import dk.silverbullet.telemed.deleteme.MonicaSkemaUserLimited;
-import dk.silverbullet.telemed.deleteme.TestBloodPressure;
-import dk.silverbullet.telemed.deleteme.TestBloodSugar;
-import dk.silverbullet.telemed.deleteme.TestDelayNode;
-import dk.silverbullet.telemed.deleteme.TestJordemoder;
-import dk.silverbullet.telemed.deleteme.TestLungMonitor;
-import dk.silverbullet.telemed.deleteme.TestOutputSkema;
-import dk.silverbullet.telemed.deleteme.TestPiratos;
-import dk.silverbullet.telemed.deleteme.TestRadioButtons;
-import dk.silverbullet.telemed.deleteme.TestSaturation;
-import dk.silverbullet.telemed.deleteme.TestSimple;
-import dk.silverbullet.telemed.deleteme.TestTemperature;
-import dk.silverbullet.telemed.deleteme.TestUrine;
+import dk.silverbullet.telemed.deleteme.*;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -44,9 +15,14 @@ import dk.silverbullet.telemed.rest.listener.ListListener;
 import dk.silverbullet.telemed.schedule.ReminderService;
 import dk.silverbullet.telemed.schedule.bean.QuestionnaireSchedule;
 import dk.silverbullet.telemed.utils.Util;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class IOSkemaMenuNode extends IONode implements ListListener {
 
     private static final String TAG = Util.getTag(IOSkemaMenuNode.class);
@@ -54,16 +30,10 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
     private Node nextNode;
     private Variable<String> skemaName;
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private Map<String, String> skemaer = new LinkedHashMap<String, String>();
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private Set<String> res = new HashSet<String>();
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private ProgressDialog dialog;
 
     public IOSkemaMenuNode(Questionnaire questionnaire, String nodeName) {
@@ -110,7 +80,7 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
 
     @Override
     public String toString() {
-        return "IOSkemaMenuNode(\"" + getNodeName() + "\") -> \"" + getNextNode().getNodeName() + "\"";
+        return "IOSkemaMenuNode(\"" + getNodeName() + "\") -> \"" + nextNode.getNodeName() + "\"";
     }
 
     @Override
@@ -187,5 +157,13 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
         } catch (JSONException e) {
             throw new IllegalArgumentException("Not proper JSON: '" + questionnaireJson + "'", e);
         }
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setSkemaName(Variable<String> skemaName) {
+        this.skemaName = skemaName;
     }
 }

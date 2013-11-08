@@ -1,17 +1,15 @@
 package dk.silverbullet.telemed.device.accuchek;
 
-import java.util.Date;
-
-import lombok.Data;
-
 import com.google.gson.annotations.Expose;
+
+import java.util.Date;
 
 /**
  * Simple value object representing a blood sugar measurement.
  * 
  * No use of encapsulating the fields, IMHO. Change it if your inner autistic tells you so.
  */
-@Data
+
 public class BloodSugarMeasurement {
     @Expose
     public Date timeOfMeasurement;

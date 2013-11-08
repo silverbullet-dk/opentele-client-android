@@ -1,20 +1,8 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.ProgressDialog;
 import android.util.Log;
-
 import com.google.gson.Gson;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.ClinicMessageBubbleElement;
@@ -22,16 +10,18 @@ import dk.silverbullet.telemed.questionnaire.element.PatientMessageBubbleElement
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
+import dk.silverbullet.telemed.rest.MarkMessagesAsReadTask;
 import dk.silverbullet.telemed.rest.RetrieveMessageListTask;
-import dk.silverbullet.telemed.rest.RetrieveMessageTask;
 import dk.silverbullet.telemed.rest.RetrieveTask;
 import dk.silverbullet.telemed.rest.bean.message.MessageItem;
-import dk.silverbullet.telemed.rest.listener.MessageGetListener;
+import dk.silverbullet.telemed.rest.bean.message.Messages;
 import dk.silverbullet.telemed.rest.listener.MessageListListener;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 public class MessageDialogNode extends IONode implements MessageListListener {
 
     private static final String TAG = Util.getTag(MessageDialogNode.class);
@@ -41,11 +31,7 @@ public class MessageDialogNode extends IONode implements MessageListListener {
     private Variable<Long> departmentId;
     @SuppressWarnings("rawtypes")
     private Variable<Map> departmentNameMap;
-
     private LinkedList<MessageItem> messages;
-
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private ProgressDialog dialog;
 
     public MessageDialogNode(Questionnaire questionnaire, String nodeName) {
@@ -77,7 +63,9 @@ public class MessageDialogNode extends IONode implements MessageListListener {
         if (messages != null && messages.size() > 0) {
             addElement(new TextViewElement(this, departmentName, false));
             for (MessageItem msg : messages) {
-                if (questionnaire.getUserId() == msg.getFrom().getId()) {
+                boolean isFromPatient = msg.getFrom().getType().equals("Patient");
+
+                if (isFromPatient) {
                     Log.d(TAG, "Adding PatientMessageBubbleElement");
                     addElement(new PatientMessageBubbleElement(this, msg));
                 } else {
@@ -104,10 +92,6 @@ public class MessageDialogNode extends IONode implements MessageListListener {
     }
 
     @Override
-    public void linkNodes(Map<String, Node> map) {
-    }
-
-    @Override
     public void linkVariables(Map<String, Variable<?>> map) throws VariableLinkFailedException {
         super.linkVariables(map);
         Util.linkVariable(map, departmentId);
@@ -127,45 +111,39 @@ public class MessageDialogNode extends IONode implements MessageListListener {
     @Override
     public void end(String result) {
         messages = new LinkedList<MessageItem>();
-        final List<String> messagesToRead = new LinkedList<String>();
+        final List<Long> messagesToRead = new LinkedList<Long>();
 
-        if (null != result && !"".equals(result)) {
-            Log.d(TAG, result);
-            long departmentId = this.departmentId.getExpressionValue().getValue();
-            for (MessageItem m : new Gson().fromJson(result, MessageItem[].class)) {
-                if (null == m.getResult() && null == m.getUnread()) {
-                    if (m.getFrom().getId() == departmentId || m.getTo().getId() == departmentId) {
-                        messages.add(0, m);
-                    }
-                    if (m.getFrom().getId() == departmentId && !m.isRead()) {
-                        messagesToRead.add(Long.toString(m.getId()));
-                    }
-                }
+        Log.d(TAG, result);
+        long departmentId = this.departmentId.getExpressionValue().getValue();
+        Messages messageResponse = new Gson().fromJson(result, Messages.class);
+        for (MessageItem message : messageResponse.messages) {
+            boolean isFromDepartment = message.getFrom().getType().equals("Department") && message.getFrom().getId() == departmentId;
+            boolean isToDepartment = message.getTo().getType().equals("Department") && message.getTo().getId() == departmentId;
+
+            if (isFromDepartment || isToDepartment) {
+                messages.add(0, message);
+            }
+            if (isFromDepartment && !message.isRead()) {
+                messagesToRead.add(message.getId());
             }
         }
 
-        final Iterator<String> readIterator = messagesToRead.iterator();
-
-        if (readIterator.hasNext()) {
-            new RetrieveMessageTask(questionnaire, new MessageGetListener() {
-                @Override
-                public void sendError() {
-                    // Ignore - we simply stop!
-                }
-
-                @Override
-                public void end(String result) {
-                    if (readIterator.hasNext()) {
-                        new RetrieveMessageTask(questionnaire, this).execute(readIterator.next());
-                    } else {
-                        Log.d(TAG, "All messages has been read!");
-                    }
-                }
-            }).execute(readIterator.next());
-        }
+        new MarkMessagesAsReadTask(getQuestionnaire()).execute(messagesToRead.toArray(new Long[0]));
 
         setView();
         createView();
         dialog.dismiss();
+    }
+
+    public void setNewMessageNode(Node newMessageNode) {
+        this.newMessageNode = newMessageNode;
+    }
+
+    public void setDepartmentId(Variable<Long> departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public void setDepartmentNameMap(Variable<Map> departmentNameMap) {
+        this.departmentNameMap = departmentNameMap;
     }
 }

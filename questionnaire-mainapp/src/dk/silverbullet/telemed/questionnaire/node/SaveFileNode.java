@@ -1,17 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import android.util.Log;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -19,9 +9,11 @@ import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-@ToString(exclude = "nextNode")
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Map;
+
 public class SaveFileNode extends IONode {
     private static final String TAG = Util.getTag(SaveFileNode.class);
 
@@ -92,5 +84,9 @@ public class SaveFileNode extends IONode {
     @Override
     public void linkVariables(Map<String, Variable<?>> map) throws UnknownVariableException {
         // Nothing to do
+    }
+
+    public void setNext(String next) {
+        this.next = next;
     }
 }

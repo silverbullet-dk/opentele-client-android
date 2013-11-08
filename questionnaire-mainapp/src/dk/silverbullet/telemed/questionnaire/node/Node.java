@@ -1,23 +1,15 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.Setter;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 
-@Data
-public abstract class Node {
+import java.util.Map;
 
+public abstract class Node {
     @Expose
     private String nodeName;
-
-    @Setter
     protected Questionnaire questionnaire;
 
     public Node(Questionnaire questionnaire, String nodeName) {
@@ -35,5 +27,17 @@ public abstract class Node {
 
     public String toString() {
         return "Node..:" + nodeName;
+    }
+
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    public Questionnaire getQuestionnaire() {
+        return questionnaire;
+    }
+
+    public void setQuestionnaire(Questionnaire questionnaire) {
+        this.questionnaire = questionnaire;
     }
 }

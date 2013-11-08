@@ -17,14 +17,11 @@ import dk.silverbullet.telemed.questionnaire.element.*;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
-import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class IONode extends Node {
     private boolean enterCalled = false;
     private boolean hideTopPanel;
@@ -36,12 +33,7 @@ public class IONode extends Node {
     @Expose
     private List<Element> elements = new ArrayList<Element>();
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private Context ctx;
-
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private Activity activity;
 
     private View topPanel;
@@ -350,5 +342,17 @@ public class IONode extends Node {
         }
 
         return result;
+    }
+
+    public void setHideBackButton(boolean hideBackButton) {
+        this.hideBackButton = hideBackButton;
+    }
+
+    public void setHideTopPanel(boolean hideTopPanel) {
+        this.hideTopPanel = hideTopPanel;
+    }
+
+    public void setHideMenuButton(boolean hideMenuButton) {
+        this.hideMenuButton = hideMenuButton;
     }
 }

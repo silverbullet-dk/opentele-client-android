@@ -41,8 +41,6 @@ import dk.silverbullet.telemed.questionnaire.node.monica.SimulatedMonicaDevice;
 import dk.silverbullet.telemed.utils.ProgressiveProgress;
 import dk.silverbullet.telemed.utils.Util;
 
-// @Data -- For some reason, this class doesn't work well with Lombok!  :(
-
 public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback, SeekBar.OnSeekBarChangeListener {
 
     private static final String TAG = Util.getTag(MonicaDeviceNode.class);

@@ -1,12 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
@@ -16,8 +9,8 @@ import dk.silverbullet.telemed.questionnaire.skema.Skema;
 import dk.silverbullet.telemed.questionnaire.skema.SkemaDef;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class IOMenuNode2 extends Node {
 
     private static final String TAG = Util.getTag(IOMenuNode2.class);
@@ -25,8 +18,6 @@ public class IOMenuNode2 extends Node {
     private Node nextNode;
     private Variable<String> menu;
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private Skema skema;
 
     public IOMenuNode2(Questionnaire questionnaire, String nodeName) {
@@ -88,5 +79,13 @@ public class IOMenuNode2 extends Node {
     @Override
     public void linkVariables(Map<String, Variable<?>> map) throws UnknownVariableException {
         // Nothing to do
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setMenu(Variable<String> menu) {
+        this.menu = menu;
     }
 }

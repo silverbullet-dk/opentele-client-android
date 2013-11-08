@@ -3,6 +3,7 @@
     	android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:id="@+id/video_top_viewGroup"
-	    android:background="#000000">
+	    android:background="#000000"
+        android:keepScreenOn="true">
     <include layout="@layout/video_accept_call"/>
 </FrameLayout>

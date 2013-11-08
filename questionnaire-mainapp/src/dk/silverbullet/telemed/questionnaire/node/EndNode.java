@@ -1,21 +1,16 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class EndNode extends Node {
 
     private static final String TAG = Util.getTag(EndNode.class);
-
     private Node nextNode;
 
     public EndNode(Questionnaire questionnaire, String nodeName) {
@@ -25,7 +20,7 @@ public class EndNode extends Node {
     @Override
     public void enter() {
         Log.d(TAG, "The End!");
-        questionnaire.setCurrentNode(getNextNode());
+        questionnaire.setCurrentNode(nextNode);
     }
 
     @Override
@@ -44,5 +39,9 @@ public class EndNode extends Node {
     @Override
     public String toString() {
         return "EndNode(\"" + getNodeName() + "\")";
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

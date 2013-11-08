@@ -1,16 +1,12 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class ErrorNode extends IONode {
 
     @SuppressWarnings("unused")
@@ -48,5 +44,13 @@ public class ErrorNode extends IONode {
 
     @Override
     public void linkNodes(Map<String, Node> map) throws UnknownNodeException {
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

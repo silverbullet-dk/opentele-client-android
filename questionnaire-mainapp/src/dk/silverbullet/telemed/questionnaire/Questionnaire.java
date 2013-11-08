@@ -1,15 +1,5 @@
 package dk.silverbullet.telemed.questionnaire;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.Activity;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -22,7 +12,8 @@ import dk.silverbullet.telemed.questionnaire.node.WebViewNode;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
+import java.util.*;
+
 public class Questionnaire {
     private static final String TAG = Util.getTag(Questionnaire.class);
 
@@ -30,9 +21,12 @@ public class Questionnaire {
 
     private Node startNode;
     private Node pastNode;
+
+
     private Node currentNode;
 
     private final Map<String, Variable<?>> valuePool = new HashMap<String, Variable<?>>();
+
     private final Map<String, Variable<?>> skemaValuePool = new HashMap<String, Variable<?>>();
 
     private OutputSkema outputSkema;
@@ -45,8 +39,6 @@ public class Questionnaire {
 
     private boolean backPressed;
 
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
     private Stack<IONode> ioNodeStack = new Stack<IONode>();
 
     private final Stack<Map<String, Constant<?>>> varStack = new Stack<Map<String, Constant<?>>>();
@@ -249,5 +241,29 @@ public class Questionnaire {
 
     public Activity getActivity() {
         return activity;
+    }
+
+    public Node getCurrentNode() {
+        return currentNode;
+    }
+
+    public Map<String, Variable<?>> getValuePool() {
+        return valuePool;
+    }
+
+    public boolean isBackPressed() {
+        return backPressed;
+    }
+
+    public void setOutputSkema(OutputSkema outputSkema) {
+        this.outputSkema = outputSkema;
+    }
+
+    public Map<String, Variable<?>> getSkemaValuePool() {
+        return skemaValuePool;
+    }
+
+    public OutputSkema getOutputSkema() {
+        return outputSkema;
     }
 }

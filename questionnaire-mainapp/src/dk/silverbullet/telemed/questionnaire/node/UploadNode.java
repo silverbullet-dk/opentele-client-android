@@ -1,10 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Date;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
@@ -17,9 +12,8 @@ import dk.silverbullet.telemed.rest.RetrieveTask;
 import dk.silverbullet.telemed.rest.listener.UploadListener;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
-@ToString(exclude = "nextNode")
+import java.util.Date;
+
 public class UploadNode extends IONode implements UploadListener {
     private static final String TAG = Util.getTag(UploadNode.class);
 
@@ -107,5 +101,9 @@ public class UploadNode extends IONode implements UploadListener {
         twoButtonElement.setLeftNextNode(nextNode);
         twoButtonElement.setRightNextNode(this);
         addElement(twoButtonElement);
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

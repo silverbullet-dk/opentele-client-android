@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import lombok.Data;
-
 import com.google.gson.annotations.Expose;
 
 /**
@@ -13,7 +11,6 @@ import com.google.gson.annotations.Expose;
  * 
  * No use of encapsulating the fields, IMHO. Change it if your inner autistic tells you so.
  */
-@Data
 public class BloodSugarMeasurements {
     @Expose
     public String serialNumber;

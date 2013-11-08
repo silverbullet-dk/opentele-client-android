@@ -3,7 +3,9 @@ package dk.silverbullet.telemed.video;
 import android.util.Log;
 import com.google.gson.Gson;
 import dk.silverbullet.telemed.MainActivity;
+import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.utils.Util;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -24,18 +26,16 @@ public class JoinConferencePoller {
     private static final String TAG = "ConferenceHandler";
     private static final int FIVE_SECONDS_IN_MILLIS = 5000;
     private final MainActivity mainActivity;
-    private final String username;
-    private final String password;
+    private final Questionnaire mainQuestionnaire;
     private volatile boolean stopped;
     private volatile HttpGet httpGet;
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private Runnable checkForConferenceRunnable;
 
-    public JoinConferencePoller(final MainActivity mainActivity, String username, String password) {
+    public JoinConferencePoller(final MainActivity mainActivity, Questionnaire mainQuestionnaire) {
         this.mainActivity = mainActivity;
-        this.username = username;
-        this.password = password;
+        this.mainQuestionnaire = mainQuestionnaire;
 
         checkForConferenceRunnable = new Runnable() {
             @Override
@@ -81,7 +81,7 @@ public class JoinConferencePoller {
             url = new URL(mainActivity.getServerURL());
 
             httpGet = new HttpGet(new URL(url, "rest/conference/patientHasPendingConference").toExternalForm());
-            setHeaders(httpGet);
+            Util.setHeaders(httpGet, mainQuestionnaire);
 
             String result = httpClient.execute(httpGet, new BasicResponseHandler());
 
@@ -89,9 +89,11 @@ public class JoinConferencePoller {
                 return new Gson().fromJson(result, PendingConferenceResponse.class);
             }
         } catch (IOException e) {
-            // We shut down the thread by closing the socket, which looks worse than it is. Therefore, this is just
-            // an "info" log.
-            Log.i(TAG, "Could not check for pending conference, probably because user logged out", e);
+            // If we're trying to stop this poller thread by aborting the GET request, we get an IOException. In
+            // that case, we don't log anything.
+            if (!stopped) {
+                Log.e(TAG, "Could not check for pending conference", e);
+            }
         }
         return new PendingConferenceResponse();
     }
@@ -99,15 +101,5 @@ public class JoinConferencePoller {
     class PendingConferenceResponse {
         String roomKey = "";
         String serviceUrl = "";
-    }
-
-    private void setHeaders(HttpRequestBase requestBase) {
-        requestBase.setHeader("Content-type", "application/json");
-        requestBase.setHeader("Accept", "application/json");
-        requestBase.setHeader("X-Requested-With", "json");
-        requestBase.setHeader("Client-version", mainActivity.getString(R.string.client_version));
-
-        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
-        requestBase.setHeader(BasicScheme.authenticate(credentials, "UTF-8", false));
     }
 }

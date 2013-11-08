@@ -1,8 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.expression;
 
-import lombok.ToString;
-
-@ToString
 public abstract class CompareExpression<T extends Comparable<T>> extends BinaryOperation<T, Boolean> {
     private static final long serialVersionUID = -2106422002220741013L;
 

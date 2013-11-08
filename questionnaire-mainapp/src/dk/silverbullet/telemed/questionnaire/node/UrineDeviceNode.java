@@ -1,12 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.RadioButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -16,8 +10,8 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class UrineDeviceNode extends DeviceNode {
 
     @SuppressWarnings("unused")
@@ -79,5 +73,9 @@ public class UrineDeviceNode extends DeviceNode {
 
     @Override
     public void deviceLeave() {
+    }
+
+    public void setUrine(Variable<Integer> urine) {
+        this.urine = urine;
     }
 }

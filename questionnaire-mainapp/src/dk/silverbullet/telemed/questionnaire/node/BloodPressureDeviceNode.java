@@ -1,13 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import android.util.Log;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.andbloodpressure.AndBloodPressureController;
 import dk.silverbullet.telemed.device.andbloodpressure.BloodPressureAndPulse;
@@ -21,8 +15,8 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListener<BloodPressureAndPulse> {
     private static final String TAG = Util.getTag(BloodPressureDeviceNode.class);
 
@@ -150,5 +144,19 @@ public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListe
                 statusText.setText(text);
             }
         });
+    }
+
+    public void setDiastolic(Variable<Integer> diastolic) {
+        this.diastolic = diastolic;
+    }
+    public void setSystolic(Variable<Integer> systolic) {
+        this.systolic = systolic;
+    }
+
+    public void setMeanArterialPressure(Variable<Integer> meanArterialPressure) {
+        this.meanArterialPressure = meanArterialPressure;
+    }
+    public void setPulse(Variable<Integer> pulse) {
+        this.pulse = pulse;
     }
 }

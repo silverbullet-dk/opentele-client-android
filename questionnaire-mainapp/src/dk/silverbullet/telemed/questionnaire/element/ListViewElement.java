@@ -1,16 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -22,9 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -32,8 +19,8 @@ import dk.silverbullet.telemed.questionnaire.node.IONode;
 import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.*;
+
 public class ListViewElement<T> extends Element {
 
     @SuppressWarnings("unused")
@@ -41,6 +28,7 @@ public class ListViewElement<T> extends Element {
 
     @Expose
     private String next;
+
     private Node nextNode;
 
     @Expose
@@ -55,12 +43,8 @@ public class ListViewElement<T> extends Element {
     @Expose
     private Variable<T> variable;
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private ListView listView;
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private ArrayAdapter<String> listAdapter;
 
     private boolean real;
@@ -144,5 +128,25 @@ public class ListViewElement<T> extends Element {
             result.setTypeface(null, style);
             return result;
         }
+    }
+
+    public void setResults(T[] results) {
+        this.results = results;
+    }
+
+    public void setVariable(Variable<T> variable) {
+        this.variable = variable;
+    }
+
+    public void setValues(String[] values) {
+        this.values = values;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setValuesToHighlight(String[] valuesToHighlight) {
+        this.valuesToHighlight = valuesToHighlight;
     }
 }

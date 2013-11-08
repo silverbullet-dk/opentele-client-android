@@ -1,12 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
@@ -16,9 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -26,8 +17,8 @@ import dk.silverbullet.telemed.questionnaire.node.IONode;
 import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class ButtonElement extends Element {
 
     private static final String TAG = Util.getTag(ButtonElement.class);
@@ -45,13 +36,12 @@ public class ButtonElement extends Element {
 
     @Expose
     private String next;
+
     private Node nextNode;
 
     @Expose
     private String gravity;
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private Button button;
 
     private LinearLayout layout;
@@ -67,7 +57,7 @@ public class ButtonElement extends Element {
 
     public ButtonElement(IONode node, String text, Node nextNode) {
         this(node, text);
-        setNextNode(nextNode);
+        this.nextNode = nextNode;
     }
 
     @Override
@@ -137,5 +127,21 @@ public class ButtonElement extends Element {
     @Override
     public boolean validates() {
         return true;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
+    public void setSkipValidation(boolean skipValidation) {
+        this.skipValidation = skipValidation;
+    }
+
+    public void setGravity(String gravity) {
+        this.gravity = gravity;
     }
 }

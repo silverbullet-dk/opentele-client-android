@@ -1,20 +1,13 @@
 package dk.silverbullet.telemed.questionnaire.output;
 
+import com.google.gson.annotations.Expose;
+import dk.silverbullet.telemed.questionnaire.expression.Variable;
+import dk.silverbullet.telemed.utils.Util;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Data;
-
-import com.google.gson.annotations.Expose;
-
-import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.utils.Util;
-
-/**
- * https://teleskejby-devel.silverbullet.dk/teleskejby-server/questionnaire/upload
- */
-@Data
 public class OutputSkema {
 
     @Expose
@@ -45,5 +38,29 @@ public class OutputSkema {
                 result = o;
 
         return result;
+    }
+
+    public void setOutput(Set<Variable<?>> output) {
+        this.output = output;
+    }
+
+    public Set<Variable<?>> getOutput() {
+        return output;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setQuestionnaireId(Long questionnaireId) {
+        QuestionnaireId = questionnaireId;
+    }
+
+    public void setPatientId(String patientId) {
+        PatientId = patientId;
     }
 }

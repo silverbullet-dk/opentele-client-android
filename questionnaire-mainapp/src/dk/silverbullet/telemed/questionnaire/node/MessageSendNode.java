@@ -1,12 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import com.google.gson.Gson;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -18,8 +12,8 @@ import dk.silverbullet.telemed.rest.bean.message.MessageWrite;
 import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class MessageSendNode extends IONode implements MessageWriteListener {
     private Node next;
     private String screenText = "Indsender besvarelser - vent venligst...";
@@ -27,7 +21,6 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
     private Variable<Long> departmentId;
     private Variable<String> title;
     private Variable<String> text;
-
     private boolean enabled;
 
     public MessageSendNode(Questionnaire questionnaire, String nodeName) {
@@ -117,5 +110,20 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
         enabled = true;
         setView();
         createView();
+    }
+
+    public void setNext(Node next) {
+        this.next = next;
+    }
+    public void setDepartmentId(Variable<Long> departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public void setTitle(Variable<String> title) {
+        this.title = title;
+    }
+
+    public void setText(Variable<String> text) {
+        this.text = text;
     }
 }

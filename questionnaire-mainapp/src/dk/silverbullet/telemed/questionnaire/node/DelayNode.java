@@ -1,22 +1,16 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
+import android.os.Handler;
+import android.os.Handler.Callback;
+import android.os.Message;
+import com.google.gson.annotations.Expose;
+import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
+
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import android.os.Handler;
-import android.os.Handler.Callback;
-import android.os.Message;
-
-import com.google.gson.annotations.Expose;
-
-import dk.silverbullet.telemed.questionnaire.Questionnaire;
-import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
-
-@Data
-@EqualsAndHashCode(callSuper = false)
 public class DelayNode extends IONode {
 
     private int currentTick;
@@ -113,5 +107,9 @@ public class DelayNode extends IONode {
     @Override
     public void linkNodes(Map<String, Node> map) {
         nextNode = map.get(next);
+    }
+
+    public void setNext(String next) {
+        this.next = next;
     }
 }

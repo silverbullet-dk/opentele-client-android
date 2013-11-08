@@ -1,13 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import android.util.Log;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Expression;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
@@ -15,8 +9,8 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
 public class DecisionNode extends Node {
 
     private static final String TAG = Util.getTag(DecisionNode.class);
@@ -30,6 +24,7 @@ public class DecisionNode extends Node {
 
     @Expose
     private String nextFalse;
+
     private Node nextFalseNode;
 
     public DecisionNode(Questionnaire questionnaire, String nodeName, Expression<Boolean> expression) {
@@ -41,14 +36,14 @@ public class DecisionNode extends Node {
             Node nextFalse) {
 
         this(questionnaire, nodeName, expression);
-        setNextNode(nextTrue);
-        setNextFalseNode(nextFalse);
+        this.nextNode = nextTrue;
+        this.nextFalseNode = nextFalse;
     }
 
     public void enter() {
         Log.d(TAG, "nodeName...:" + getNodeName());
         if (expression.evaluate()) {
-            questionnaire.setCurrentNode(getNextNode());
+            questionnaire.setCurrentNode(nextNode);
         } else {
             questionnaire.setCurrentNode(nextFalseNode);
         }
@@ -79,7 +74,23 @@ public class DecisionNode extends Node {
 
     @Override
     public String toString() {
-        return "DecisionNode(\"" + getNodeName() + "\") T->\"" + getNextNode().getNodeName() + "\" F->\""
-                + getNextFalseNode().getNodeName() + "\"";
+        return "DecisionNode(\"" + getNodeName() + "\") T->\"" + nextNode.getNodeName() + "\" F->\""
+                + nextFalseNode.getNodeName() + "\"";
+    }
+
+    public void setNext(String next) {
+        this.next = next;
+    }
+
+    public void setNextFalse(String nextFalse) {
+        this.nextFalse = nextFalse;
+    }
+
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setNextFalseNode(Node nextFalseNode) {
+        this.nextFalseNode = nextFalseNode;
     }
 }

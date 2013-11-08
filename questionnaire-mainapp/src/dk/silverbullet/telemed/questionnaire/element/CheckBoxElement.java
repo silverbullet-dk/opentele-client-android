@@ -1,23 +1,12 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import static dk.silverbullet.telemed.utils.Util.linkVariable;
-
-import java.util.Map;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
@@ -25,22 +14,21 @@ import dk.silverbullet.telemed.questionnaire.node.IONode;
 import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.utils.Util;
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+import java.util.Map;
+
+import static dk.silverbullet.telemed.utils.Util.linkVariable;
+
 public class CheckBoxElement extends Element {
 
     @SuppressWarnings("unused")
     private static final String TAG = Util.getTag(CheckBoxElement.class);
 
-    @Setter
     @Expose
     private Variable<Boolean> outputVariable;
 
     @Expose
     private String text;
 
-    @Setter(AccessLevel.PRIVATE)
-    @Getter(AccessLevel.PRIVATE)
     private CheckBox checkBox;
 
     public CheckBoxElement(final IONode node) {
@@ -85,5 +73,13 @@ public class CheckBoxElement extends Element {
     @Override
     public boolean validates() {
         return true;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setOutputVariable(Variable<Boolean> outputVariable) {
+        this.outputVariable = outputVariable;
     }
 }
