@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
@@ -31,7 +32,7 @@ public class TemperatureDeviceNode extends DeviceNode {
         clearElements();
         addElement(new TextViewElement(this, text));
         TextViewElement tve = new TextViewElement(this);
-        tve.setText("Indtast temperatur");
+        tve.setText(Util.getString(R.string.temerature_enter_temperature, questionnaire));
         addElement(tve);
 
         EditTextElement ete = new EditTextElement(this);
@@ -42,9 +43,9 @@ public class TemperatureDeviceNode extends DeviceNode {
         TwoButtonElement be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
         be.setLeftSkipValidation(true);
-        be.setLeftText("Undlad");
+        be.setLeftText(Util.getString(R.string.default_omit, questionnaire));
         be.setRightNextNode(getNextNode());
-        be.setRightText("OK");
+        be.setRightText(Util.getString(R.string.default_ok, questionnaire));
         addElement(be);
 
         super.enter();

@@ -1,9 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -12,17 +8,14 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.webkit.*;
 import android.widget.TextView;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
-import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 public class WebViewNode extends IONode {
 
@@ -109,7 +102,7 @@ public class WebViewNode extends IONode {
     }
 
     private void showDialog() {
-        dialog = ProgressDialog.show(questionnaire.getActivity(), "Henter", "Vent venligst...", true);
+        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.web_view_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
     }
 
     private String username() {

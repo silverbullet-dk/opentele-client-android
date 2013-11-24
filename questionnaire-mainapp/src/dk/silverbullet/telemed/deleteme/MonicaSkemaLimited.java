@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.deleteme;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.QuestionnaireFragment;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
 import dk.silverbullet.telemed.questionnaire.element.RadioButtonElement;
@@ -15,17 +16,16 @@ import dk.silverbullet.telemed.questionnaire.node.SaveFileNode;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
 import dk.silverbullet.telemed.questionnaire.skema.Skema;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 public class MonicaSkemaLimited implements TestSkema {
 
     @Override
     public Skema getSkema() throws UnknownNodeException {
-        Skema result = null;
         Questionnaire q = new Questionnaire(new QuestionnaireFragment());
-        String json = Util.getGson().toJson(getInternSkema(q));
-        result = Util.getGson().fromJson(json, Skema.class);
-        return result;
+        String json = Json.print(getInternSkema(q));
+        return Json.parse(json, Skema.class);
     }
 
     public Skema getInternSkema(Questionnaire questionnaire) throws UnknownNodeException {
@@ -102,21 +102,21 @@ public class MonicaSkemaLimited implements TestSkema {
 
         IONode askSimulate = new IONode(questionnaire, "askSimulate");
 
-        askSimulate.addElement(new TextViewElement(askSimulate, "Simulér Monica device?"));
+        askSimulate.addElement(new TextViewElement(askSimulate, Util.getString(R.string.monica_ask_simulate, questionnaire)));
 
         {
             RadioButtonElement<Boolean> yesNo = new RadioButtonElement<Boolean>(askSimulate);
             @SuppressWarnings("unchecked")
             ValueChoice<Boolean>[] yesNoChoice = new ValueChoice[2];
-            yesNoChoice[0] = new ValueChoice<Boolean>(true, "Ja tak, kør simuleret");
-            yesNoChoice[1] = new ValueChoice<Boolean>(false, "Nej tak, brug Monica-apparatet");
+            yesNoChoice[0] = new ValueChoice<Boolean>(true, Util.getString(R.string.monica_accept_simulate, questionnaire));
+            yesNoChoice[1] = new ValueChoice<Boolean>(false, Util.getString(R.string.monica_decline_simulate, questionnaire));
             yesNo.setChoices(yesNoChoice);
             yesNo.setOutputVariable(simulated);
             askSimulate.addElement(yesNo);
         }
 
         {
-            askSimulate.addElement(new TextViewElement(askSimulate, "Angiv opsamlingstid i minutter:"));
+            askSimulate.addElement(new TextViewElement(askSimulate, Util.getString(R.string.monica_enter_duration, questionnaire)));
 
             EditTextElement runTimeElm = new EditTextElement(askSimulate);
             runTimeElm.setOutputVariable(runTime);
@@ -124,7 +124,7 @@ public class MonicaSkemaLimited implements TestSkema {
         }
 
         {
-            ButtonElement button = new ButtonElement(askSimulate, "Fortsæt");
+            ButtonElement button = new ButtonElement(askSimulate, Util.getString(R.string.default_proceed, questionnaire));
             button.setNext(monicaNode.getNodeName());
             button.setSkipValidation(true);
             askSimulate.addElement(button);

@@ -8,7 +8,7 @@ import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedExcept
 import java.util.Date;
 import java.util.Map;
 
-import static dk.silverbullet.telemed.utils.Util.ISO8601_DATE_TIME_FORMAT;
+import static dk.silverbullet.telemed.utils.Json.ISO8601_DATE_TIME_FORMAT;
 import static dk.silverbullet.telemed.utils.Util.linkVariable;
 
 public abstract class DeviceNode extends IONode {

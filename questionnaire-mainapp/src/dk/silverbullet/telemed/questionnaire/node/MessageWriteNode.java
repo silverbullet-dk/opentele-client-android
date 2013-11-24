@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import android.app.ProgressDialog;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -35,24 +36,24 @@ public class MessageWriteNode extends IONode {
     public void setView() {
         clearElements();
 
-        addElement(new TextViewElement(this, "Opret ny besked"));
+        addElement(new TextViewElement(this, Util.getString(R.string.message_create, questionnaire)));
 
         // addElement(new TextViewElement(this, "Til afdelingen")); // TODO indsæt
 
-        addElement(new TextViewElement(this, "Overskrift"));
+        addElement(new TextViewElement(this, Util.getString(R.string.message_headline, questionnaire)));
 
         EditTextElement ete2 = new EditTextElement(this);
         ete2.setOutputVariable(title);
         addElement(ete2);
 
-        addElement(new TextViewElement(this, "Besked"));
+        addElement(new TextViewElement(this, Util.getString(R.string.message_message, questionnaire)));
 
         EditTextElement ete3 = new EditTextElement(this);
         ete3.setForMessageBody(true);
         ete3.setOutputVariable(text);
         addElement(ete3);
 
-        addElement(new ButtonElement(this, "Send", writeMessageNode));
+        addElement(new ButtonElement(this, Util.getString(R.string.message_send, questionnaire), writeMessageNode));
     }
 
     @Override

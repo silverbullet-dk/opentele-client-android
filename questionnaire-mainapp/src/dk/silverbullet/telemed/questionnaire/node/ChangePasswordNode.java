@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,11 @@ public class ChangePasswordNode extends IONode implements ChangePasswordListener
         passwordRepeatInput = (EditText) changePasswordView.findViewById(R.id.password_repeat_input);
         errorTextView = (TextView) changePasswordView.findViewById(R.id.change_password_error_text);
 
+        if (Util.shouldHidePasswordText(questionnaire)) {
+            passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            passwordRepeatInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
+
         changePasswordOnButtonClick(changePasswordView);
         clearErrorTextWhenFieldsAreChanged();
         showKeyboard(passwordInput);
@@ -78,7 +84,7 @@ public class ChangePasswordNode extends IONode implements ChangePasswordListener
 
     @Override
     public void communicationError() {
-        errorTextView.setText("Fejl ved kommunikation med serveren");
+        errorTextView.setText(Util.getString(R.string.default_server_communication_error, questionnaire));
         showForm();
     }
 

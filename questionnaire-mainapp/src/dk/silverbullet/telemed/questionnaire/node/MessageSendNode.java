@@ -1,7 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -10,13 +10,14 @@ import dk.silverbullet.telemed.rest.PostMessageTask;
 import dk.silverbullet.telemed.rest.RetrieveTask;
 import dk.silverbullet.telemed.rest.bean.message.MessageWrite;
 import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Map;
 
 public class MessageSendNode extends IONode implements MessageWriteListener {
     private Node next;
-    private String screenText = "Indsender besvarelser - vent venligst...";
+    private String screenText;
 
     private Variable<Long> departmentId;
     private Variable<String> title;
@@ -25,6 +26,7 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
 
     public MessageSendNode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
+        screenText = Util.getString(R.string.message_sending, questionnaire);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
         messageWrite.setText(text.getExpressionValue().getValue());
 
         RetrieveTask retrieveFeedTask = new PostMessageTask(questionnaire, this);
-        retrieveFeedTask.execute(new Gson().toJson(messageWrite));
+        retrieveFeedTask.execute(Json.print(messageWrite));
 
         super.enter();
     }
@@ -53,7 +55,7 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
         addElement(tve);
 
         ButtonElement be = new ButtonElement(this);
-        be.setText("OK");
+        be.setText(Util.getString(R.string.default_ok, questionnaire));
         be.setNextNode(next);
         if (enabled) {
             addElement(be);
@@ -85,7 +87,7 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
 
     @Override
     public void sendError() {
-        screenText = "Fejl ved kommunikation med serveren";
+        screenText = Util.getString(R.string.default_server_communication_error, questionnaire);
 
         enabled = true;
         setView();
@@ -100,12 +102,12 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
     @Override
     public void end(String result) {
         if ("200".equals(result)) {
-            screenText = "Beskeden er nu afsendt.";
+            screenText = Util.getString(R.string.message_message_sent, questionnaire);
             // departmentId.setValue((Long)null); // TODO ??
             title.setValue("");
             text.setValue("");
         } else
-            screenText = "Fejl ved afsendelse af besked!";
+            screenText = Util.getString(R.string.message_error_while_sending, questionnaire);
 
         enabled = true;
         setView();

@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
@@ -28,15 +29,15 @@ public class SaturationTestDeviceNode extends DeviceNode {
     @Override
     public void enter() {
         clearElements();
-        addElement(new TextViewElement(this, "Saturation"));
+        addElement(new TextViewElement(this, Util.getString(R.string.saturation_saturation, questionnaire)));
 
-        addElement(new TextViewElement(this, "Angiv saturation:"));
+        addElement(new TextViewElement(this, Util.getString(R.string.saturation_enter_saturation, questionnaire)));
         EditTextElement saturationElement = new EditTextElement(this);
         saturationElement.setOutputVariable(saturation);
         saturationElement.setDecimals(0);
         addElement(saturationElement);
 
-        addElement(new TextViewElement(this, "Angiv puls:"));
+        addElement(new TextViewElement(this, Util.getString(R.string.saturation_enter_pulse, questionnaire)));
 
         EditTextElement pulseElement = new EditTextElement(this);
         pulseElement.setOutputVariable(pulse);
@@ -45,9 +46,9 @@ public class SaturationTestDeviceNode extends DeviceNode {
 
         TwoButtonElement be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
-        be.setLeftText("Undlad");
+        be.setLeftText(Util.getString(R.string.default_omit, questionnaire));
         be.setRightNextNode(getNextNode());
-        be.setRightText("OK");
+        be.setRightText(Util.getString(R.string.default_ok, questionnaire));
         addElement(be);
 
         super.enter();

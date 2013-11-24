@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.skema;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -39,13 +40,13 @@ public class RunSkema implements SkemaDef {
         // ////////////////////////////////////////////////////////////////////////////////
         IONode uploadValg = new IONode(questionnaire, "uploadValg");
         TextViewElement twe = new TextViewElement(uploadValg);
-        twe.setText("Vil du sende data?");
+        twe.setText(Util.getString(R.string.run_skema_do_you_want_to_send_data, questionnaire));
         uploadValg.addElement(twe);
 
         TwoButtonElement tbe = new TwoButtonElement(uploadValg);
-        tbe.setLeftText("Nej");
+        tbe.setLeftText(Util.getString(R.string.default_no, questionnaire));
         tbe.setLeftNextNode(end);
-        tbe.setRightText("Ja");
+        tbe.setRightText(Util.getString(R.string.default_yes, questionnaire));
         uploadValg.addElement(tbe);
 
         @SuppressWarnings("unchecked")

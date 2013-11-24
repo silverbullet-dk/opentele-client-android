@@ -9,6 +9,7 @@ import dk.silverbullet.telemed.device.continua.android.AndroidHdpController;
 import dk.silverbullet.telemed.device.nonin.NoninController;
 import dk.silverbullet.telemed.device.nonin.SaturationAndPulse;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -38,14 +39,14 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
         clearElements();
         addElement(new TextViewElement(this, text));
 
-        statusElement = new TextViewElement(this, "Forbinder til enhed...");
+        statusElement = new TextViewElement(this, Util.getString(R.string.saturation_connecting, questionnaire));
         addElement(statusElement);
 
         be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
-        be.setLeftText("Undlad");
+        be.setLeftText(Util.getString(R.string.default_omit, questionnaire));
         be.setRightNextNode(this);
-        be.setRightText("Prøv igen");
+        be.setRightText(Util.getString(R.string.default_retry, questionnaire));
         be.hideRightButton();
         addElement(be);
 
@@ -56,7 +57,7 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
                 HdpController bluetoothController = new AndroidHdpController(questionnaire.getActivity());
                 noninController = NoninController.create(this, bluetoothController);
             } catch (DeviceInitialisationException e) {
-                statusElement.setText("Kunne ikke forbinde til måler.");
+                statusElement.setText(Util.getString(R.string.saturation_could_not_connect, questionnaire));
             }
         }
     }
@@ -81,7 +82,7 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
         questionnaire.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                statusElement.setText("Venter på måling. Hold dig i ro.");
+                statusElement.setText(Util.getString(R.string.saturation__waiting_for_measurement, questionnaire));
             }
         });
     }
@@ -97,10 +98,9 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
             public void run() {
                 noninController.close();
 
-                statusElement.setText("Måling modtaget\n" + "Iltmætning: " + measurement.getSaturation() + "\n"
-                        + "Puls: " + measurement.getPulse());
+                statusElement.setText(Util.getString(R.string.saturation_measurement_received, questionnaire, measurement.getSaturation(), measurement.getPulse()));
 
-                be.setRightText("Næste");
+                be.setRightText(Util.getString(R.string.default_next, questionnaire));
                 be.showRightButton();
                 be.setRightNextNode(getNextNode());
             }
@@ -109,17 +109,17 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
 
     @Override
     public void disconnected() {
-        setStatusText("Forbindelse afbrudt");
+        setStatusText(Util.getString(R.string.saturation_connection_broken, questionnaire));
     }
 
     @Override
     public void permanentProblem() {
-        setStatusText("Der kan ikke skabes forbindelse");
+        setStatusText(Util.getString(R.string.saturation_permanent_problem, questionnaire));
     }
 
     @Override
     public void temporaryProblem() {
-        setStatusText("Kunne ikke hente data. Sluk og tænd evt. oxymeteret.");
+        setStatusText(Util.getString(R.string.saturation_temporary_problem, questionnaire));
     }
 
     private void setStatusText(final String statusText) {

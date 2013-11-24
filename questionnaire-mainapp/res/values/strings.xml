@@ -1,28 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="acknowledgements_acknowledgements">Kvitteringer</string>
+    <string name="acknowledgements_fetching">Henter kvitteringer</string>
+
+    <string name="admin_change_server">Ret server-URL</string>
+    <string name="admin_set_alarm">Sæt alarm</string>
+    <string name="admin_show_upload_debug">Vis Upload-debug-node?</string>
+
+    <string name="alarm_alarm">Alarm</string>
+    <string name="alarm_user_prompt">Du skal besvare et spørgeskema</string>
+
+    <string name="app_name">OpenTele</string>
+
+    <string name="bloodpressure_could_not_connect">Kunne ikke forbinde til måler.</string>
+    <string name="bloodpressure_diastolic">Diastolisk blodtryk:</string>
+    <string name="bloodpressure_disconnected">Forbindelse afbrudt.</string>
+    <string name="bloodpressure_permanent_problem">Der kan ikke skabes forbindelse.</string>
+    <string name="bloodpressure_press_start">Tryk på START-knappen på blodtryksmåleren.</string>
+    <string name="bloodpressure_pulse">Puls:</string>
+    <string name="bloodpressure_systolic">Systolisk blodtryk:</string>
+    <string name="bloodpressure_temporary_problem">Kunne ikke hente data. Prøv evt. en ny blodtryksmåling.</string>
+    <string name="bloodpressure_waiting_for_measurement">Venter på måling. Hold dig i ro.</string>
+    <string name="bloodpressure_your_bloodpressure_and_pulse">Dit blodtryk og din puls</string>
+
+    <string name="bloodsugar_after_meal">Efter måltid</string>
+    <string name="bloodsugar_before_meal">Før måltid</string>
+    <string name="bloodsugar_connect_device">Tilslut din blodsukkermåler. Vær sikker på at blodsukkermåleren er slukket inden den tilsluttes.</string>
+    <string name="bloodsugar_connected">Blodsukkermåler fundet.</string>
+    <string name="bloodsugar_fetching_measurements">Henter blodsukkermålinger.</string>
+    <string name="bloodsugar_measurements_fetched">Blodsukkermålinger hentet.</string>
+    <string name="bloodsugar_no_diary">Kunne ikke finde blodsukkermålinger.</string>
+    <string name="bloodsugar_parse_failed">Kunne ikke læse blodsukkermålinger. Kontakt din kontaktperson.</string>
+    <string name="bloodsugar_too_many_diaries">For mange blodsukkermålinger.</string>
+
+    <string name="change_password_change">Skift</string>
+    <string name="change_password_changing_password">Skifter adgangskode. Vent venligst...</string>
+    <string name="change_password_repeat_password">Gentag ny adgangskode</string>
+    <string name="change_password_change_password">Skift adgangskode</string>
+    <string name="change_password_new_password">Ny adgangskode</string>
+
+    <string name="checking_version_detail">Kontrollerer om programmet er opdateret</string>
+    <string name="checking_version_headling">Kontrollerer programversion</string>
+
+    <string name="clear_user_name_on_login">${userName.clearOnLogin}</string>
+
+    <string name="client_server_version_connection_problem_body">Kunne ikke kontakte serveren. Tjek din netværksforbindelse og prøv igen.</string>
+    <string name="client_server_version_connection_problem_button">OK</string>
+    <string name="client_server_version_connection_problem_title">Forbindelsesproblem</string>
+    <string name="client_server_version_mismatch">Du kan ikke logge ind. Programmet skal opdateres. Kontakt din kontaktperson for hjælp.</string>
+    <string name="client_server_version_not_checked">Kunne ikke kontakte serveren for at kontrollere versionsnummer. Tjek netværksforbindelsen.</string>
+
+    <string name="client_version">${version}</string>
+
+    <string name="crp_angiv_resultat_">Angiv resultat </string>
+    <string name="crp_measurement_or">eller</string>
+    <string name="crp_under_5"> &lt;5</string>
+
+    <string name="default_cancel">Annuller</string>
+    <string name="default_menu">Menu</string>
+    <string name="default_next">Næste</string>
+    <string name="default_no">Nej</string>
+    <string name="default_ok">OK</string>
+    <string name="default_omit">Undlad</string>
+    <string name="default_open_tele">OpenTele</string>
+    <string name="default_please_wait">Vent venligst...</string>
+    <string name="default_proceed">Fortsæt</string>
+    <string name="default_retry">Prøv igen</string>
+    <string name="default_server_communication_error">Fejl ved kommunikation med serveren</string>
+    <string name="default_validation_error">Et eller flere felter er ikke udfyldt korrekt</string>
+    <string name="default_working">Arbejder</string>
+    <string name="default_yes">Ja</string>
+
+    <string name="delay_out_of">ud af</string>
+    <string name="delay_seconds">sekunder.</string>
+    <string name="delay_time_elapsed">Tid gået:</string>
+    <string name="delay_time_left">Tid tilbage:</string>
+
+    <string name="error_error_occured">Der er sket en fejl :(</string>
+
+    <string name="haemoglobin_enter_value">Indtast hæmoglobinværdi</string>
+
+    <string name="login_account_locked">Din konto er blevet låst. Henvend dig til din kontaktperson.</string>
+    <string name="login_client_must_be_upgraded">OpenTele skal opdateres inden du kan logge ind.</string>
+    <string name="login_logging_in">Logger ind...</string>
+    <string name="login_login">Log ind</string>
+    <string name="login_password">Adgangskode</string>
+    <string name="login_username">Brugernavn</string>
+    <string name="login_wrong_username_password">Forkert brugernavn eller adgangskode.</string>
+
+    <string name="lung_monitor_bad_measurement">Dårlig måling modtaget. Prøv igen.</string>
+    <string name="lung_monitor_connect">Tænd for apparatet og udfør lungefunktionstest.</string>
+    <string name="lung_monitor_could_not_connect">Kunne ikke forbinde til lungefunktionsmåler.</string>
+    <string name="lung_monitor_measurement_recieved">Måling modtaget.</string>
+    <string name="lung_monitor_perform_test">Udfør lungefunktionstest.</string>
+    <string name="lung_monitor_permanent_problem">Der kan ikke skabes forbindelse.</string>
+    <string name="lung_monitor_temporary_problem">Kunne ikke hente data. Prøv evt. igen.</string>
+
+    <string name="m_lingen_er_">Målingen er: </string>
+
+    <string name="menu_acknowledements">Kvitteringer</string>
+    <string name="menu_change_password">Skift adgangskode</string>
+    <string name="menu_complete_questionnaire">Gennemfør måling</string>
+    <string name="menu_messages"><![CDATA[Beskeder{0,choice,0#|1#\' (\'én ny besked\')\'|1<\' (\'{0,number,integer} nye\')\'}]]></string>
+    <string name="menu_my_measurements">Mine målinger</string>
+
+    <string name="message_create">Opret ny besked</string>
+    <string name="message_error_while_sending">Fejl ved afsendelse af besked!</string>
+    <string name="message_fetching">Henter beskeder</string>
+    <string name="message_headline">Overskrift</string>
+    <string name="message_message">Besked</string>
+    <string name="message_message_sent">Beskeden er nu afsendt.</string>
+    <string name="message_messages">Beskeder</string>
+    <string name="message_new">Ny besked</string>
+    <string name="message_read_write">Her kan du læse og skrive beskeder.</string>
+    <string name="message_received">modtaget</string>
+    <string name="message_send">Send</string>
+    <string name="message_sending">Indsender besvarelser - vent venligst...</string>
+    <string name="message_sent">sendt</string>
+    <string name="message_unread">(Ulæst)</string>
+    <string name="message_write_instructions">For at skrive en besked skal du trykke på knappen \"Ny besked\".</string>
+
+    <string name="monica_bluetooth_off">Fejl: Bluetooth er slået fra!</string>
+    <string name="monica_accept_simulate">Ja tak, kør simuleret</string>
+    <string name="monica_ask_simulate">Simulér Monica device?</string>
+    <string name="monica_battery_low">Der er ikke tilstrækkelig strøm på Monica-apparatet!</string>
+    <string name="monica_black">Sort (B)</string>
+    <string name="monica_bluetooth_unavaliable">Fejl: Bluetooth er ikke tilgængeligt!</string>
+    <string name="monica_checking_connection">Kontrollerer forbindelser. Sluk ikke for Monica-apparatet, men ret de forbindelser der ikke har et flueben.</string>
+    <string name="monica_closing">Afslutter</string>
+    <string name="monica_communication_error">Kunne ikke kommunikere med Monica-apparatet!</string>
+    <string name="monica_decline_simulate">Nej tak, brug Monica-apparatet</string>
+    <string name="monica_device">Monica device</string>
+    <string name="monica_device_initialisation_error">Det lykkedes ikke at starte Monica-apparatet korrekt.</string>
+    <string name="monica_device_not_found">Der blev ikke fundet et apparat der kan benyttes med dette program.</string>
+    <string name="monica_enter_duration">Angiv opsamlingstid i minutter:</string>
+    <string name="monica_failed_to_start">Opstart af Monica-apparatet fejlede!</string>
+    <string name="monica_green">Grøn (G)</string>
+    <string name="monica_indcators_or_only_guides">Ovenstående indikatorer er kun vejledende. Det er altid måleapparatets indikatorer der er gældende!</string>
+    <string name="monica_missing_sample">Der opstod en datafejl under læsningen fra Monica-apparatet!</string>
+    <string name="monica_multiple_devices">Fejl: Der er tilknyttet mere end et Monica-apparater!</string>
+    <string name="monica_orange">Orange (O)</string>
+    <string name="monica_processing_data">Behandler data</string>
+    <string name="monica_question_marks">\?\?</string>
+    <string name="monica_reading_interrupted">Læsning af data er stoppet.</string>
+    <string name="monica_recieving_data">Modtager data...</string>
+    <string name="monica_set_time">Indstil tiden:</string>
+    <string name="monica_switched_off">Monica-apparatet blev slukket!</string>
+    <string name="monica_time_set_to">Indstillet til</string>
+    <string name="monica_unknown_firmware">Monica-apparatets version ( %1$s ) er ikke understøttet af dette program!</string>
+    <string name="monica_waiting_for_connection">Venter på forbindelse. (Tænd for Monica-apparatet, og hold tablet og Monica-apparatet indenfor 3 m fra hinanden)</string>
+    <string name="monica_waiting_for_data">Venter på data...</string>
+    <string name="monica_white">Hvid (W)</string>
+    <string name="monica_yellow">Gul (Y)</string>
+
+
+    <string name="patient_measurements_my_measurements">Mine målinger</string>
+
+    <string name="questionnaire_fetching">Henter skema</string>
+
+    <string name="run_skema_do_you_want_to_send_data">Vil du sende data?</string>
+
+    <string name="saturation__waiting_for_measurement">Venter på måling. Hold dig i ro.</string>
+    <string name="saturation_connecting">Forbinder til enhed...</string>
+    <string name="saturation_connection_broken">Forbindelse afbrudt</string>
+    <string name="saturation_could_not_connect">Kunne ikke forbinde til måler.</string>
+    <string name="saturation_enter_pulse">Angiv puls:</string>
+    <string name="saturation_enter_saturation">Angiv saturation:</string>
+    <string name="saturation_measuremen_without_pulse_recieved">Måling modtaget\nIltmætning: %1$d</string>
+    <string name="saturation_measurement_received">Måling modtaget\n Iltmætning: %1$d\nPuls: %2$d</string>
+    <string name="saturation_permanent_problem">Der kan ikke skabes forbindelse</string>
+    <string name="saturation_saturation">Saturation</string>
+    <string name="saturation_temporary_problem">Kunne ikke hente data. Sluk og tænd evt. oxymeteret.</string>
+
+    <string name="save_file_data_saved_locally">Data gemmes lokalt</string>
+    <string name="save_file_error">Fejl:</string>
+    <string name="save_file_save_to">Saving to:</string>
+    <string name="save_file_saved_in">Data gemt i</string>
 
     <string name="server_url">${server.url}</string>
     <string name="server_url_locked">${server.url.locked}</string>
-    <string name="client_version">${version}</string>
+
+    <string name="set_alarm_alarm_set">Alarm sat</string>
+    <string name="set_alarm_server_ip">Sæt server-IP</string>
+    <string name="set_server_server_ip">Set server-ip</string>
+
+    <string name="set_show_upload_debug_show_data">Vis data</string>
+    <string name="set_show_upload_debug_show_debug">Skal upload-debug-noden vises?</string>
+
+    <string name="skema_menu_choose_questionnaire">Vælg et spørgeskema</string>
+    <string name="skema_menu_fetching_questionnaires">Henter skemaer</string>
+    <string name="skema_menu_skema">skema:</string>
+
     <string name="skip_version_check">${skipVersionCheck}</string>
-    <string name="hello">Hello World, QuestionnaireActivity!</string>
-    <string name="app_name">OpenTele</string>
-    <string name="ok">OK</string>
-    <string name="monica_device">Monica device</string>
-    <string name="textSize">36sp</string>
-    <string name="yellow">Gul (Y)</string>
-    <string name="black">Sort (B)</string>
-    <string name="green">Grøn (G)</string>
-    <string name="white">Hvid (W)</string>
-    <string name="orange">Orange (O)</string>
-    <string name="checking_version_headling">Kontrollerer programversion</string>
-    <string name="checking_version_detail">Kontrollerer om programmet er opdateret</string>
-    <string name="client_server_version_mismatch">Du kan ikke logge ind. Programmet skal opdateres. Kontakt din kontaktperson for hjælp.</string>
-    <string name="client_server_version_not_checked">Kunne ikke kontakte serveren for at kontrollere versionsnummer. Tjek netværksforbindelsen.</string>
-    <string name="client_server_version_connection_problem_title">Forbindelsesproblem</string>
-    <string name="client_server_version_connection_problem_body">Kunne ikke kontakte serveren. Tjek din netværksforbindelse og prøv igen.</string>
-    <string name="client_server_version_connection_problem_button">OK</string>
-    <string name="angiv_resultat_">Angiv resultat </string>
-    <string name="under_5"> &lt;5</string>
-    <string name="m_lingen_er_">Målingen er: </string>
-    </resources>
+
+    <string name="temerature_enter_temperature">Indtast temperatur</string>
+
+    <string name="top_panel_back">Tilbage</string>
+    <string name="top_panel_log_out">Log ud</string>
+    <string name="top_panel_main_meni">Hovedmenu</string>
+
+    <string name="upload_measurements_error">Fejl</string>
+    <string name="upload_measurements_measurements_recieved">Indsendt måling/svar er modtaget.</string>
+    <string name="upload_measurements_sent">Indsendt måling/svar</string>
+    <string name="upload_measurements_upload_failed">Indsendelse af måling/svar fejlede. Tjek evt. netværksforbindelsen og prøv igen.</string>
+    <string name="upload_measurements_uploading">Indsender svar...</string>
+
+    <string name="urine_enter_measurement">Angiv urin proteintal</string>
+    <string name="urine_value_negative">negativ</string>
+    <string name="urine_value_plus_four">+4</string>
+    <string name="urine_value_plus_minus">+/-</string>
+    <string name="urine_value_plus_one">+1</string>
+    <string name="urine_value_plus_three">+3</string>
+    <string name="urine_value_plus_two">+2</string>
+
+    <string name="urineglocose_enter_glucose_number">Angiv urin glukosetal</string>
+    <string name="urineglocose_value_negative">negativ</string>
+    <string name="urineglocose_value_plus_four">+4</string>
+    <string name="urineglocose_value_plus_one">+1</string>
+    <string name="urineglocose_value_plus_three">+3</string>
+    <string name="urineglocose_value_plus_two">+2</string>
+
+    <string name="video_bloodpressure_bloodpressure_and_pulse">Blodtryk og puls</string>
+    <string name="video_bloodpressure_could_not_connect">Kunne ikke forbinde til blodtryksmåler.</string>
+    <string name="video_bloodpressure_disconnected">Afkoblet.</string>
+    <string name="video_bloodpressure_measurement_received">Måling modtaget.</string>
+    <string name="video_bloodpressure_permanent_problem">Der kan ikke skabes forbindelse.</string>
+    <string name="video_bloodpressure_press_start">Tryk på START-knappen på blodtryksmåleren.</string>
+    <string name="video_bloodpressure_temporary_problem">Kunne ikke hente data. Prøv evt. en ny blodtryksmåling.</string>
+    <string name="video_bloodpressure_waiting_for_measurement">Venter på måling. Hold dig i ro.</string>
+    <string name="video_consultation">Video-konsultation</string>
+    <string name="video_could_not_start">Det var desværre ikke muligt at starte video-konsultationen.</string>
+    <string name="video_its_time_for_a_conference">Det er tid til din video-konsultation.</string>
+    <string name="video_lung_function_bad_measurement">Dårlig måling modtaget. Prøv igen.</string>
+    <string name="video_lung_function_could_not_connect">Kunne ikke forbinde til lungefunktionsmåler.</string>
+    <string name="video_lung_function_lung_function">Lungefunktion</string>
+    <string name="video_lung_function_measurement_recived">Måling modtaget.</string>
+    <string name="video_lung_function_perform_test">Udfør lungefunktionstest.</string>
+    <string name="video_lung_function_permanent_problem">Der kan ikke skabes forbindelse.</string>
+    <string name="video_lung_function_temporary_problem">Kunne ikke hente data. Prøv evt. igen.</string>
+    <string name="video_lung_function_turn_on_device">Tænd for apparatet og udfør lungefunktionstest.</string>
+    <string name="video_press_ok_to_start">Tryk på OK-knappen for at starte konsultationen.</string>
+    <string name="video_saturation_connected">Venter på måling. Hold dig i ro.</string>
+    <string name="video_saturation_connection_problem">Kunne ikke forbinde til måler.</string>
+    <string name="video_saturation_disconnected">Forbindelse afbrudt.</string>
+    <string name="video_saturation_equip_device">Sæt måleren på din finger.</string>
+    <string name="video_saturation_measurement_received">Måling modtaget.</string>
+    <string name="video_saturation_permanent_problem">Der kan ikke skabes forbindelse.</string>
+    <string name="video_saturation_saturation">Iltmætning</string>
+    <string name="video_saturation_temporary_problem">Kunne ikke hente data. Sluk og tænd evt. oxymeteret.</string>
+    <string name="video_starting">Starter video-konsultation. Vent et øjeblik.</string>
+    <string name="web_view_fetching">Henter</string>
+    <string name="weight_connected">Træd op på vægten og hold dig i ro.</string>
+    <string name="weight_could_not_connect">Kunne ikke forbinde til vægt.</string>
+    <string name="weight_disconnected">Forbindelsen til vægten blev afbrudt. Prøv evt. igen.</string>
+    <string name="weight_permanent_problem">Der kan ikke skabes forbindelse.</string>
+    <string name="weight_set_weight_to_kg">Indstil din vægt til at måle i kg og prøv igen. Vægt:</string>
+    <string name="weight_temporary_problem">Kunne ikke hente data. Prøv evt. igen.</string>
+    <string name="weight_turn_on_and_wait">Tænd for vægten og afvent ny besked i skærmbillede.</string>
+    <string name="weight_weight">Vægt:</string>
+</resources>

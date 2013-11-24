@@ -4,6 +4,7 @@ import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 import dk.silverbullet.telemed.questionnaire.skema.Skema;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 public class TestHenrik implements TestSkema {
@@ -210,11 +211,11 @@ public class TestHenrik implements TestSkema {
             "}";
 
     public Skema getSkema() {
-        return Util.getGson().fromJson(json, Skema.class);
+        return Json.parse(json, Skema.class);
     }
 
     public Skema getSkema(Questionnaire questionnaire) throws UnknownNodeException {
-        Skema skema = Util.getGson().fromJson(json, Skema.class);
+        Skema skema = Json.parse(json, Skema.class);
         skema.link();
         skema.setQuestionnaire(questionnaire);
         for (Variable<?> output : skema.getOutput())

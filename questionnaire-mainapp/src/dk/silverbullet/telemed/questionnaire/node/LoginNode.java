@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,6 +70,9 @@ public class LoginNode extends IONode implements LoginListener {
 
         usernameInput.addTextChangedListener(textChangedListener);
         passwordInput.addTextChangedListener(textChangedListener);
+        if (Util.shouldHidePasswordText(questionnaire)) {
+            passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
 
         setLoginButtonListener();
         showUpdatedNeededInfo();
@@ -135,7 +139,7 @@ public class LoginNode extends IONode implements LoginListener {
         Boolean clientSupported = (Boolean) questionnaire.getValuePool().get(Util.VARIABLE_CLIENT_SUPPORTED).getExpressionValue().getValue();
 
         if(clientSupported != null && !clientSupported) {
-            showError("OpenTele skal opdateres inden du kan logge ind.");
+            showError(Util.getString(R.string.login_client_must_be_upgraded, questionnaire));
         }
     }
 
@@ -158,7 +162,7 @@ public class LoginNode extends IONode implements LoginListener {
     public void loginFailed() {
         clearPasswordText();
         showLoginForm();
-        showError("Forkert brugernavn eller adgangskode.");
+        showError(Util.getString(R.string.login_wrong_username_password, questionnaire));
     }
 
     @Override
@@ -171,13 +175,13 @@ public class LoginNode extends IONode implements LoginListener {
     public void accountLocked() {
         clearPasswordText();
         showLoginForm();
-        showError("Din konto er blevet låst. Henvend dig til din kontaktperson.");
+        showError(Util.getString(R.string.login_account_locked, questionnaire));
     }
 
     @Override
     public void sendError() {
         showLoginForm();
-        showError("Fejl ved kommunikation med serveren.");
+        showError(Util.getString(R.string.default_server_communication_error, questionnaire));
     }
 
     private void clearPasswordText() {
@@ -191,6 +195,10 @@ public class LoginNode extends IONode implements LoginListener {
     }
 
     private String getSavedUsername() {
+        if (Util.shouldClearUserNameOnLogin(questionnaire)) {
+            return null;
+        }
+
         Activity activity = questionnaire.getActivity();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         return preferences.getString(SHARED_PREFERENCES_LAST_USERNAME, null);
@@ -201,7 +209,11 @@ public class LoginNode extends IONode implements LoginListener {
         String username = Util.getStringVariableValue(questionnaire, Util.VARIABLE_USERNAME);
 
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
-        editor.putString(SHARED_PREFERENCES_LAST_USERNAME, username);
+        if (Util.shouldClearUserNameOnLogin(questionnaire)) {
+            editor.remove(SHARED_PREFERENCES_LAST_USERNAME);
+        } else {
+            editor.putString(SHARED_PREFERENCES_LAST_USERNAME, username);
+        }
         editor.commit();
     }
 

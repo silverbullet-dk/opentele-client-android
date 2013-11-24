@@ -2,8 +2,8 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import android.app.ProgressDialog;
 import android.util.Log;
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.ClinicMessageBubbleElement;
 import dk.silverbullet.telemed.questionnaire.element.PatientMessageBubbleElement;
@@ -16,6 +16,7 @@ import dk.silverbullet.telemed.rest.RetrieveTask;
 import dk.silverbullet.telemed.rest.bean.message.MessageItem;
 import dk.silverbullet.telemed.rest.bean.message.Messages;
 import dk.silverbullet.telemed.rest.listener.MessageListListener;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.LinkedList;
@@ -45,7 +46,7 @@ public class MessageDialogNode extends IONode implements MessageListListener {
             clearElements();
         }
 
-        dialog = ProgressDialog.show(questionnaire.getActivity(), "Henter beskeder", "Vent venligst...", true);
+        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.message_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 
         RetrieveTask messageTask = new RetrieveMessageListTask(questionnaire, this);
         messageTask.execute();
@@ -75,13 +76,13 @@ public class MessageDialogNode extends IONode implements MessageListListener {
             }
         } else {
             addElement(new TextViewElement(this, departmentName, false));
-            addElement(new TextViewElement(this, "Her kan du læse og skrive beskeder."));
-            addElement(new TextViewElement(this, "For at skrive en besked skal du trykke på knappen \"Ny besked\"."));
+            addElement(new TextViewElement(this, Util.getString(R.string.message_read_write, questionnaire)));
+            addElement(new TextViewElement(this, Util.getString(R.string.message_write_instructions, questionnaire)));
         }
 
         ButtonElement be = new ButtonElement(this);
         be.setNextNode(newMessageNode);
-        be.setText("Ny besked");
+        be.setText(Util.getString(R.string.message_new, questionnaire));
         addElement(be);
     }
 
@@ -115,7 +116,7 @@ public class MessageDialogNode extends IONode implements MessageListListener {
 
         Log.d(TAG, result);
         long departmentId = this.departmentId.getExpressionValue().getValue();
-        Messages messageResponse = new Gson().fromJson(result, Messages.class);
+        Messages messageResponse = Json.parse(result, Messages.class);
         for (MessageItem message : messageResponse.messages) {
             boolean isFromDepartment = message.getFrom().getType().equals("Department") && message.getFrom().getId() == departmentId;
             boolean isToDepartment = message.getTo().getType().equals("Department") && message.getTo().getId() == departmentId;

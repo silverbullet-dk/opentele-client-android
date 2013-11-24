@@ -15,12 +15,12 @@ public class SkemaValidator {
 
         // Startnode
         if (!contains(skema.getStartNodeNode())) {
-            throw new RuntimeException("Startnode findes ikke.");
+            throw new RuntimeException("Startnode not found");
         }
 
         // Endnode
         if (!contains(skema.getEndNodeNode())) {
-            throw new RuntimeException("Endnode findes ikke.");
+            throw new RuntimeException("Endnode not found");
         }
 
         for (Node node : skema.getNodes()) {

@@ -9,6 +9,7 @@ import dk.silverbullet.telemed.device.continua.ContinuaDeviceController;
 import dk.silverbullet.telemed.device.continua.ContinuaListener;
 import dk.silverbullet.telemed.device.continua.android.AndroidHdpController;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Constant;
@@ -41,14 +42,14 @@ public class WeightDeviceNode extends DeviceNode implements ContinuaListener<Wei
         addElement(new TextViewElement(this, text));
 
         statusText = new TextViewElement(this);
-        setStatusText("Tænd for vægten og afvent ny besked i skærmbillede.");
+        setStatusText(Util.getString(R.string.weight_turn_on_and_wait, questionnaire));
         addElement(statusText);
 
         be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
-        be.setLeftText("Undlad");
+        be.setLeftText(Util.getString(R.string.default_omit, questionnaire));
         be.setRightNextNode(this);
-        be.setRightText("Prøv igen");
+        be.setRightText(Util.getString(R.string.default_retry, questionnaire));
         addElement(be);
 
         super.enter();
@@ -57,7 +58,7 @@ public class WeightDeviceNode extends DeviceNode implements ContinuaListener<Wei
             weightDeviceController = AndWeightScaleController.create(this, new AndroidHdpController(questionnaire
                     .getActivity().getApplicationContext()));
         } catch (DeviceInitialisationException e) {
-            setStatusText("Kunne ikke forbinde til vægt.");
+            setStatusText(Util.getString(R.string.weight_could_not_connect, questionnaire));
         }
     }
 
@@ -76,22 +77,22 @@ public class WeightDeviceNode extends DeviceNode implements ContinuaListener<Wei
 
     @Override
     public void connected() {
-        setStatusText("Træd op på vægten og hold dig i ro.");
+        setStatusText(Util.getString(R.string.weight_connected, questionnaire));
     }
 
     @Override
     public void disconnected() {
-        setStatusText("Forbindelsen til vægten blev afbrudt. Prøv evt. igen.");
+        setStatusText(Util.getString(R.string.weight_disconnected, questionnaire));
     }
 
     @Override
     public void permanentProblem() {
-        setStatusText("Der kan ikke skabes forbindelse.");
+        setStatusText(Util.getString(R.string.weight_permanent_problem, questionnaire));
     }
 
     @Override
     public void temporaryProblem() {
-        setStatusText("Kunne ikke hente data. Prøv evt. igen.");
+        setStatusText(Util.getString(R.string.weight_temporary_problem, questionnaire));
     }
 
     @Override
@@ -102,11 +103,11 @@ public class WeightDeviceNode extends DeviceNode implements ContinuaListener<Wei
                 if (weight.getUnit() == Unit.KG) {
                     setDeviceIdString(systemId);
                     WeightDeviceNode.this.weight.setValue(new Constant<Float>(weight.getWeight()));
-                    statusText.setText("Vægt: " + weight.getWeight() + " " + weight.getUnit().getName());
-                    be.setRightText("OK");
+                    statusText.setText(Util.getString(R.string.weight_weight, questionnaire) + weight.getWeight() + " " + weight.getUnit().getName());
+                    be.setRightText(Util.getString(R.string.default_ok, questionnaire));
                     be.setRightNextNode(getNextNode());
                 } else {
-                    statusText.setText("Indstil din vægt til at måle i kg og prøv igen. Vægt: " + weight.getWeight()
+                    statusText.setText(Util.getString(R.string.weight_set_weight_to_kg, questionnaire) + weight.getWeight()
                             + " " + weight.getUnit().getName());
                 }
             }

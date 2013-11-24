@@ -2,7 +2,7 @@ package dk.silverbullet.telemed.questionnaire.output;
 
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.utils.Util;
+import dk.silverbullet.telemed.utils.Json;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -24,7 +24,7 @@ public class OutputSkema {
     private Long QuestionnaireId;
 
     public void setDate(Date date) {
-        this.date = Util.ISO8601_DATE_TIME_FORMAT.format(date);
+        this.date = Json.ISO8601_DATE_TIME_FORMAT.format(date);
     }
 
     public void addVariable(Variable<?> output) {

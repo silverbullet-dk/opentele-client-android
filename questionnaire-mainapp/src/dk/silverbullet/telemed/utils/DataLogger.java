@@ -32,7 +32,7 @@ public class DataLogger {
             Date now = new Date();
             start = 0;
             file = new File(Environment.getExternalStorageDirectory().getAbsoluteFile(), LOG_FILE_PREFIX
-                    + Util.ISO8601_DATE_TIME_FORMAT_SHORT.format(now) + ".CSV");
+                    + Json.ISO8601_DATE_TIME_FORMAT_SHORT.format(now) + ".CSV");
             cleanupFiles(file.getParentFile(), LOG_FILE_PREFIX, 4);
             Log.d(TAG, "DateLogger output file: " + file.getAbsolutePath());
             out = new OutputStreamWriter(new FileOutputStream(file));

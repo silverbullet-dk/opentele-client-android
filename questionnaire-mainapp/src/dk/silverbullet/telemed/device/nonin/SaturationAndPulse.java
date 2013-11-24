@@ -1,8 +1,10 @@
 package dk.silverbullet.telemed.device.nonin;
 
+import com.google.gson.annotations.Expose;
+
 public class SaturationAndPulse {
-    private final int saturation;
-    private final int pulse;
+    @Expose private final int saturation;
+    @Expose private final int pulse;
 
     public SaturationAndPulse(int saturation, int pulse) {
         this.saturation = saturation;

@@ -3,10 +3,12 @@ package dk.silverbullet.telemed.questionnaire.node;
 import android.util.Log;
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.io.File;
@@ -33,23 +35,23 @@ public class SaveFileNode extends IONode {
         clearElements();
 
         Log.d(TAG, "SaveFileNode Enter()");
-        TextViewElement tve = new TextViewElement(this, "Data gemmes lokalt");
+        TextViewElement tve = new TextViewElement(this, Util.getString(R.string.save_file_data_saved_locally, questionnaire));
         addElement(tve);
 
         File outFile = new File("/mnt/sdcard/Download/data.jsn");
-        statusText = new TextViewElement(this, "Saving to: " + outFile.getAbsolutePath());
+        statusText = new TextViewElement(this, Util.getString(R.string.save_file_save_to, questionnaire) + outFile.getAbsolutePath());
 
         addElement(statusText);
-        addElement(new ButtonElement(this, "OK", nextNode));
+        addElement(new ButtonElement(this, Util.getString(R.string.default_ok, questionnaire), nextNode));
 
         try {
             String json = getJson();
             FileOutputStream os = new FileOutputStream(outFile);
             os.write(json.getBytes("UTF-8"));
             os.close();
-            statusText.setText("Data gemt i " + outFile.getAbsolutePath());
+            statusText.setText(Util.getString(R.string.save_file_saved_in, questionnaire) + outFile.getAbsolutePath());
         } catch (IOException ex) {
-            statusText.setText("Fejl: " + ex);
+            statusText.setText(Util.getString(R.string.save_file_error, questionnaire) + ex);
             Log.w(TAG, ex);
         }
 
@@ -62,7 +64,7 @@ public class SaveFileNode extends IONode {
             throw new IOException("questionnaire.getSkemaValuePool() == null");
         }
 
-        String json = Util.getGsonForOutput().toJson(out);
+        String json = Json.print(out);
 
         if (json == null) {
             throw new IOException("..toJson() == null");

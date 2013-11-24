@@ -90,7 +90,7 @@ public class QuestionnaireFragment extends Fragment {
     }
 
     private boolean shouldSkipVersionCheck() {
-        return true;// getString(R.string.skip_version_check).equals("true");
+        return getString(R.string.skip_version_check).equals("true");
     }
 
     private boolean couldNotConnectToServerWhileServerUrlCannotBeChanged(Boolean clientSupported) {

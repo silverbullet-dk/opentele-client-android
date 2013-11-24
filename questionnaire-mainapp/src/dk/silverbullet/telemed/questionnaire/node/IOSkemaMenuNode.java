@@ -2,9 +2,9 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import android.app.ProgressDialog;
 import android.util.Log;
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.deleteme.*;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -14,6 +14,7 @@ import dk.silverbullet.telemed.rest.bean.ListBean;
 import dk.silverbullet.telemed.rest.listener.ListListener;
 import dk.silverbullet.telemed.schedule.ReminderService;
 import dk.silverbullet.telemed.schedule.bean.QuestionnaireSchedule;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,8 +32,6 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
     private Variable<String> skemaName;
 
     private Map<String, String> skemaer = new LinkedHashMap<String, String>();
-
-    private Set<String> res = new HashSet<String>();
 
     private ProgressDialog dialog;
 
@@ -59,12 +58,20 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
         }
     }
 
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
+    }
+
+    public void setSkemaName(Variable<String> skemaName) {
+        this.skemaName = skemaName;
+    }
+
     @Override
     public void enter() {
         Log.d(TAG, "enter....");
         hideBackButton();
 
-        dialog = ProgressDialog.show(questionnaire.getActivity(), "Henter skemaer", "Vent venligst...", true);
+        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.skema_menu_fetching_questionnaires, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 
         RetrieveTask asyncHttpPost = new RetrieveQuestionnaireListTask(questionnaire, this);
         asyncHttpPost.execute(TestOutputSkema.getOutputSkema());
@@ -85,18 +92,19 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
 
     @Override
     public void setJson(String json) {
-        Gson gson = new Gson();
-        ListBean listBean = gson.fromJson(json, ListBean.class);
+        ListBean listBean = Json.parse(json, ListBean.class);
 
-        if (null != listBean) {
-            for (QuestionnaireSchedule schedule : listBean.getQuestionnaires()) {
-                skemaer.put(schedule.getSkemaName(), gson.toJson(schedule));
-            }
+        for (QuestionnaireSchedule schedule : listBean.getQuestionnaires()) {
+            skemaer.put(schedule.getSkemaName(), Json.print(schedule));
         }
 
         buildView();
         createView();
         dialog.dismiss();
+
+        if (listBean.getQuestionnaires().size() == 1) {
+            startFirstQuestionnaireDirectly(listBean);
+        }
     }
 
     @Override
@@ -108,7 +116,7 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
         clearElements();
 
         TextViewElement tve = new TextViewElement(this);
-        tve.setText("Vælg et spørgeskema");
+        tve.setText(Util.getString(R.string.skema_menu_choose_questionnaire, questionnaire));
         addElement(tve);
 
         ListViewElement<String> lve = new ListViewElement<String>(this);
@@ -118,7 +126,7 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
         int i = 0;
         for (String key : vals) {
             String skema = skemaer.get(key);
-            Log.d(TAG, key + " skema: " + skema);
+            Log.d(TAG, key + Util.getString(R.string.skema_menu_skema, questionnaire) + skema);
             res[i++] = skema;
         }
 
@@ -136,7 +144,7 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
         for (String fullQuestionnaireName : questionnaires.keySet()) {
             String questionnaireJson = questionnaires.get(fullQuestionnaireName);
             String questionnaireName = questionnaireNameFromQuestionnaireJson(questionnaireJson);
-            if (ReminderService.shouldHightlightQuestionnaire(questionnaireName)) {
+            if (ReminderService.shouldHighlightQuestionnaire(questionnaireName)) {
                 result.add(fullQuestionnaireName);
             }
         }
@@ -159,11 +167,9 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
         }
     }
 
-    public void setNextNode(Node nextNode) {
-        this.nextNode = nextNode;
-    }
-
-    public void setSkemaName(Variable<String> skemaName) {
-        this.skemaName = skemaName;
+    private void startFirstQuestionnaireDirectly(ListBean listBean) {
+        skemaName.setValue(Json.print(listBean.getQuestionnaires().get(0)));
+        questionnaire.chainToNextIONode();
+        questionnaire.setCurrentNode(nextNode);
     }
 }

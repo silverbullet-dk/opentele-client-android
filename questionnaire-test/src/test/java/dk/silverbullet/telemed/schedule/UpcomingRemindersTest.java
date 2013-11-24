@@ -30,6 +30,16 @@ public class UpcomingRemindersTest {
 		assertTrue(reminders.hasMoreReminders());
 		assertEquals(time("2013-06-05 17:00:00"), reminders.nextReminder());
 	}
+
+    @Test
+    public void handlesUpcomingAlarmsInFarFuture() {
+        long farInTheFuture = 59000000; // Overflows an int when multiplied with 1000 to go from seconds to milliseconds
+        ReminderBean reminderBean = reminderBean(23, "First questionnaire", farInTheFuture);
+
+        UpcomingReminders reminders = new UpcomingReminders(now, Arrays.asList(reminderBean));
+        assertTrue(reminders.hasMoreReminders());
+        assertTrue(reminders.nextReminder().after(new Date()));
+    }
 	
 	@Test
 	public void knowsFirstUpcomingAlarmForSeveralReminderBeans() {
@@ -101,7 +111,7 @@ public class UpcomingRemindersTest {
 		assertEquals(Arrays.asList("Second questionnaire"), reminders.remindedQuestionnairesAt(time("2013-06-05 17:30:00")));
 	}
 	
-	private ReminderBean reminderBean(long questionnaireId, String questionnaireName, Integer... alarms) {
+	private ReminderBean reminderBean(long questionnaireId, String questionnaireName, Long... alarms) {
 		ReminderBean result = new ReminderBean();
 		result.setQuestionnaireId(questionnaireId);
 		result.setQuestionnaireName(questionnaireName);
@@ -109,8 +119,8 @@ public class UpcomingRemindersTest {
 		return result;
 	}
 
-	private int secondsTo(String timeAsString) {
-		return (int)((time(timeAsString).getTime() - now.getTime()) / 1000);
+	private long secondsTo(String timeAsString) {
+		return (time(timeAsString).getTime() - now.getTime()) / 1000;
 	}
 	
 	private Date time(String asString) {

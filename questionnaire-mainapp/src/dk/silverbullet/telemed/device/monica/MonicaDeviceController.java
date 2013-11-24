@@ -1,28 +1,24 @@
 package dk.silverbullet.telemed.device.monica;
 
-import java.io.IOException;
-import java.util.Date;
-
+import android.content.Context;
 import android.util.Log;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.DeviceNotFoundException;
-import dk.silverbullet.telemed.device.monica.packet.BatteryVoltageMessage;
-import dk.silverbullet.telemed.device.monica.packet.CBlockMessage;
-import dk.silverbullet.telemed.device.monica.packet.DeviceOffMessage;
-import dk.silverbullet.telemed.device.monica.packet.FetalHeightAndSignalToNoise;
-import dk.silverbullet.telemed.device.monica.packet.GotDataMessage;
-import dk.silverbullet.telemed.device.monica.packet.ImpedanceStatus;
-import dk.silverbullet.telemed.device.monica.packet.MmMessage;
-import dk.silverbullet.telemed.device.monica.packet.MonicaMessage;
-import dk.silverbullet.telemed.device.monica.packet.PatientStatusMessage;
+import dk.silverbullet.telemed.device.monica.packet.*;
 import dk.silverbullet.telemed.device.monica.packet.PatientStatusMessage.Status;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.node.monica.DeviceState;
 import dk.silverbullet.telemed.questionnaire.node.monica.MonicaDeviceCallback;
 import dk.silverbullet.telemed.utils.DataLogger;
+import dk.silverbullet.telemed.utils.Util;
+
+import java.io.IOException;
+import java.util.Date;
 
 public class MonicaDeviceController extends Thread implements MonicaDevice {
     private static final String TAG = "MonicaDeviceController";
     private final MonicaDeviceCallback monicaCallback;
+    private Context context;
     private MonicaBluetoothIOController btio;
     private boolean orange;
     private boolean white;
@@ -30,8 +26,9 @@ public class MonicaDeviceController extends Thread implements MonicaDevice {
     private boolean black;
     private boolean yellow;
 
-    public MonicaDeviceController(MonicaDeviceCallback monicaCallback) throws DeviceInitialisationException {
+    public MonicaDeviceController(MonicaDeviceCallback monicaCallback, Context context) throws DeviceInitialisationException {
         this.monicaCallback = monicaCallback;
+        this.context = context;
         try {
             monicaCallback.setState(DeviceState.WAITING_FOR_CONNECTION);
             btio = new MonicaBluetoothIOController();
@@ -57,29 +54,28 @@ public class MonicaDeviceController extends Thread implements MonicaDevice {
             collectData();
         } catch (DeviceNotFoundException dne) {
             Log.w(TAG, dne);
-            monicaCallback.abort("Der blev ikke fundet et apparat der kan benyttes med dette program.");
+            monicaCallback.abort(Util.getString(R.string.monica_device_not_found, context));
         } catch (BatteryTooLowException btl) {
             Log.w(TAG, btl);
-            monicaCallback.done("Der er ikke tilstrækkelig strøm på Monica-apparatet!");
+            monicaCallback.done(Util.getString(R.string.monica_battery_low, context));
         } catch (DeviceSwitchedOffException off) {
             Log.w(TAG, off);
-            monicaCallback.done("Monica-apparatet blev slukket!");
+            monicaCallback.done(Util.getString(R.string.monica_switched_off, context));
         } catch (UnknownFirmwareVersionException e) {
             Log.w(TAG, e);
-            monicaCallback.abort("Monica-apparatets version (" + e.getVersion()
-                    + ") er ikke understøttet af dette program!");
+            monicaCallback.abort(Util.getString(R.string.monica_unknown_firmware, context, e.getVersion()));
         } catch (DeviceInitialisationException e) {
             Log.w(TAG, e);
-            monicaCallback.abort("Det lykkedes ikke at starte Monica-apparatet korrekt.");
+            monicaCallback.abort(Util.getString(R.string.monica_device_initialisation_error, context));
         } catch (IOException e) {
             Log.w(TAG, e);
-            monicaCallback.done("Kunne ikke kommunikere med Monica-apparatet!");
+            monicaCallback.done(Util.getString(R.string.monica_communication_error, context));
         } catch (InterruptedException e) {
             Log.w(TAG, e);
-            monicaCallback.done("Læsning af data er stoppet.");
+            monicaCallback.done(Util.getString(R.string.monica_reading_interrupted, context));
         } catch (MonicaSamplesMissingException e) {
             Log.w(TAG, e);
-            monicaCallback.done("Der opstod en datafejl under læsningen fra Monica-apparatet!");
+            monicaCallback.done(Util.getString(R.string.monica_missing_sample, context));
         } finally {
             monicaCallback.setState(DeviceState.CLOSING);
             try {

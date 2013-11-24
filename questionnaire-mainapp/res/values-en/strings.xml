@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="acknowledgements_acknowledgements">Acknowledgements</string>
+    <string name="acknowledgements_fetching">Fetching acknowledgements</string>
+
+    <string name="admin_change_server">Change server-URL</string>
+    <string name="admin_set_alarm">Set alarm</string>
+    <string name="admin_show_upload_debug">Show Upload-debug-node?</string>
+
+    <string name="alarm_alarm">Alarm</string>
+    <string name="alarm_user_prompt">It\'s time to answer a questionnaire</string>
+
+    <string name="app_name">OpenTele</string>
+
+    <string name="bloodpressure_could_not_connect">Could not connect to blood pressure device</string>
+    <string name="bloodpressure_diastolic">Diastolic blood pressure:</string>
+    <string name="bloodpressure_disconnected">Disconnected.</string>
+    <string name="bloodpressure_permanent_problem">A connection could not be established.</string>
+    <string name="bloodpressure_press_start">Press the START-button on the blood pressure device.</string>
+    <string name="bloodpressure_pulse">Pulse:</string>
+    <string name="bloodpressure_systolic">Systolic blood pressure:</string>
+    <string name="bloodpressure_temporary_problem">Could not fetch data. Try taking another measurement.</string>
+    <string name="bloodpressure_waiting_for_measurement">Waiting for measurement. Stay still.</string>
+    <string name="bloodpressure_your_bloodpressure_and_pulse">Your blood pressure and pulse</string>
+
+    <string name="bloodsugar_after_meal">After meal</string>
+    <string name="bloodsugar_before_meal">Before meal</string>
+    <string name="bloodsugar_connect_device">Connect your blood sugar device. Make sure that it is turned of before connecting it.</string>
+    <string name="bloodsugar_connected">Blood sugar device found.</string>
+    <string name="bloodsugar_fetching_measurements">Fetching blood sugar measurements.</string>
+    <string name="bloodsugar_measurements_fetched">Blood sugar measurements fetched.</string>
+    <string name="bloodsugar_no_diary">Could not find blood sugar measurements.</string>
+    <string name="bloodsugar_parse_failed">Could not read blood sugar measurements. Please contact your contact person.</string>
+    <string name="bloodsugar_too_many_diaries">Too many blood sugar measurements.</string>
+
+    <string name="change_password_change">Change</string>
+    <string name="change_password_changing_password">Changing password. Please wait…</string>
+    <string name="change_password_repeat_password">Repeat new password</string>
+    <string name="change_password_change_password">Change password</string>
+    <string name="change_password_new_password">New Password</string>
+
+    <string name="checking_version_detail">Checking for application updates</string>
+    <string name="checking_version_headling">Checking application version</string>
+
+    <string name="clear_user_name_on_login">${userName.clearOnLogin}</string>
+
+    <string name="client_server_version_connection_problem_body">Could not connect to server. Please check your network connection and try again</string>
+    <string name="client_server_version_connection_problem_button">OK</string>
+    <string name="client_server_version_connection_problem_title">Connection problem</string>
+    <string name="client_server_version_mismatch">You cannot log in. The application needs to be updated. Please contact your contact person for help.</string>
+    <string name="client_server_version_not_checked">Could not connect to sever to check application version. Please check your network connection.</string>
+
+    <string name="client_version">${version}</string>
+
+    <string name="crp_angiv_resultat_">Enter result </string>
+    <string name="crp_measurement_or">or</string>
+    <string name="crp_under_5"> &lt;5</string>
+
+    <string name="default_cancel">Cancel</string>
+    <string name="default_menu">Menu</string>
+    <string name="default_next">Next</string>
+    <string name="default_no">No</string>
+    <string name="default_ok">OK</string>
+    <string name="default_omit">Omit</string>
+    <string name="default_open_tele">OpenTele</string>
+    <string name="default_please_wait">Please wait…</string>
+    <string name="default_proceed">Proceed</string>
+    <string name="default_retry">Retry</string>
+    <string name="default_server_communication_error">Error communicating with server</string>
+    <string name="default_validation_error">One or more fields not filled out correctly</string>
+    <string name="default_working">Working</string>
+    <string name="default_yes">Yes</string>
+
+    <string name="delay_out_of">out of</string>
+    <string name="delay_seconds">seconds.</string>
+    <string name="delay_time_elapsed">Time elapsed:</string>
+    <string name="delay_time_left">Time remaining:</string>
+
+    <string name="error_error_occured">An error occurred</string>
+
+    <string name="haemoglobin_enter_value">Enter haemoglobin value</string>
+
+    <string name="login_account_locked">Your account has been locked. Contact your contact person.</string>
+    <string name="login_client_must_be_upgraded">OpenTele must be upgraded before you can log in.</string>
+    <string name="login_logging_in">Logging in…</string>
+    <string name="login_login">Log in</string>
+    <string name="login_password">Password</string>
+    <string name="login_username">Username</string>
+    <string name="login_wrong_username_password">Wrong username or password</string>
+
+    <string name="lung_monitor_bad_measurement">Bad measurement received. Please try again</string>
+    <string name="lung_monitor_connect">Turn on the device and perform a lung function test.</string>
+    <string name="lung_monitor_could_not_connect">Could not connect to lung function device.</string>
+    <string name="lung_monitor_measurement_recieved">Measurement received.</string>
+    <string name="lung_monitor_perform_test">Perform lung function test.</string>
+    <string name="lung_monitor_permanent_problem">Could not establish a connection.</string>
+    <string name="lung_monitor_temporary_problem">Could not fetch data. Please try again.</string>
+
+    <string name="m_lingen_er_">The measurement is: </string>
+
+    <string name="menu_acknowledements">Acknowledgements</string>
+    <string name="menu_change_password">Change password</string>
+    <string name="menu_complete_questionnaire">Perform measurement</string>
+    <string name="menu_messages"><![CDATA[Messages{0,choice,0#|1#\' (\'one new message\')\'|1<\' (\'{0,number,integer} new\')\'}]]></string>
+    <string name="menu_my_measurements">My measurements</string>
+
+    <string name="message_create">Create new message</string>
+    <string name="message_error_while_sending">Error sending message.</string>
+    <string name="message_fetching">Fetching messages</string>
+    <string name="message_headline">Topic</string>
+    <string name="message_message">Message</string>
+    <string name="message_message_sent">Message sent.</string>
+    <string name="message_messages">Messages</string>
+    <string name="message_new">New message</string>
+    <string name="message_read_write">Here you can read and write messages.</string>
+    <string name="message_received">received</string>
+    <string name="message_send">Send</string>
+    <string name="message_sending">Sending messages - please wait…</string>
+    <string name="message_sent">sent</string>
+    <string name="message_unread">(Unread)</string>
+    <string name="message_write_instructions">To write a message please press the \"New message\".</string>
+
+    <string name="monica_bluetooth_off">Error: Bluetooth is turned off.</string>
+    <string name="monica_accept_simulate">Yes please, run as simulated</string>
+    <string name="monica_ask_simulate">Simulate Monica device?</string>
+    <string name="monica_battery_low">Insufficient power on the Monica-device.</string>
+    <string name="monica_black">Black (B)</string>
+    <string name="monica_bluetooth_unavaliable">Error: Bluetooth not available.</string>
+    <string name="monica_checking_connection">Checking connection. Do not turn off the Monica-device but correct the connections not marked with a check-mark.</string>
+    <string name="monica_closing">Closing</string>
+    <string name="monica_communication_error">Could not communicate with the Monica-device.</string>
+    <string name="monica_decline_simulate">No please use the Monica-device</string>
+    <string name="monica_device">Monica device</string>
+    <string name="monica_device_initialisation_error">Could not initialise the Monica-device correctly.</string>
+    <string name="monica_device_not_found">Could not find a Monica-device compatible with this application.</string>
+    <string name="monica_enter_duration">Enter measurement time in minutes:</string>
+    <string name="monica_failed_to_start">Failed to start the Monica-device.</string>
+    <string name="monica_green">Green (G)</string>
+    <string name="monica_indcators_or_only_guides">The indicators above serve only as guidance. In case of differences only rely on the indicators on the device.</string>
+    <string name="monica_missing_sample">Error while reading data from the Monica device.</string>
+    <string name="monica_multiple_devices">Error: More that one Monica device connected.</string>
+    <string name="monica_orange">Orange (O)</string>
+    <string name="monica_processing_data">Processing data</string>
+    <string name="monica_question_marks">\?\?</string>
+    <string name="monica_reading_interrupted">Reading of data has stopped.</string>
+    <string name="monica_receiving_data">Receiving data…</string>
+    <string name="monica_set_time">Enter time:</string>
+    <string name="monica_switched_off">The Monica device has been turned off.</string>
+    <string name="monica_time_set_to">set to</string>
+    <string name="monica_unknown_firmware">The version of the Monica device ( %1$s ) is not supported by this application.</string>
+    <string name="monica_waiting_for_connection">Waiting for connection (Turn on the Monica device and keep the Monica device within 10 feet of the tablet)</string>
+    <string name="monica_waiting_for_data">Waiting for data</string>
+    <string name="monica_white">White (W)</string>
+    <string name="monica_yellow">Yellow (Y)</string>
+
+
+    <string name="patient_measurements_my_measurements">My measurements</string>
+
+    <string name="questionnaire_fetching">Fetching questionnaires</string>
+
+    <string name="run_skema_do_you_want_to_send_data">Would you like to send your measurements/replies?</string>
+
+    <string name="saturation__waiting_for_measurement">Waiting for measurement. Keep still.</string>
+    <string name="saturation_connecting">Connecting to device…</string>
+    <string name="saturation_connection_broken">Connection broken</string>
+    <string name="saturation_could_not_connect">Could not connect to device.</string>
+    <string name="saturation_enter_pulse">Enter pulse:</string>
+    <string name="saturation_enter_saturation">Enter saturation:</string>
+    <string name="saturation_measuremen_without_pulse_recieved">Measurement received\nSaturation: %1$d</string>
+    <string name="saturation_measurement_received">Measurement received\n Saturation: %1$d\nPulse: %2$d</string>
+    <string name="saturation_permanent_problem">Could not connect to device</string>
+    <string name="saturation_saturation">Saturation</string>
+    <string name="saturation_temporary_problem">Could fetch data. Try turning the device off and on again.</string>
+
+    <string name="save_file_data_saved_locally">Data saved locally</string>
+    <string name="save_file_error">Error:</string>
+    <string name="save_file_save_to">Saving to:</string>
+    <string name="save_file_saved_in">Data saved in</string>
+
+    <string name="server_url">${server.url}</string>
+    <string name="server_url_locked">${server.url.locked}</string>
+
+    <string name="set_alarm_alarm_set">Alarm set</string>
+    <string name="set_alarm_server_ip">Set server-IP</string>
+    <string name="set_server_server_ip">Set server-IP</string>
+
+    <string name="set_show_upload_debug_show_data">Show data</string>
+    <string name="set_show_upload_debug_show_debug">Show upload-debug-node?</string>
+
+    <string name="skema_menu_choose_questionnaire">Choose a questionnaire</string>
+    <string name="skema_menu_fetching_questionnaires">fetching questionnaire</string>
+    <string name="skema_menu_skema">questionnaire:</string>
+
+    <string name="skip_version_check">${skipVersionCheck}</string>
+
+    <string name="temerature_enter_temperature">Enter temperature</string>
+
+    <string name="top_panel_back">Back</string>
+    <string name="top_panel_log_out">Log out</string>
+    <string name="top_panel_main_meni">Main menu</string>
+
+    <string name="upload_measurements_error">Error</string>
+    <string name="upload_measurements_measurements_recieved">Measurement/Replies received.</string>
+    <string name="upload_measurements_sent">Send measurement/replies</string>
+    <string name="upload_measurements_upload_failed">Upload of measurement/replies failed. Please check your network connection.</string>
+    <string name="upload_measurements_uploading">Uploading measurements/replies…</string>
+
+    <string name="urine_enter_measurement">Enter urine protein level</string>
+    <string name="urine_value_negative">negative</string>
+    <string name="urine_value_plus_four">+4</string>
+    <string name="urine_value_plus_minus">+/-</string>
+    <string name="urine_value_plus_one">+1</string>
+    <string name="urine_value_plus_three">+3</string>
+    <string name="urine_value_plus_two">+2</string>
+
+    <string name="urineglocose_enter_glucose_number">Enter urine glucose level</string>
+    <string name="urineglocose_value_negative">negative</string>
+    <string name="urineglocose_value_plus_four">+4</string>
+    <string name="urineglocose_value_plus_one">+1</string>
+    <string name="urineglocose_value_plus_three">+3</string>
+    <string name="urineglocose_value_plus_two">+2</string>
+
+    <string name="video_bloodpressure_bloodpressure_and_pulse">Blood pressure and pulse</string>
+    <string name="video_bloodpressure_could_not_connect">Could not connect to blood pressure device.</string>
+    <string name="video_bloodpressure_disconnected">Disconnected.</string>
+    <string name="video_bloodpressure_measurement_received">Measurement received.</string>
+    <string name="video_bloodpressure_permanent_problem">Could not connect to device.</string>
+    <string name="video_bloodpressure_press_start">Press the START-button on the device.</string>
+    <string name="video_bloodpressure_temporary_problem">Could not fetch measurement. Please try again.</string>
+    <string name="video_bloodpressure_waiting_for_measurement">Waiting for measurement. Please stay still.</string>
+    <string name="video_consultation">Video-consultation</string>
+    <string name="video_could_not_start">Could not start video consultation.</string>
+    <string name="video_its_time_for_a_conference">It\'s time for your video-consultation.</string>
+    <string name="video_lung_function_bad_measurement">Bad measurement received. Please try again.</string>
+    <string name="video_lung_function_could_not_connect">Could not connect to lung function device.</string>
+    <string name="video_lung_function_lung_function">Lung function</string>
+    <string name="video_lung_function_measurement_received">Measurement received.</string>
+    <string name="video_lung_function_perform_test">Perform lung function test.</string>
+    <string name="video_lung_function_permanent_problem">Could not connect to device.</string>
+    <string name="video_lung_function_temporary_problem">Could not fetch data. Please try again.</string>
+    <string name="video_lung_function_turn_on_device">Turn on the device and perform a lung function test.</string>
+    <string name="video_press_ok_to_start">Press the OK-button to start the consultation.</string>
+    <string name="video_saturation_connected">Waiting for measurement. Please stay still.</string>
+    <string name="video_saturation_connection_problem">Could not connect to device.</string>
+    <string name="video_saturation_disconnected">Disconnected.</string>
+    <string name="video_saturation_equip_device">Place the device on your finger.</string>
+    <string name="video_saturation_measurement_received">Measurement recieved.</string>
+    <string name="video_saturation_permanent_problem">Could not connect to device.</string>
+    <string name="video_saturation_saturation">Oxygen Saturation</string>
+    <string name="video_saturation_temporary_problem">Could not fetch measurement. Please try turning the device off and on again.</string>
+    <string name="video_starting">Starting video-consultation. Please wait.</string>
+    <string name="web_view_fetching">Fetching</string>
+    <string name="weight_connected">Stand on the weight and keep still…</string>
+    <string name="weight_could_not_connect">Could not connect to the weight.</string>
+    <string name="weight_disconnected">Connection to weight lost. Please try again.</string>
+    <string name="weight_permanent_problem">Could not establish device.</string>
+    <string name="weight_set_weight_to_kg">Adjust your weight to measure in kg and try again. Weight:</string>
+    <string name="weight_temporary_problem">Could not fetch data. Please try again.</string>
+    <string name="weight_turn_on_and_wait">Turn on the weight and await instructions.</string>
+    <string name="weight_weight">Weight:</string>
+</resources>

@@ -1,12 +1,14 @@
 package dk.silverbullet.telemed.device.vitalographlungmonitor;
 
+import com.google.gson.annotations.Expose;
+
 public class LungMeasurement {
-    private final float fev1;
-    private final float fev6;
-    private final float fev1Fev6Ratio;
-    private final float fef2575;
-    private final boolean goodTest;
-    private final int softwareVersion;
+    @Expose private final float fev1;
+    @Expose private final float fev6;
+    @Expose private final float fev1Fev6Ratio;
+    @Expose private final float fef2575;
+    @Expose private final boolean goodTest;
+    @Expose private final int softwareVersion;
 
     public LungMeasurement(float fev1, float fev6, float fev1Fev6Ratio, float fef2575, boolean goodTest,
             int softwareVersion) {

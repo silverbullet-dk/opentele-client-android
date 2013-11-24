@@ -1,5 +1,7 @@
 package dk.silverbullet.telemed.rest.bean;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 
 public class ChangePasswordError implements Serializable {
@@ -10,8 +12,8 @@ public class ChangePasswordError implements Serializable {
     public static final String FIELD_PASSWORD = "password";
     public static final String FIELD_PASSWORDREPEAT = "passwordRepeat";
 
-    private String field;
-    private String error;
+    @Expose private String field;
+    @Expose private String error;
 
     public String getError() {
         return error;

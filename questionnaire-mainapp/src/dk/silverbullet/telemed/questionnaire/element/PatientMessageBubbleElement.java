@@ -24,8 +24,8 @@ public class PatientMessageBubbleElement extends MessageBubble {
         Activity activity = getQuestionnaire().getActivity();
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout messageBubbleLayout = (LinearLayout) inflater.inflate(R.layout.patient_message_bubble, null);
-        formatMessageBubble(messageBubbleLayout, R.drawable.patient_bubble_unread, "(Ulæst)",
-                R.drawable.patient_bubble_read, "", "sendt");
+        formatMessageBubble(messageBubbleLayout, R.drawable.patient_bubble_unread, Util.getString(R.string.message_unread, activity),
+                R.drawable.patient_bubble_read, "", Util.getString(R.string.message_sent, activity));
         return messageBubbleLayout;
     }
 

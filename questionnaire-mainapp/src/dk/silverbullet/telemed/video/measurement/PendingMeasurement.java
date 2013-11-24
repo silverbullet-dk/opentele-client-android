@@ -1,5 +1,7 @@
 package dk.silverbullet.telemed.video.measurement;
 
+import com.google.gson.annotations.Expose;
+
 class PendingMeasurement {
-    MeasurementType type;
+    @Expose MeasurementType type;
 }

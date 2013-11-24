@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -13,15 +14,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
-import dk.silverbullet.telemed.questionnaire.element.Element;
-import dk.silverbullet.telemed.questionnaire.element.ElementAdapter;
 import dk.silverbullet.telemed.questionnaire.expression.*;
-import dk.silverbullet.telemed.questionnaire.node.Node;
-import dk.silverbullet.telemed.questionnaire.node.NodeAdapter;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.auth.BasicScheme;
@@ -61,14 +56,6 @@ public final class Util {
     public static final String ADMINUSER_NAME = "admin";
     public static final String ADMINUSER_PASS = "admin";
 
-    public static final SimpleDateFormat ISO8601_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    public static final SimpleDateFormat ISO8601_DATE_TIME_FORMAT_SHORT = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
-
-    static { // 'Zulu time' in accordance with ISO-8601: http://en.wikipedia.org/wiki/Iso8601#UTC
-        ISO8601_DATE_TIME_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
-        ISO8601_DATE_TIME_FORMAT_SHORT.setTimeZone(TimeZone.getTimeZone("UTC"));
-    }
-
     public static String getServerUrl(Questionnaire questionnaire) {
         String serverUrl = DEFAULT_SERVER_URL;
 
@@ -97,6 +84,15 @@ public final class Util {
 
     public static boolean isServerUrlLocked(Questionnaire questionnaire) {
         return "true".equals(questionnaire.getActivity().getString(R.string.server_url_locked));
+    }
+
+    public static boolean shouldClearUserNameOnLogin(Questionnaire questionnaire) {
+        return "true".equals(questionnaire.getActivity().getString(R.string.clear_user_name_on_login));
+    }
+
+    public static boolean shouldHidePasswordText(Questionnaire questionnaire) {
+        // Using the same setting as "clear user name on login"
+        return shouldClearUserNameOnLogin(questionnaire);
     }
 
     private static String staticServerUrl(Questionnaire questionnaire) {
@@ -153,22 +149,6 @@ public final class Util {
         });
 
         dialog.show();
-    }
-
-    public static Gson getGson() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Element.class, new ElementAdapter());
-        builder.registerTypeAdapter(Node.class, new NodeAdapter());
-        Object expressionInterfaceAdapter = new ExpressionInterfaceAdapter<Expression<?>>();
-        builder.registerTypeAdapter(Expression.class, expressionInterfaceAdapter);
-        builder.registerTypeAdapter(Variable.class, new VariableAdapter());
-        return builder.excludeFieldsWithoutExposeAnnotation().create();
-    }
-
-    public static Gson getGsonForOutput() {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Variable.class, new VariableAdapter());
-        return builder.excludeFieldsWithoutExposeAnnotation().create();
     }
 
     public static String getTag(Class<?> klass) {
@@ -388,4 +368,21 @@ public final class Util {
         }
         return builder.toString();
     }
+
+    public static String getString(int resourceId, Questionnaire questionnaire) {
+        return Util.getString(resourceId, questionnaire.getActivity());
+    }
+
+    public static String getString(int resourceId, Context context) {
+        return context.getString(resourceId);
+    }
+
+    public static String getString(int resourceId, Context context, Object... formatArgs) {
+        return context.getString(resourceId, formatArgs);
+    }
+
+    public static String getString(int resourceId, Questionnaire questionnaire, Object... formatArgs) {
+        return Util.getString(resourceId, questionnaire.getActivity(), formatArgs);
+    }
+
 }

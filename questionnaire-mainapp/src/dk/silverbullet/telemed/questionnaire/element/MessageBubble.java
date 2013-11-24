@@ -1,10 +1,8 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import java.text.ParseException;
 import java.util.Map;
 
 import android.text.Html;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -39,16 +37,11 @@ abstract class MessageBubble extends Element {
 
         String messageTime;
 
-        try {
-            if (messageItem.getSendDate() != null) {
-                messageTime = " - " + received + " "
-                        + Util.formatTime(Util.ISO8601_DATE_TIME_FORMAT.parse(messageItem.getSendDate()));
-            } else {
-                messageTime = "";
-            }
-        } catch (ParseException e) {
-            Log.w(TAG, e);
-            messageTime = " (" + messageItem + ")";
+        if (messageItem.getSendDate() != null) {
+            messageTime = " - " + received + " "
+                    + Util.formatTime(messageItem.getSendDate());
+        } else {
+            messageTime = "";
         }
         messageBubble.setText(Html.fromHtml(status + " <b>" + Util.escapeHtml(messageItem.getTitle()) + "</b>"
                 + messageTime + "<br>" + Util.escapeHtml(messageItem.getText())));

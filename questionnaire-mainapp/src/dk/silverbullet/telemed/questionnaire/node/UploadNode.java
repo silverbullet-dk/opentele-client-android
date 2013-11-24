@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
@@ -10,6 +11,7 @@ import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
 import dk.silverbullet.telemed.rest.PostQuestionnaireTask;
 import dk.silverbullet.telemed.rest.RetrieveTask;
 import dk.silverbullet.telemed.rest.listener.UploadListener;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Date;
@@ -18,16 +20,20 @@ public class UploadNode extends IONode implements UploadListener {
     private static final String TAG = Util.getTag(UploadNode.class);
 
     private Node nextNode;
-    private String titleText = "Indsender svar...";
-    private String statusText = "Vent venligst...";
+    private String titleText;
+    private String statusText;
 
     public UploadNode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
+        titleText = Util.getString(R.string.upload_measurements_uploading, questionnaire);
+        statusText = Util.getString(R.string.default_please_wait, questionnaire);
     }
 
     @Override
     public void enter() {
         Log.d(TAG, "UploadNode...");
+
+
 
         String json = getJson();
         if (json != null) {
@@ -55,9 +61,7 @@ public class UploadNode extends IONode implements UploadListener {
                 out.addVariable(vv);
         }
 
-        String json = Util.getGsonForOutput().toJson(out);
-
-        return json;
+        return Json.print(out);
     }
 
     @Override
@@ -68,12 +72,12 @@ public class UploadNode extends IONode implements UploadListener {
     @Override
     public void end(boolean success) {
         if (success) {
-            titleText = "Indsendt måling/svar";
-            statusText = "Indsendt måling/svar er modtaget.";
+            titleText = Util.getString(R.string.upload_measurements_sent, questionnaire);
+            statusText = Util.getString(R.string.upload_measurements_measurements_recieved, questionnaire);
             setupViewWithOkButton();
         } else {
-            titleText = "Fejl";
-            statusText = "Indsendelse af måling/svar fejlede. Tjek evt. netværksforbindelsen og prøv igen.";
+            titleText = Util.getString(R.string.upload_measurements_error, questionnaire);
+            statusText = Util.getString(R.string.upload_measurements_upload_failed, questionnaire);
             setupViewWithRetryCancelButtons();
         }
         createView();
@@ -89,7 +93,7 @@ public class UploadNode extends IONode implements UploadListener {
     private void setupViewWithOkButton() {
         setupViewWithStatusText();
 
-        ButtonElement be = new ButtonElement(this, "OK");
+        ButtonElement be = new ButtonElement(this, Util.getString(R.string.default_ok, questionnaire));
         be.setNextNode(nextNode);
         addElement(be);
     }
@@ -97,7 +101,7 @@ public class UploadNode extends IONode implements UploadListener {
     private void setupViewWithRetryCancelButtons() {
         setupViewWithStatusText();
 
-        TwoButtonElement twoButtonElement = new TwoButtonElement(this, "Annuller", "Prøv igen");
+        TwoButtonElement twoButtonElement = new TwoButtonElement(this, Util.getString(R.string.default_cancel, questionnaire), Util.getString(R.string.default_retry, questionnaire));
         twoButtonElement.setLeftNextNode(nextNode);
         twoButtonElement.setRightNextNode(this);
         addElement(twoButtonElement);

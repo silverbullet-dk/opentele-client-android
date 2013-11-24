@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:checked="false"
             android:clickable="false"
-            android:text="@string/orange"
+            android:text="@string/monica_orange"
             android:textColor="#F60"
             android:textSize="36sp" />
 
@@ -94,7 +94,7 @@
             android:clickable="false"
             android:shadowColor="#000"
             android:shadowRadius="4.0"
-            android:text="@string/white"
+            android:text="@string/monica_white"
             android:textColor="#FFF"
             android:textSize="36sp" />
 
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:checked="false"
             android:clickable="false"
-            android:text="@string/green"
+            android:text="@string/monica_green"
             android:textColor="#0F0"
             android:textSize="36sp" />
 
@@ -116,7 +116,7 @@
             android:clickable="false"
             android:shadowColor="#FFF"
             android:shadowRadius="4.0"
-            android:text="@string/black"
+            android:text="@string/monica_black"
             android:textColor="#000"
             android:textSize="36sp" />
 
@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:checked="false"
             android:clickable="false"
-            android:text="@string/yellow"
+            android:text="@string/monica_yellow"
             android:textColor="#FF0"
             android:textSize="36sp" />
         
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:textSize="24sp"
-            android:text="Ovenstående indikatorer er kun vejledende. Det er altid måleapparatets indikatorer der er gældende!"
+            android:text="@string/monica_indcators_or_only_guides"
              />
         
         <LinearLayout

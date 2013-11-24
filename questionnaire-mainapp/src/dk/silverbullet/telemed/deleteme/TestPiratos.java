@@ -20,6 +20,7 @@ import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
 import dk.silverbullet.telemed.questionnaire.skema.Skema;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 public class TestPiratos implements TestSkema {
@@ -200,16 +201,14 @@ public class TestPiratos implements TestSkema {
 
     @Override
     public Skema getSkema() {
-        // return Util.getGson().fromJson(JSON, Skema.class);
-        Skema result = null;
         Questionnaire q = new Questionnaire(new QuestionnaireFragment());
         try {
-            String json = Util.getGson().toJson(getSkema(q));
-            result = Util.getGson().fromJson(json, Skema.class);
+            String json = Json.print(getSkema(q));
+            return Json.parse(json, Skema.class);
         } catch (UnknownNodeException e) {
             e.printStackTrace();
         }
-        return result;
+        return null;
 
     }
 }

@@ -1,24 +1,26 @@
 package dk.silverbullet.telemed.rest.bean;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class ReminderBean implements Serializable {
 
     private static final long serialVersionUID = 6582059327386086772L;
-    private long questionnaireId;
-    private String questionnaireName;
-    private List<Integer> alarms;
+    @Expose private long questionnaireId;
+    @Expose private String questionnaireName;
+    @Expose private List<Long> alarms;
 
     public void setQuestionnaireName(String questionnaireName) {
         this.questionnaireName = questionnaireName;
     }
 
-    public void setAlarms(List<Integer> alarms) {
+    public void setAlarms(List<Long> alarms) {
         this.alarms = alarms;
     }
 
-    public List<Integer> getAlarms() {
+    public List<Long> getAlarms() {
         return alarms;
     }
 

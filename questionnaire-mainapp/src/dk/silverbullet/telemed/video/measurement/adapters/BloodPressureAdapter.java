@@ -6,6 +6,8 @@ import dk.silverbullet.telemed.device.andbloodpressure.BloodPressureAndPulse;
 import dk.silverbullet.telemed.device.continua.ContinuaDeviceController;
 import dk.silverbullet.telemed.device.continua.ContinuaListener;
 import dk.silverbullet.telemed.device.continua.android.AndroidHdpController;
+import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.utils.Util;
 import dk.silverbullet.telemed.video.measurement.TakeMeasurementFragment;
 import dk.silverbullet.telemed.video.measurement.adapters.submitters.SubmitBloodPressureMeasurementTask;
 
@@ -20,11 +22,11 @@ public class BloodPressureAdapter implements VideoMeasurementAdapter, ContinuaLi
     @Override
     public void start() {
         try {
-            fragment.setMeasurementTypeText("Blodtryk og puls");
-            fragment.setStatusText("Tryk på START-knappen på blodtryksmåleren.");
+            fragment.setMeasurementTypeText(Util.getString(R.string.video_bloodpressure_bloodpressure_and_pulse, fragment.getActivity()));
+            fragment.setStatusText(Util.getString(R.string.video_bloodpressure_press_start, fragment.getActivity()));
             controller = AndBloodPressureController.create(this, new AndroidHdpController(fragment.getActivity()));
         } catch (DeviceInitialisationException e) {
-            fragment.setStatusText("Kunne ikke forbinde til blodtryksmåler.");
+            fragment.setStatusText(Util.getString(R.string.video_bloodpressure_could_not_connect, fragment.getActivity()));
         }
     }
 
@@ -37,27 +39,27 @@ public class BloodPressureAdapter implements VideoMeasurementAdapter, ContinuaLi
 
     @Override
     public void connected() {
-        fragment.setStatusText("Venter på måling. Hold dig i ro.");
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_waiting_for_measurement, fragment.getActivity()));
     }
 
     @Override
     public void disconnected() {
-        fragment.setStatusText("Afkoblet.");
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_disconnected, fragment.getActivity()));
     }
 
     @Override
     public void permanentProblem() {
-        fragment.setStatusText("Der kan ikke skabes forbindelse.");
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_permanent_problem, fragment.getActivity()));
     }
 
     @Override
     public void temporaryProblem() {
-        fragment.setStatusText("Kunne ikke hente data. Prøv evt. en ny blodtryksmåling.");
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_temporary_problem, fragment.getActivity()));
     }
 
     @Override
     public void measurementReceived(String deviceId, BloodPressureAndPulse measurement) {
-        fragment.setStatusText("Måling modtaget.");
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_measurement_received, fragment.getActivity()));
         controller.close();
 
         DeviceIdAndMeasurement<BloodPressureAndPulse> deviceIdAndMeasurement = new DeviceIdAndMeasurement<BloodPressureAndPulse>(deviceId, measurement);

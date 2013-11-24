@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.CheckBoxElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -23,17 +24,17 @@ public class SetShowUploadDebugNode extends IONode {
         clearElements();
 
         TextViewElement tve = new TextViewElement(this);
-        tve.setText("Skal upload-debug-noden vises?");
+        tve.setText(Util.getString(R.string.set_show_upload_debug_show_debug, questionnaire));
         addElement(tve);
 
         CheckBoxElement ete = new CheckBoxElement(this);
         ete.setOutputVariable(showUploadDebugNode);
-        ete.setText("Vis data");
+        ete.setText(Util.getString(R.string.set_show_upload_debug_show_data, questionnaire));
         addElement(ete);
 
         ButtonElement be = new ButtonElement(this);
         be.setNextNode(nextNode);
-        be.setText("OK");
+        be.setText(Util.getString(R.string.default_ok, questionnaire));
         addElement(be);
 
         super.enter();

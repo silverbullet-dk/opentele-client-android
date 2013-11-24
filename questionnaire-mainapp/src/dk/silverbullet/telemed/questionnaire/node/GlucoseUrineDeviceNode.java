@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.RadioButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
@@ -35,7 +36,7 @@ public class GlucoseUrineDeviceNode extends DeviceNode {
     public void setView() {
         clearElements();
         addElement(new TextViewElement(this, text));
-        addElement(new TextViewElement(this, "Angiv urin glukosetal"));
+        addElement(new TextViewElement(this, Util.getString(R.string.urineglocose_enter_glucose_number, questionnaire)));
 
         RadioButtonElement<Integer> select = new RadioButtonElement<Integer>(this);
         {
@@ -43,11 +44,11 @@ public class GlucoseUrineDeviceNode extends DeviceNode {
             // Arrays and generics don't mix.
             ValueChoice<Integer>[] choices = new ValueChoice[5];
             int c = 0;
-            choices[c++] = new ValueChoice<Integer>(0, "negativ");
-            choices[c++] = new ValueChoice<Integer>(1, "+1");
-            choices[c++] = new ValueChoice<Integer>(2, "+2");
-            choices[c++] = new ValueChoice<Integer>(3, "+3");
-            choices[c++] = new ValueChoice<Integer>(4, "+4");
+            choices[c++] = new ValueChoice<Integer>(0, Util.getString(R.string.urineglocose_value_negative, questionnaire));
+            choices[c++] = new ValueChoice<Integer>(1, Util.getString(R.string.urineglocose_value_plus_one, questionnaire));
+            choices[c++] = new ValueChoice<Integer>(2, Util.getString(R.string.urineglocose_value_plus_two, questionnaire));
+            choices[c++] = new ValueChoice<Integer>(3, Util.getString(R.string.urineglocose_value_plus_three, questionnaire));
+            choices[c++] = new ValueChoice<Integer>(4, Util.getString(R.string.urineglocose_value_plus_four, questionnaire));
             assert c == choices.length;
             select.setChoices(choices);
         }
@@ -56,7 +57,7 @@ public class GlucoseUrineDeviceNode extends DeviceNode {
 
         addElement(select);
 
-        TwoButtonElement be = new TwoButtonElement(this, "Undlad", "Næste");
+        TwoButtonElement be = new TwoButtonElement(this, Util.getString(R.string.default_omit, questionnaire), Util.getString(R.string.default_next, questionnaire));
         be.setLeftNextNode(getNextFailNode());
         be.setLeftSkipValidation(true);
         be.setRightNextNode(getNextNode());

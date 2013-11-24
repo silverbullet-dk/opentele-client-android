@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.deleteme;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.QuestionnaireFragment;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Constant;
@@ -13,16 +14,15 @@ import dk.silverbullet.telemed.questionnaire.node.MonicaDeviceNode;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
 import dk.silverbullet.telemed.questionnaire.skema.Skema;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 public class MonicaSkemaUserLimited implements TestSkema {
     @Override
     public Skema getSkema() throws UnknownNodeException {
-        Skema result = null;
         Questionnaire q = new Questionnaire(new QuestionnaireFragment());
-        String json = Util.getGson().toJson(getInternSkema(q));
-        result = Util.getGson().fromJson(json, Skema.class);
-        return result;
+        String json = Json.print(getInternSkema(q));
+        return Json.parse(json, Skema.class);
     }
 
     public Skema getInternSkema(Questionnaire questionnaire) throws UnknownNodeException {
@@ -95,13 +95,13 @@ public class MonicaSkemaUserLimited implements TestSkema {
 
         IONode askSimulate = new IONode(questionnaire, "askSimulate");
         TextViewElement simulateYesNo = new TextViewElement(askSimulate);
-        simulateYesNo.setText("Simulér Monica device?");
+        simulateYesNo.setText(Util.getString(R.string.monica_ask_simulate, questionnaire));
         askSimulate.addElement(simulateYesNo);
         TwoButtonElement simulateYesNoButtons = new TwoButtonElement(askSimulate);
         simulateYesNoButtons.setLeftNext(monicaNode.getNodeName());
-        simulateYesNoButtons.setLeftText("Nej");
+        simulateYesNoButtons.setLeftText(Util.getString(R.string.default_no, questionnaire));
         simulateYesNoButtons.setRightNext(setSimulateToTrue.getNodeName());
-        simulateYesNoButtons.setRightText("Ja");
+        simulateYesNoButtons.setRightText(Util.getString(R.string.default_yes, questionnaire));
         askSimulate.addElement(simulateYesNoButtons);
 
         // //////////////////////////////////////////////////////////////////////////////////////////

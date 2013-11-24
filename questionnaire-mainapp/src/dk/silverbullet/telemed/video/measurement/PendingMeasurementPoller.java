@@ -1,8 +1,8 @@
 package dk.silverbullet.telemed.video.measurement;
 
 import android.util.Log;
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.video.VideoActivity;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
@@ -70,7 +70,7 @@ class PendingMeasurementPoller {
             String result = httpClient.execute(httpGet, new BasicResponseHandler());
 
             if (!stopped && !result.isEmpty()) {
-                return new Gson().fromJson(result, PendingMeasurement.class);
+                return Json.parse(result, PendingMeasurement.class);
             }
         } catch (IOException e) {
             Log.e(TAG, "Could not check for pending measurement", e);

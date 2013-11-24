@@ -1,10 +1,12 @@
 package dk.silverbullet.telemed.device.andbloodpressure;
 
+import com.google.gson.annotations.Expose;
+
 public class BloodPressureAndPulse {
-    private final int systolic;
-    private final int diastolic;
-    private final int meanArterialPressure;
-    private final int pulse;
+    @Expose private final int systolic;
+    @Expose private final int diastolic;
+    @Expose private final int meanArterialPressure;
+    @Expose private final int pulse;
 
     public BloodPressureAndPulse(int systolic, int diastolic, int meanArterialPressure, int pulse) {
         this.systolic = systolic;

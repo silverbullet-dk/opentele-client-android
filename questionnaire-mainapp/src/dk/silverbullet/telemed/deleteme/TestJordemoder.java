@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.deleteme;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.QuestionnaireFragment;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -21,13 +22,16 @@ import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
 import dk.silverbullet.telemed.questionnaire.skema.Skema;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 public class TestJordemoder implements TestSkema {
-    public static final String BUTTON_OK = "OK";
+    public String buttonOkText;
 
     public IONode getIONodeText(Questionnaire questionnaire, String name, String text, String button, String next) {
         IONode ioNode = new IONode(questionnaire, name);
+
+        this.buttonOkText = Util.getString(R.string.default_ok, questionnaire);
 
         TextViewElement tve2 = new TextViewElement(ioNode);
         tve2.setText(text);
@@ -44,7 +48,7 @@ public class TestJordemoder implements TestSkema {
 
     public IONode getIONodeYesNo(Questionnaire questionnaire, String name, String text, String noNext, String yesNext) {
 
-        return getIONodeYesNo(questionnaire, name, text, noNext, "Nej", yesNext, "Ja");
+        return getIONodeYesNo(questionnaire, name, text, noNext, Util.getString(R.string.default_no, questionnaire), yesNext, Util.getString(R.string.default_yes, questionnaire));
     }
 
     public IONode getIONodeYesNo(Questionnaire questionnaire, String name, String text, String leftNext,
@@ -138,15 +142,15 @@ public class TestJordemoder implements TestSkema {
         EndNode end = new EndNode(questionnaire, "slut");
 
         // ////////////////////////////////////////////////////////////////////////////////
-        IONode svarSendes = getIONodeText(questionnaire, "svarSendes", "Dine svar sendes nu til hospitalet", BUTTON_OK,
+        IONode svarSendes = getIONodeText(questionnaire, "svarSendes", "Dine svar sendes nu til hospitalet", buttonOkText,
                 end.getNodeName());
 
         // ////////////////////////////////////////////////////////////////////////////////
         IONode kontaktJordemoder = getIONodeText(questionnaire, "kontaktJordemoder",
-                "Kontakt venligst din jordemoder.", BUTTON_OK, svarSendes.getNodeName());
+                "Kontakt venligst din jordemoder.", buttonOkText, svarSendes.getNodeName());
 
         // ////////////////////////////////////////////////////////////////////////////////
-        // IONode paasaetMonica = getIONodeText(questionnaire, "paasaetMonica", "Påsæt Monica", BUTTON_OK,
+        // IONode paasaetMonica = getIONodeText(questionnaire, "paasaetMonica", "Påsæt Monica", buttonOkText,
         // svarSendes.getNodeName());
         MonicaDeviceNode paasaetMonica = new MonicaDeviceNode(questionnaire, "paasaetMonica");
 
@@ -281,7 +285,7 @@ public class TestJordemoder implements TestSkema {
         // ////////////////////////////////////////////////////////////////////////////////
         // ////////////////////////////////////////////////////////////////////////////////
         // ////////////////////////////////////////////////////////////////////////////////
-        // IONode vaegt = getIONodeText(questionnaire, "vaegt", "Vægt", BUTTON_OK, hovedpine.getNodeName());
+        // IONode vaegt = getIONodeText(questionnaire, "vaegt", "Vægt", buttonOkText, hovedpine.getNodeName());
         IONode vaegt = new IONode(questionnaire, "vaegt");
         TextViewElement tve = new TextViewElement(vaegt);
         tve.setText("Hvad er din vægt?");
@@ -295,7 +299,7 @@ public class TestJordemoder implements TestSkema {
         ButtonElement be2 = new ButtonElement(vaegt);
         be2.setGravity(ButtonElement.GRAVITY_RIGHT);
         be2.setNext(hovedpine.getNodeName());
-        be2.setText(BUTTON_OK);
+        be2.setText(buttonOkText);
         vaegt.addElement(be2);
 
         // ////////////////////////////////////////////////////////////////////////////////
@@ -335,7 +339,7 @@ public class TestJordemoder implements TestSkema {
         ButtonElement be = new ButtonElement(urintest);
         be.setGravity(ButtonElement.GRAVITY_RIGHT);
         be.setNext(decisionSpor1Protein.getNodeName());
-        be.setText(BUTTON_OK);
+        be.setText(buttonOkText);
         urintest.addElement(be);
 
         // ////////////////////////////////////////////////////////////////////////////////
@@ -386,7 +390,7 @@ public class TestJordemoder implements TestSkema {
         ButtonElement be3 = new ButtonElement(blodtryk);
         be3.setGravity(ButtonElement.GRAVITY_RIGHT);
         be3.setNext(decisionBTlt140.getNodeName());
-        be3.setText(BUTTON_OK);
+        be3.setText(buttonOkText);
         blodtryk.addElement(be3);
 
         // ////////////////////////////////////////////////////////////////////////////////
@@ -460,10 +464,8 @@ public class TestJordemoder implements TestSkema {
 
     @Override
     public Skema getSkema() throws UnknownNodeException {
-        Skema result = null;
         Questionnaire q = new Questionnaire(new QuestionnaireFragment());
-        String json = Util.getGson().toJson(getSkema(q));
-        result = Util.getGson().fromJson(json, Skema.class);
-        return result;
+        String json = Json.print(getSkema(q));
+        return Json.parse(json, Skema.class);
     }
 }

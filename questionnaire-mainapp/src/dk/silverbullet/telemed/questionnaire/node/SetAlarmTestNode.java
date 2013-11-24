@@ -3,6 +3,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 import android.content.Context;
 import dk.silverbullet.telemed.deleteme.TestBloodSugar;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -33,11 +34,11 @@ public class SetAlarmTestNode extends IONode {
 
         ReminderBean reminder = new ReminderBean();
         reminder.setQuestionnaireName(new TestBloodSugar().getSkema().getName());
-        reminder.setAlarms(Arrays.asList(10)); // Alarm hits in 10 seconds
+        reminder.setAlarms(Arrays.asList(10L)); // Alarm hits in 10 seconds
 
         ReminderService.setRemindersTo(context, reminder);
 
-        Util.showToast(getQuestionnaire(), "Alarm sat");
+        Util.showToast(getQuestionnaire(), Util.getString(R.string.set_alarm_alarm_set, questionnaire));
         getQuestionnaire().setCurrentNode(nextNode);
     }
 
@@ -45,7 +46,7 @@ public class SetAlarmTestNode extends IONode {
         clearElements();
 
         TextViewElement tve = new TextViewElement(this);
-        tve.setText("Sæt server-IP");
+        tve.setText(Util.getString(R.string.set_alarm_server_ip, questionnaire));
         addElement(tve);
 
         EditTextElement ete = new EditTextElement(this);
@@ -54,7 +55,7 @@ public class SetAlarmTestNode extends IONode {
 
         ButtonElement be = new ButtonElement(this);
         be.setNextNode(nextNode);
-        be.setText("OK");
+        be.setText(Util.getString(R.string.default_ok, questionnaire));
         addElement(be);
     }
 

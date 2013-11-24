@@ -25,7 +25,7 @@
                 android:gravity="center_horizontal"
                 android:textColor="#777"
                 android:textSize="48sp"
-                android:text="OpenTele"/>
+                android:text="@string/default_open_tele"/>
     </LinearLayout>
 
 
@@ -36,7 +36,7 @@
                   android:layout_marginBottom="10dp"
                   android:layout_marginTop="10dp">
         <TextView
-                android:text="Logger ind..."
+                android:text="@string/login_logging_in"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#777"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_weight="1">
                 <TextView
-                        android:text="Brugernavn"
+                        android:text="@string/login_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#777"
@@ -90,7 +90,7 @@
                     android:paddingRight="10dp"
                     >
                 <TextView
-                        android:text="Adgangskode"
+                        android:text="@string/login_password"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#777"
@@ -109,7 +109,7 @@
             </LinearLayout>
 
             <Button style="@style/buttonstyle"
-                    android:text="Log ind"
+                    android:text="@string/login_login"
                     android:id="@+id/login_button"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"

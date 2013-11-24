@@ -1,11 +1,11 @@
 package dk.silverbullet.telemed.rest.bean;
 
+import com.google.gson.annotations.Expose;
 
 public class QuestionnairListBean {
-    private Long id;
-    private String name;
-    private String version;
-    private String cron;
+    @Expose private Long id;
+    @Expose private String name;
+    @Expose private String version;
 
     public String getName() {
         return name;
@@ -18,5 +18,4 @@ public class QuestionnairListBean {
     public String getVersion() {
         return version;
     }
-
 }

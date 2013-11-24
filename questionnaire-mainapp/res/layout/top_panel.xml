@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:text=" Tilbage "
+        android:text="@string/top_panel_back"
         android:textSize="18dip" />
 
     <Button
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/back"
-        android:text=" Hovedmenu "
+        android:text="@string/top_panel_main_meni"
         android:textSize="18dip" />
 
     <TextView
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text=" Log ud "
+        android:text="@string/top_panel_log_out"
         android:textSize="18dip" />
 
 </RelativeLayout>

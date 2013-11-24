@@ -19,7 +19,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Video-konsultation"
+                android:text="@string/video_consultation"
                 android:textColor="#777"
                 android:textSize="36sp"/>
     </LinearLayout>
@@ -37,7 +37,7 @@
         <TextView android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:gravity="bottom|center_horizontal"
-                  android:text="Det er tid til din video-konsultation."
+                  android:text="@string/video_its_time_for_a_conference"
                   android:textColor="#777"
                   android:textSize="36sp"
                   android:layout_weight="1"
@@ -45,7 +45,7 @@
         <TextView android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:gravity="top|center_horizontal"
-                  android:text="Tryk på OK-knappen for at starte konsultationen."
+                  android:text="@string/video_press_ok_to_start"
                   android:textColor="#777"
                   android:textSize="36sp"
                   android:layout_weight="1"
@@ -70,7 +70,7 @@
                 style="@style/buttonstyle"
                 android:layout_width="fill_parent"
                 android:textSize="36sp"
-                android:text="OK"
+                android:text="@string/default_ok"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:paddingLeft="50dp"

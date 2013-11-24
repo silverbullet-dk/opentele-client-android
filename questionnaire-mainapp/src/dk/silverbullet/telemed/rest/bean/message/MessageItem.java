@@ -1,17 +1,20 @@
 package dk.silverbullet.telemed.rest.bean.message;
 
+import com.google.gson.annotations.Expose;
+
+import java.util.Date;
+
 public class MessageItem {
-    private Long id;
-    private String title;
-    private String text;
-    private MessagePerson to;
-    private MessagePerson from;
-    private boolean isRead;
-    private String sendDate;
-    private String readDate;
+    @Expose private Long id;
+    @Expose private String title;
+    @Expose private String text;
+    @Expose private MessagePerson to;
+    @Expose private MessagePerson from;
+    @Expose private boolean isRead;
+    @Expose private Date sendDate;
+    @Expose private Date readDate;
 
-
-    public String getSendDate() {
+    public Date getSendDate() {
         return sendDate;
     }
 

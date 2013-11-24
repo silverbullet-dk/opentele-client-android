@@ -15,7 +15,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="20dp"
-        android:text="@string/ok"
+        android:text="@string/default_ok"
         android:width="170dp"
         android:layout_alignParentBottom="true" />
     

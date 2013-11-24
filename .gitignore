@@ -13,3 +13,4 @@ lint-results.xml
 out
 project.properties
 questionnaire-mainapp/project.properties
+pom.xml.versionsBackup

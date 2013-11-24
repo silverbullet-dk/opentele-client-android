@@ -48,6 +48,7 @@ public class ListViewElement<T> extends Element {
     private ArrayAdapter<String> listAdapter;
 
     private boolean real;
+    private boolean clickAhead = true;
 
     public ListViewElement(final IONode node) {
         super(node);
@@ -67,21 +68,16 @@ public class ListViewElement<T> extends Element {
             listAdapter = new HighlightingArrayAdapter(context, values, valuesToHighlight);
             listView.setAdapter(listAdapter);
 
-            listView.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-                    variable.setValue(results[position]);
-                    // if (real) {
-                    // getQuestionnaire().addSkemaVariable(new Variable<Object>(outputName, results[position]));
-                    // } else {
-                    // getQuestionnaire().addVariable(new Variable<Object>(outputName, results[position]));
-                    // }
-
-                    getQuestionnaire().setCurrentNode(nextNode);
-                }
-            });
+            if (clickAhead) {
+                listView.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+                        variable.setValue(results[position]);
+                        getQuestionnaire().setCurrentNode(nextNode);
+                    }
+                });
+            }
         }
-
         return listView;
     }
 
@@ -102,6 +98,10 @@ public class ListViewElement<T> extends Element {
     @Override
     public boolean validates() {
         return true;
+    }
+
+    public void setClickAhead(boolean clickAhead) {
+        this.clickAhead = clickAhead;
     }
 
     private static class HighlightingArrayAdapter extends ArrayAdapter<String> {

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 public class TestOutputSkema {
@@ -29,8 +30,6 @@ public class TestOutputSkema {
         // out.addVariable(new Variable<Double[]>("aDoubleA", new Double[] { 100.1d, 100.2d }));
         // out.addVariable(new Variable<Integer[]>("aIntegerA", new Integer[] { 200, 201 }));
 
-        String json = Util.getGsonForOutput().toJson(out);
-
-        return json;
+        return Json.print(out);
     }
 }

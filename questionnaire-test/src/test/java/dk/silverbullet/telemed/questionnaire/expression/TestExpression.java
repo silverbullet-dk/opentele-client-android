@@ -1,10 +1,8 @@
 package dk.silverbullet.telemed.questionnaire.expression;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.node.AssignmentNode;
-import dk.silverbullet.telemed.utils.Util;
-import org.junit.Before;
+import dk.silverbullet.telemed.utils.Json;
 import org.junit.Test;
 
 import java.util.*;
@@ -13,14 +11,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TestExpression {
-
-    private Gson gson;
-
-    @Before
-    public void before() {
-        gson = Util.getGson();
-    }
-
     @Test
     public void testValueSerialisation() {
         Constant<?> v;
@@ -63,10 +53,10 @@ public class TestExpression {
                 n4, a), n24), new SubtractExpression<Number>(b, n12));
         System.out.println(ex + "=" + ex.evaluate());
 
-        String s = gson.toJson(ex, Expression.class);
+        String s = Json.print(ex, Expression.class);
         System.out.println("*********** JSON Expression for " + ex + ":");
         System.out.println(s);
-        ex = (Expression<Number>) gson.fromJson(s, Expression.class);
+        ex = (Expression<Number>) Json.parse(s, Expression.class);
         System.out.println("*********** JSON Expression parsed " + ex);
 
         Map<String, Variable<?>> varPool = new HashMap<String, Variable<?>>();
@@ -127,10 +117,10 @@ public class TestExpression {
         System.out.println(v1);
 
         System.out.println("getValue: " + n12.getValue());
-        String js = gson.toJson(s, Expression.class);
+        String js = Json.print(s, Expression.class);
         System.out.println("JS= " + js);
 
-        Expression<?> e = gson.fromJson(js, Expression.class);
+        Expression<?> e = Json.parse(js, Expression.class);
 
         System.out.println(e);
 
@@ -141,17 +131,17 @@ public class TestExpression {
         il.add(40);
         il.add(40);
         Integer[] ia = new Integer[] { 11, 22, 33 };
-        String ias = gson.toJson(ia, Integer[].class);
+        String ias = Json.print(ia);
         System.out.println("JSON array: " + ias);
         System.out.println("Int array type: " + ia.getClass().getName());
         System.out.println();
         Constant<Integer[]> v = new Constant<Integer[]>(ia);
         System.out.println("v=" + v.toString());
         System.out.println("v.type=" + v.getType());
-        js = gson.toJson(v, Expression.class);
+        js = Json.print(v, Expression.class);
         System.out.println("int array: " + js);
 
-        Constant<Integer[]> v0 = (Constant<Integer[]>) gson.fromJson(js, Expression.class);
+        Constant<Integer[]> v0 = (Constant<Integer[]>) Json.parse(js, Expression.class);
 
         System.out.println(v0);
         Integer[] zz = (Integer[]) v0.getValue();
@@ -160,17 +150,17 @@ public class TestExpression {
         }
         System.out.println();
 
-        System.out.println(gson.toJson(v1, Expression.class));
-        System.out.println(gson.toJson(e, Expression.class));
+        System.out.println(Json.print(v1));
+        System.out.println(Json.print(e));
 
         AssignmentNode<Integer> anode = new AssignmentNode<Integer>(null, null, v1, (Expression<Integer>) e);
         System.out.println("***********' ASSIGNMENT:");
-        System.out.println(gson.toJson(anode, Object.class));
+        System.out.println(Json.print(anode));
 
         Blob b = new Blob();
         b.e = e;
         System.out.println("***********' BLOB:");
-        System.out.println(gson.toJson(b, Object.class));
+        System.out.println(Json.print(b));
         assertTrue(true);
     }
 
@@ -188,10 +178,10 @@ public class TestExpression {
         }
 
         // Serialise
-        String s = gson.toJson(v, Expression.class);
+        String s = Json.print(v, Expression.class);
         System.out.println("*** " + s);
         // ..and de-serialise from the string
-        Constant<?> v2 = (Constant<?>) gson.fromJson(s, Expression.class);
+        Constant<?> v2 = (Constant<?>) Json.parse(s, Expression.class);
 
         // Re-check the de-serialised value:
         assertEquals("Type name check", typeName, v2.getType());

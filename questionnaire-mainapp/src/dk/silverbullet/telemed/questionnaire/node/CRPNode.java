@@ -108,7 +108,7 @@ public class CRPNode extends DeviceNode {
         headline.setText(text);
 
         buttonParent = (ViewGroup) rootLayout.findViewById(R.id.button_parent);
-        TwoButtonElement be = new TwoButtonElement(this, "Undlad", "Næste");
+        TwoButtonElement be = new TwoButtonElement(this, Util.getString(R.string.default_omit, questionnaire), Util.getString(R.string.default_next, questionnaire));
         be.setLeftNextNode(getNextFailNode());
         be.setLeftSkipValidation(true);
         be.setRightNextNode(getNextNode());

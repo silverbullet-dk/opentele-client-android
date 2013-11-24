@@ -33,11 +33,11 @@ public class UpcomingReminders {
     }
 
     public Date nextReminder() {
-        // We know that we have at least one upcoming reminder, so we'll never actually return Integer.MAX_VALUE
-        int offsetToNextReminder = Integer.MAX_VALUE;
+        // We know that we have at least one upcoming reminder, so we'll never actually return Long.MAX_VALUE
+        long offsetToNextReminder = Long.MAX_VALUE;
 
         for (ReminderBean reminderBean : reminders) {
-            for (Integer alarm : reminderBean.getAlarms()) {
+            for (Long alarm : reminderBean.getAlarms()) {
                 offsetToNextReminder = Math.min(offsetToNextReminder, alarm);
             }
         }
@@ -46,11 +46,11 @@ public class UpcomingReminders {
     }
 
     public List<String> remindedQuestionnairesAt(Date time) {
-        int offset = offsetFromDate(time);
+        long offset = offsetFromDate(time);
         List<String> result = new ArrayList<String>();
 
         for (ReminderBean reminderBean : reminders) {
-            for (Integer alarm : reminderBean.getAlarms()) {
+            for (Long alarm : reminderBean.getAlarms()) {
                 if (alarm <= offset) {
                     result.add(reminderBean.getQuestionnaireName());
                     break;
@@ -68,12 +68,12 @@ public class UpcomingReminders {
      * supports removal etc., and anyway it's generally, mutating lists is not so nice.
      */
     public void removeRemindersBeforeOrAt(Date time) {
-        int offset = offsetFromDate(time);
+        long offset = offsetFromDate(time);
         List<ReminderBean> newReminderBeans = new ArrayList<ReminderBean>();
 
         for (ReminderBean reminderBean : reminders) {
-            List<Integer> alarms = new ArrayList<Integer>();
-            for (Integer alarm : reminderBean.getAlarms()) {
+            List<Long> alarms = new ArrayList<Long>();
+            for (Long alarm : reminderBean.getAlarms()) {
                 if (alarm > offset) {
                     alarms.add(alarm);
                 }
@@ -103,11 +103,11 @@ public class UpcomingReminders {
         reminders = newReminderBeans;
     }
 
-    private Date dateFromOffset(int offset) {
+    private Date dateFromOffset(long offset) {
         return new Date(baselineDate.getTime() + offset * 1000);
     }
 
-    private int offsetFromDate(Date date) {
-        return (int) ((date.getTime() - baselineDate.getTime()) / 1000);
+    private long offsetFromDate(Date date) {
+        return (date.getTime() - baselineDate.getTime()) / 1000;
     }
 }

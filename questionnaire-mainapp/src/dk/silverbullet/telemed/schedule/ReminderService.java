@@ -14,10 +14,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
 import dk.silverbullet.telemed.rest.bean.ReminderBean;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 public class ReminderService {
@@ -70,7 +70,7 @@ public class ReminderService {
         saveUpcomingReminders(context, upcomingReminders);
     }
 
-    public static boolean shouldHightlightQuestionnaire(String questionnaireName) {
+    public static boolean shouldHighlightQuestionnaire(String questionnaireName) {
         return QUESTIONNAIRES_TO_HIGHLIGHT.contains(questionnaireName);
     }
 
@@ -105,7 +105,7 @@ public class ReminderService {
     }
 
     private static void saveUpcomingReminders(Context context, UpcomingReminders upcomingReminders) {
-        String reminderBeansAsJson = new Gson().toJson(upcomingReminders.getReminderBeans());
+        String reminderBeansAsJson = Json.print(upcomingReminders.getReminderBeans());
         long baselineDate = upcomingReminders.getBaselineDateAsLong();
 
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
@@ -122,7 +122,7 @@ public class ReminderService {
         if (reminderBeansAsJson != null && baselineDate != 0) {
             ReminderBean[] reminderBeans;
             try {
-                reminderBeans = new Gson().fromJson(reminderBeansAsJson, ReminderBean[].class);
+                reminderBeans = Json.parse(reminderBeansAsJson, ReminderBean[].class);
             } catch (JsonParseException e) {
                 Log.e(TAG, "Could not deserialize reminder beans");
                 return noReminders();

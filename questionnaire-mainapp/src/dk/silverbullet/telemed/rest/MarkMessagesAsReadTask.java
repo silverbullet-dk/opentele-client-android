@@ -2,10 +2,9 @@ package dk.silverbullet.telemed.rest;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -45,6 +44,6 @@ public class MarkMessagesAsReadTask extends AsyncTask<Long, Void, Void> {
     }
 
     private String jsonList(Long[] ids) {
-        return new Gson().toJson(ids);
+        return Json.print(ids);
     }
 }

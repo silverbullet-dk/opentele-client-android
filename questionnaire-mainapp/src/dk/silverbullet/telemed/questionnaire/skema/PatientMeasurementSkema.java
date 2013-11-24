@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.skema;
 
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.node.EndNode;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 import dk.silverbullet.telemed.questionnaire.node.WebViewNode;
@@ -15,8 +16,7 @@ public class PatientMeasurementSkema implements SkemaDef {
 
         EndNode end = new EndNode(questionnaire, "End");
         String patientMeasurementsURL = Util.getServerUrl(questionnaire) + "rest/patient/measurements";
-        WebViewNode webViewNode = new WebViewNode(questionnaire, "patientMeasurementNode", patientMeasurementsURL,
-                "Mine målinger");
+        WebViewNode webViewNode = new WebViewNode(questionnaire, "patientMeasurementNode", patientMeasurementsURL, Util.getString(R.string.patient_measurements_my_measurements, questionnaire));
 
         Skema skema = new Skema();
         skema.setEndNode(end.getNodeName());

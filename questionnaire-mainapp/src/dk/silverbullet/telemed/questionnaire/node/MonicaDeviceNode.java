@@ -1,28 +1,13 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import static dk.silverbullet.telemed.utils.Util.ISO8601_DATE_TIME_FORMAT;
-import static dk.silverbullet.telemed.utils.Util.linkVariable;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.device.AmbiguousDeviceException;
 import dk.silverbullet.telemed.device.BluetoothDisabledException;
 import dk.silverbullet.telemed.device.BluetoothNotAvailableException;
@@ -40,6 +25,14 @@ import dk.silverbullet.telemed.questionnaire.node.monica.MonicaDeviceCallback;
 import dk.silverbullet.telemed.questionnaire.node.monica.SimulatedMonicaDevice;
 import dk.silverbullet.telemed.utils.ProgressiveProgress;
 import dk.silverbullet.telemed.utils.Util;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import static dk.silverbullet.telemed.utils.Json.ISO8601_DATE_TIME_FORMAT;
+import static dk.silverbullet.telemed.utils.Util.linkVariable;
 
 public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback, SeekBar.OnSeekBarChangeListener {
 
@@ -117,25 +110,25 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
             if (runAsSimulator != null && runAsSimulator.evaluate() != null && runAsSimulator.evaluate())
                 device = new SimulatedMonicaDevice(this);
             else
-                device = new MonicaDeviceController(this);
+                device = new MonicaDeviceController(this, activity);
         } catch (BluetoothDisabledException e) {
             Log.d(TAG, "Exception: " + e);
-            Toast.makeText(questionnaire.getActivity().getApplicationContext(), "Fejl: Bluetooth er slået fra!",
+            Toast.makeText(questionnaire.getActivity().getApplicationContext(), Util.getString(R.string.monica_bluetooth_off, questionnaire),
                     Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (BluetoothNotAvailableException e) {
             Log.d(TAG, "Exception: " + e);
             Toast.makeText(questionnaire.getActivity().getApplicationContext(),
-                    "Fejl: Bluetooth er ikke tilgængeligt!", Toast.LENGTH_LONG).show();
+                    Util.getString(R.string.monica_bluetooth_unavaliable, questionnaire), Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (AmbiguousDeviceException e) {
             Log.d(TAG, "Exception: " + e);
             Toast.makeText(questionnaire.getActivity().getApplicationContext(),
-                    "Fejl: Der er tilknyttet mere end et Monica-apparater!", Toast.LENGTH_LONG).show();
+                    Util.getString(R.string.monica_multiple_devices, questionnaire), Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (DeviceInitialisationException e) {
             Log.d(TAG, "Exception: " + e);
-            Toast.makeText(questionnaire.getActivity().getApplicationContext(), "Opstart af Monica-apparatet fejlede!",
+            Toast.makeText(questionnaire.getActivity().getApplicationContext(), Util.getString(R.string.monica_failed_to_start, questionnaire),
                     Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         }
@@ -281,25 +274,25 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
 
         switch (currentState) {
         case WAITING_FOR_CONNECTION:
-            text = "Venter på forbindelse. (Tænd for Monica-apparatet, og hold tablet og Monica-apparatet indenfor 3 m fra hinanden)";
+            text = Util.getString(R.string.monica_waiting_for_connection, questionnaire);
             break;
         case CHECKING_STARTING_CONDITION:
-            text = "Kontrollerer forbindelser. Sluk ikke for Monica-apparatet, men ret de forbindelser der ikke har et flueben.";
+            text = Util.getString(R.string.monica_checking_connection, questionnaire);
             break;
         case WAITING_FOR_DATA:
-            text = "Venter på data...";
+            text = Util.getString(R.string.monica_waiting_for_data, questionnaire);
             break;
         case RECEIVING_DATA:
-            text = "Modtager data...";
+            text = Util.getString(R.string.monica_recieving_data, questionnaire);
             break;
         case PROCESSING_DATA:
-            text = "Behandler data";
+            text = Util.getString(R.string.monica_processing_data, questionnaire);
             break;
         case CLOSING:
-            text = "Afslutter";
+            text = Util.getString(R.string.monica_closing, questionnaire);
             break;
         default:
-            text = "??";
+            text = Util.getString(R.string.monica_question_marks, questionnaire);
             break;
         }
 
@@ -518,7 +511,7 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
 
         int progressTime = updateMeasuringTime(progress);
 
-        measureTimeText.setText("Indstil tiden: " + getSampleTimeText(progressTime));
+        measureTimeText.setText(Util.getString(R.string.monica_set_time, questionnaire) + getSampleTimeText(progressTime));
     }
 
     private int updateMeasuringTime(int progress) {
@@ -541,14 +534,14 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
 
         int progressTime = updateMeasuringTime(seekBar.getProgress());
 
-        measureTimeText.setText("Indstil tiden: " + getSampleTimeText(progressTime));
+        measureTimeText.setText(Util.getString(R.string.monica_set_time, questionnaire) + getSampleTimeText(progressTime));
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         sampleTimeInMinutes = updateMeasuringTime(seekBar.getProgress());
 
-        measureTimeText.setText("Indstillet til " + getSampleTimeText(sampleTimeInMinutes));
+        measureTimeText.setText(Util.getString(R.string.monica_time_set_to, questionnaire) + getSampleTimeText(sampleTimeInMinutes));
     }
 
     private String getSampleTimeText(int minutes) {

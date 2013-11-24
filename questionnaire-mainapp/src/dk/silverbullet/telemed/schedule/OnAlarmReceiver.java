@@ -18,7 +18,7 @@ public class OnAlarmReceiver extends BroadcastReceiver {
     public final void onReceive(Context context, Intent intent) {
         Log.d(TAG, "MyBroadcastReceiver....");
 
-        displayNotification(context, "Du skal besvare et spørgeskema");
+        displayNotification(context, Util.getString(R.string.alarm_user_prompt, context));
 
         ReminderService.updateReminders(context);
     }
@@ -28,7 +28,7 @@ public class OnAlarmReceiver extends BroadcastReceiver {
         Notification notification = new Notification.Builder(context)
             .setWhen(System.currentTimeMillis())
             .setContentIntent(contentIntent)
-            .setContentTitle("Alarm")
+            .setContentTitle(Util.getString(R.string.alarm_alarm, context))
             .setDefaults(Notification.DEFAULT_ALL)
             .setContentText(message)
             .setAutoCancel(true)

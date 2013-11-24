@@ -1,5 +1,6 @@
 package dk.silverbullet.telemed.rest.bean.message;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -9,13 +10,13 @@ public class MessageWrite implements Serializable {
     private static final long serialVersionUID = 5892450544356032404L;
 
     @SerializedName("id")
-    private Long userId;
+    @Expose private Long userId;
 
     @SerializedName("department")
-    private Long departmentId;
+    @Expose private Long departmentId;
 
-    private String title;
-    private String text;
+    @Expose private String title;
+    @Expose private String text;
 
     public void setUserId(Long userId) {
         this.userId = userId;

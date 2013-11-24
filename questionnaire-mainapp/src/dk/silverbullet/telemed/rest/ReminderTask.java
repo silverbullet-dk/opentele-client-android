@@ -3,6 +3,7 @@ package dk.silverbullet.telemed.rest;
 import java.io.IOException;
 import java.util.Arrays;
 
+import dk.silverbullet.telemed.utils.Json;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -10,7 +11,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
@@ -47,7 +47,7 @@ public class ReminderTask extends RetrieveTask {
     protected void onPostExecute(String result) {
         ReminderBean[] reminderBeans;
         try {
-            reminderBeans = new Gson().fromJson(result, ReminderBean[].class);
+            reminderBeans = Json.parse(result, ReminderBean[].class);
         } catch (JsonSyntaxException e) {
             Log.e(TAG, "Could not deserialize response from server", e);
             reminderBeans = new ReminderBean[0];

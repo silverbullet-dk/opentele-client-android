@@ -5,7 +5,9 @@ import android.os.Handler.Callback;
 import android.os.Message;
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
+import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Map;
 import java.util.Timer;
@@ -42,10 +44,10 @@ public class DelayNode extends IONode {
         numberOfticks = countTime;
         if (countUp) {
             currentTick = 0;
-            timeText = "Tid gået: ";
+            timeText = Util.getString(R.string.delay_time_elapsed, questionnaire);
         } else {
             currentTick = numberOfticks;
-            timeText = "Tid tilbage: ";
+            timeText = Util.getString(R.string.delay_time_left, questionnaire);
         }
 
         clearElements();
@@ -54,8 +56,8 @@ public class DelayNode extends IONode {
 
         // Create countdown/up display
         counterText = new TextViewElement(this);
-        counterText.setText(displayTextString + "\n\n" + timeText + " " + currentTick + " ud af " + numberOfticks
-                + " sekunder.");
+        counterText.setText(displayTextString + "\n\n" + timeText + " " + currentTick + Util.getString(R.string.delay_out_of, questionnaire) + numberOfticks
+                + Util.getString(R.string.delay_seconds, questionnaire));
         addElement(counterText);
 
         super.enter();
@@ -65,8 +67,8 @@ public class DelayNode extends IONode {
         final Handler handler = new Handler(new Callback() {
             @Override
             public boolean handleMessage(Message arg0) {
-                counterText.setText(displayTextString + "\n\n" + timeText + " " + currentTick + " ud af "
-                        + numberOfticks + " sekunder.");
+                counterText.setText(displayTextString + "\n\n" + timeText + " " + currentTick + Util.getString(R.string.delay_out_of, questionnaire)
+                        + numberOfticks + Util.getString(R.string.delay_seconds, questionnaire));
 
                 if (countUp) {
                     if (currentTick >= numberOfticks) {

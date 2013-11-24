@@ -3,9 +3,9 @@ package dk.silverbullet.telemed.questionnaire.node;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.deleteme.TestSkema;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.UnknownVariableException;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
@@ -16,6 +16,7 @@ import dk.silverbullet.telemed.rest.RetrieveTask;
 import dk.silverbullet.telemed.rest.bean.QuestionnairListBean;
 import dk.silverbullet.telemed.rest.listener.SkemaListener;
 import dk.silverbullet.telemed.schedule.ReminderService;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Map;
@@ -40,7 +41,7 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
     public void enter() {
         questionnaire.cleanSkemaValuePool();
 
-        dialog = ProgressDialog.show(questionnaire.getActivity(), "Henter skema", "Vent venligst...", true);
+        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.questionnaire_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 
         try {
             if (skemaName.evaluate().startsWith("dk.silverbullet.telemed.deleteme")) {
@@ -88,9 +89,7 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
 
     public void getLocal(String skemaName) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException, UnknownNodeException, VariableLinkFailedException {
-
-        Class<?> c = null;
-        c = Class.forName(skemaName);
+        Class<?> c = Class.forName(skemaName);
 
         TestSkema ts = (TestSkema) c.newInstance();
         skema = ts.getSkema();
@@ -127,7 +126,7 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
     @Override
     public void setJson(String json) {
         try {
-            skema = Util.getGson().fromJson(json, Skema.class);
+            skema = Json.parse(json, Skema.class);
             setup();
         } catch (Exception e) {
             ErrorNode errorNode = new ErrorNode(questionnaire, "errorNode");
@@ -148,7 +147,7 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
     }
 
     private QuestionnairListBean deserializeQuestionnaire(String skemaName) {
-        return new Gson().fromJson(skemaName, QuestionnairListBean.class);
+        return Json.parse(skemaName, QuestionnairListBean.class);
     }
 
     public void setNextNode(Node nextNode) {

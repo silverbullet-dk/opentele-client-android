@@ -4,11 +4,11 @@ import static org.junit.Assert.fail;
 
 import java.util.Date;
 
+import dk.silverbullet.telemed.utils.Json;
 import org.junit.Test;
 
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
-import dk.silverbullet.telemed.utils.Util;
 
 public class TestOutputJson {
 
@@ -31,11 +31,11 @@ public class TestOutputJson {
         out.addVariable(new Variable<Double[]>("aDoubleA", new Double[] { 100.1d, 100.2d }));
         out.addVariable(new Variable<Integer[]>("aIntegerA", new Integer[] { 200, 201 }));
 
-        String json = Util.getGsonForOutput().toJson(out);
+        String json = Json.print(out);
         System.out.println(json);
 
         try {
-            OutputSkema newOut = Util.getGsonForOutput().fromJson(json, OutputSkema.class);
+            OutputSkema newOut = Json.parse(json, OutputSkema.class);
             System.out.println(newOut);
         } catch (Throwable t) {
             t.printStackTrace();

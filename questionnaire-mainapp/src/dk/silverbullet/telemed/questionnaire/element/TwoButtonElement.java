@@ -77,7 +77,7 @@ public class TwoButtonElement extends Element {
                     if (leftSkipValidation || node.validates())
                         getQuestionnaire().setCurrentNode(leftNextNode);
                     else {
-                        String text = "Et eller flere felter er ikke udfyldt korrekt";
+                        String text = Util.getString(R.string.default_validation_error, getQuestionnaire());
                         Util.showToast(getQuestionnaire(), text);
                     }
                 }
@@ -94,7 +94,7 @@ public class TwoButtonElement extends Element {
                     if (rightSkipValidation || node.validates())
                         getQuestionnaire().setCurrentNode(rightNextNode);
                     else {
-                        String text = "Et eller flere felter er ikke udfyldt korrekt";
+                        String text = Util.getString(R.string.default_validation_error, getQuestionnaire());
                         Util.showToast(getQuestionnaire(), text);
                     }
                 }

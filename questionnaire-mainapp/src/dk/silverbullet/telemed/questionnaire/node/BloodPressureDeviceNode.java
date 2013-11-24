@@ -9,6 +9,7 @@ import dk.silverbullet.telemed.device.continua.ContinuaDeviceController;
 import dk.silverbullet.telemed.device.continua.ContinuaListener;
 import dk.silverbullet.telemed.device.continua.android.AndroidHdpController;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -47,7 +48,7 @@ public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListe
     public void enter() {
         clearElements();
         addElement(new TextViewElement(this, text));
-        statusText = new TextViewElement(this, "Tryk på START-knappen på blodtryksmåleren.");
+        statusText = new TextViewElement(this, Util.getString(R.string.bloodpressure_press_start, questionnaire));
         addElement(statusText);
 
         systolicBloodPressureDisplayText = new TextViewElement(this);
@@ -61,9 +62,9 @@ public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListe
 
         be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
-        be.setLeftText("Undlad");
+        be.setLeftText(Util.getString(R.string.default_omit, questionnaire));
         be.setRightNextNode(this);
-        be.setRightText("Prøv igen");
+        be.setRightText(Util.getString(R.string.default_retry, questionnaire));
         addElement(be);
 
         super.enter();
@@ -71,7 +72,7 @@ public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListe
         try {
             controller = AndBloodPressureController.create(this, new AndroidHdpController(questionnaire.getActivity()));
         } catch (DeviceInitialisationException e) {
-            setStatusText("Kunne ikke forbinde til måler.");
+            setStatusText(Util.getString(R.string.bloodpressure_could_not_connect, questionnaire));
         }
     }
 
@@ -97,13 +98,13 @@ public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListe
         questionnaire.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                statusText.setText("Dit blodtryk og din puls");
-                systolicBloodPressureDisplayText.setText("Systolisk blodtryk: " + systolic.getExpressionValue());
-                diastolicBloodPressureDisplayText.setText("Diastolisk blodtryk: " + diastolic.getExpressionValue());
-                pulseDisplayText.setText("Puls: " + pulse.getExpressionValue());
+                statusText.setText(Util.getString(R.string.bloodpressure_your_bloodpressure_and_pulse, questionnaire));
+                systolicBloodPressureDisplayText.setText(Util.getString(R.string.bloodpressure_systolic, questionnaire) + systolic.getExpressionValue());
+                diastolicBloodPressureDisplayText.setText(Util.getString(R.string.bloodpressure_diastolic, questionnaire) + diastolic.getExpressionValue());
+                pulseDisplayText.setText(Util.getString(R.string.bloodpressure_pulse, questionnaire) + pulse.getExpressionValue());
 
                 be.showRightButton();
-                be.setRightText("OK");
+                be.setRightText(Util.getString(R.string.default_ok, questionnaire));
                 be.setRightNextNode(getNextNode());
             }
         });
@@ -119,22 +120,22 @@ public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListe
 
     @Override
     public void connected() {
-        setStatusText("Venter på måling. Hold dig i ro.");
+        setStatusText(Util.getString(R.string.bloodpressure_waiting_for_measurement, questionnaire));
     }
 
     @Override
     public void disconnected() {
-        setStatusText("Forbindelse afbrudt.");
+        setStatusText(Util.getString(R.string.bloodpressure_disconnected, questionnaire));
     }
 
     @Override
     public void permanentProblem() {
-        setStatusText("Der kan ikke skabes forbindelse.");
+        setStatusText(Util.getString(R.string.bloodpressure_permanent_problem, questionnaire));
     }
 
     @Override
     public void temporaryProblem() {
-        setStatusText("Kunne ikke hente data. Prøv evt. en ny blodtryksmåling.");
+        setStatusText(Util.getString(R.string.bloodpressure_temporary_problem, questionnaire));
     }
 
     private void setStatusText(final String text) {

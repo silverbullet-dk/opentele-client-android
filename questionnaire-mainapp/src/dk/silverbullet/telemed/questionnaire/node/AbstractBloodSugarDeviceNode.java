@@ -1,17 +1,17 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import java.util.Map;
-
 import com.google.gson.annotations.Expose;
-
 import dk.silverbullet.telemed.device.accuchek.AccuChekListener;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
+
+import java.util.Map;
 
 public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements AccuChekListener {
     private TextViewElement infoElement;
@@ -31,14 +31,14 @@ public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements
         addElement(new TextViewElement(this, text));
 
         infoElement = new TextViewElement(this,
-                "Tilslut din blodsukkermåler. Vær sikker på at blodsukkermåleren er slukket inden den tilsluttes.");
+                Util.getString(R.string.bloodsugar_connect_device, questionnaire));
         addElement(infoElement);
 
         be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
-        be.setLeftText("Undlad");
+        be.setLeftText(Util.getString(R.string.default_omit, questionnaire));
         be.setRightNextNode(this);
-        be.setRightText("Prøv igen");
+        be.setRightText(Util.getString(R.string.default_retry, questionnaire));
         be.hideRightButton();
         addElement(be);
 
@@ -60,34 +60,34 @@ public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements
 
     @Override
     public void fetchingDiary() {
-        updateInfoElement("Henter blodsukkermålinger.");
+        updateInfoElement(Util.getString(R.string.bloodsugar_fetching_measurements, questionnaire));
     }
 
     @Override
     public void connected() {
-        updateInfoElement("Blodsukkermåler fundet.");
+        updateInfoElement(Util.getString(R.string.bloodsugar_connected, questionnaire));
     }
 
     @Override
     public void diaryNotFound() {
-        updateInfoElement("Kunne ikke finde blodsukkermålinger.");
+        updateInfoElement(Util.getString(R.string.bloodsugar_no_diary, questionnaire));
     }
 
     @Override
     public void tooManyDiariesFound() {
-        updateInfoElement("For mange blodsukkermålinger.");
+        updateInfoElement(Util.getString(R.string.bloodsugar_too_many_diaries, questionnaire));
     }
 
     @Override
     public void measurementsParsed(BloodSugarMeasurements measurements) {
-        updateInfoElement("Blodsukkermålinger hentet.");
+        updateInfoElement(Util.getString(R.string.bloodsugar_measurements_fetched, questionnaire));
         getDeviceId().setValue(measurements.serialNumber);
         bloodSugarMeasurements.setValue(measurements);
 
         questionnaire.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                be.setRightText("Næste");
+                be.setRightText(Util.getString(R.string.default_next, questionnaire));
                 be.showRightButton();
                 be.setRightNextNode(getNextNode());
             }
@@ -96,7 +96,7 @@ public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements
 
     @Override
     public void parsingFailed() {
-        updateInfoElement("Kunne ikke læse blodsukkermålinger. Kontakt din kontaktperson.");
+        updateInfoElement(Util.getString(R.string.bloodsugar_parse_failed, questionnaire));
     }
 
     private void updateInfoElement(final String content) {

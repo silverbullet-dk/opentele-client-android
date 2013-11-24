@@ -2,8 +2,8 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import android.app.ProgressDialog;
 import android.util.Log;
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -15,6 +15,7 @@ import dk.silverbullet.telemed.rest.bean.message.MessageRecipient;
 import dk.silverbullet.telemed.rest.bean.message.Messages;
 import dk.silverbullet.telemed.rest.listener.MessageListListener;
 import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.text.MessageFormat;
@@ -26,9 +27,9 @@ import java.util.Set;
 public class IOMenuNode extends IONode implements MessageListListener, MessageWriteListener {
 
     private static final String TAG = Util.getTag(IOMenuNode.class);
-    private static final String MENU_TEXT_EDIT_SERVER_URL = "Ret server-URL";
-    private static final String MENU_TEXT_SHOW_UPLOAD_DEBUG = "Vis Upload-debug-node?";
-    private static final String MENU_TEXT_SET_ALARM = "Sæt alarm";
+    private static String MENU_TEXT_EDIT_SERVER_URL;
+    private static String MENU_TEXT_SHOW_UPLOAD_DEBUG;
+    private static String MENU_TEXT_SET_ALARM;
 
     private Node nextNode;
     private Variable<String> menu;
@@ -44,6 +45,10 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
 
     public IOMenuNode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
+
+        MENU_TEXT_EDIT_SERVER_URL = Util.getString(R.string.admin_change_server, questionnaire);
+        MENU_TEXT_SHOW_UPLOAD_DEBUG = Util.getString(R.string.admin_show_upload_debug, questionnaire);
+        MENU_TEXT_SET_ALARM = Util.getString(R.string.admin_set_alarm, questionnaire);
     }
 
     @Override
@@ -57,7 +62,7 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
         Variable<?> user = questionnaire.getValuePool().get(Util.VARIABLE_USERNAME);
         if (null != user && null != user.getExpressionValue() && null != user.getExpressionValue().toString()
                 && !Util.ADMINUSER_NAME.equalsIgnoreCase(user.getExpressionValue().toString())) {
-            dialog = ProgressDialog.show(questionnaire.getActivity(), "Arbejder", "Vent venligst...", true);
+            dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.default_working, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
             new ReminderTask(questionnaire).execute();
             new RetrieveRecipientsTask(questionnaire, this).execute();
         } else {
@@ -79,7 +84,7 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
     @Override
     public void end(String result) {
         Log.d(TAG, result);
-        Messages messages = new Gson().fromJson(result, Messages.class);
+        Messages messages = Json.parse(result, Messages.class);
         int numberOfUnreadMessages = messages.unread;
 
         boolean refreshGui = numberOfUnreadMessages != unreadMessages;
@@ -93,7 +98,7 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
 
     private void buildView() {
         skemaer.clear();
-        skemaer.put("Gennemfør måling", RunSkema.class.getName());
+        skemaer.put(Util.getString(R.string.menu_complete_questionnaire, questionnaire), RunSkema.class.getName());
 
         Variable<?> user = questionnaire.getValuePool().get(Util.VARIABLE_USERNAME);
         if (null != user && null != user.getExpressionValue() && null != user.getExpressionValue().toString()
@@ -112,19 +117,21 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
             skemaer.remove(MENU_TEXT_SET_ALARM);
 
             if (showMessagesMenuItem) {
-                MessageFormat fmt = new MessageFormat(
-                        "Beskeder{0,choice,0#|1#' ('én ny besked')'|1<' ('{0,number,integer} nye')'}");
+                MessageFormat fmt = new MessageFormat(Util.getString(R.string.menu_messages, questionnaire));
 
                 skemaer.put(fmt.format(new Integer[] { unreadMessages }), MessageSkema.class.getName());
             }
+            if (showMessagesMenuItem) {
+                skemaer.put(Util.getString(R.string.menu_acknowledements, questionnaire), AcknowledgementsSkema.class.getName());
+            }
 
-            skemaer.put("Mine målinger", PatientMeasurementSkema.class.getName());
-            skemaer.put("Skift adgangskode", ChangePasswordSkema.class.getName());
+            skemaer.put(Util.getString(R.string.menu_my_measurements, questionnaire), PatientMeasurementSkema.class.getName());
+            skemaer.put(Util.getString(R.string.menu_change_password, questionnaire), ChangePasswordSkema.class.getName());
         }
 
         clearElements();
         TextViewElement tve = new TextViewElement(this);
-        tve.setText("Menu");
+        tve.setText(Util.getString(R.string.default_menu, questionnaire));
         addElement(tve);
 
         ListViewElement<String> lve = new ListViewElement<String>(this);
@@ -146,7 +153,7 @@ public class IOMenuNode extends IONode implements MessageListListener, MessageWr
     @Override
     public void setRecipients(String result) {
         if (null != result && !"".equals(result)) {
-            MessageRecipient[] messageRecipients = new Gson().fromJson(result, MessageRecipient[].class);
+            MessageRecipient[] messageRecipients = Json.parse(result, MessageRecipient[].class);
             showMessagesMenuItem = messageRecipients != null && messageRecipients.length > 0;
 
             buildView();

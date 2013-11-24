@@ -19,7 +19,7 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Video-konsultation"
+                android:text="@string/video_consultation"
                 android:textColor="#777"
                 android:textSize="36sp"/>
     </LinearLayout>
@@ -37,7 +37,7 @@
         <TextView android:layout_width="fill_parent"
                   android:layout_height="fill_parent"
                   android:gravity="center"
-                  android:text="Det var desværre ikke muligt at starte video-konsultationen."
+                  android:text="@string/video_could_not_start"
                   android:textColor="#777"
                   android:textSize="36sp"
                 />
@@ -60,7 +60,7 @@
                 style="@style/buttonstyle"
                 android:layout_width="fill_parent"
                 android:textSize="36sp"
-                android:text="OK"
+                android:text="@string/default_ok"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:paddingLeft="50dp"

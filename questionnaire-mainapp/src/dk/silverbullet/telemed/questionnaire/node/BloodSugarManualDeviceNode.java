@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurement;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.CheckBoxElement;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -52,21 +53,21 @@ public class BloodSugarManualDeviceNode extends DeviceNode {
         addElement(measurementElement);
 
         beforeMealElement = new CheckBoxElement(this);
-        beforeMealElement.setText("Før måltid");
+        beforeMealElement.setText(Util.getString(R.string.bloodsugar_before_meal, questionnaire));
         beforeMealElement.setOutputVariable(beforeMealVariable);
         addElement(beforeMealElement);
 
         afterMealElement = new CheckBoxElement(this);
-        afterMealElement.setText("Efter måltid");
+        afterMealElement.setText(Util.getString(R.string.bloodsugar_after_meal, questionnaire));
         afterMealElement.setOutputVariable(afterMealVariable);
         addElement(afterMealElement);
 
         be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
-        be.setLeftText("Undlad");
+        be.setLeftText(Util.getString(R.string.default_omit, questionnaire));
         be.setLeftSkipValidation(true);
         be.setRightNextNode(getNextNode());
-        be.setRightText("Næste");
+        be.setRightText(Util.getString(R.string.default_next, questionnaire));
         addElement(be);
 
         super.enter();

@@ -2,12 +2,12 @@ package dk.silverbullet.telemed.rest;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.questionnaire.MainQuestionnaire;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.rest.bean.LoginBean;
 import dk.silverbullet.telemed.rest.listener.LoginListener;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -60,7 +60,7 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
                 }
 
                 if (loginSucceeded(response)) {
-                    LoginBean loginBean = new Gson().fromJson(res, LoginBean.class);
+                    LoginBean loginBean = Json.parse(res, LoginBean.class);
 
                     questionnaire.addVariable(new Variable<String>(Util.VARIABLE_REAL_NAME, loginBean.getFullName()));
                     questionnaire.addVariable(new Variable<Long>(Util.VARIABLE_USER_ID, loginBean.getId()));

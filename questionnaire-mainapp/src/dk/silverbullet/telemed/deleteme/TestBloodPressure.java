@@ -9,6 +9,7 @@ import dk.silverbullet.telemed.questionnaire.node.EndNode;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
 import dk.silverbullet.telemed.questionnaire.skema.Skema;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 public class TestBloodPressure implements TestSkema {
@@ -58,14 +59,13 @@ public class TestBloodPressure implements TestSkema {
 
     @Override
     public Skema getSkema() {
-        Skema result = null;
         Questionnaire q = new Questionnaire(new QuestionnaireFragment());
         try {
-            String json = Util.getGson().toJson(getInternSkema(q));
-            result = Util.getGson().fromJson(json, Skema.class);
+            String json = Json.print(getInternSkema(q));
+            return Json.parse(json, Skema.class);
         } catch (UnknownNodeException e) {
             Log.e(TAG, "Got exception", e);
         }
-        return result;
+        return null;
     }
 }

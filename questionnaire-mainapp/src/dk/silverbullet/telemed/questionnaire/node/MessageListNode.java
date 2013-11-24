@@ -2,8 +2,8 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import android.app.ProgressDialog;
 import android.util.Log;
-import com.google.gson.Gson;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -16,6 +16,7 @@ import dk.silverbullet.telemed.rest.bean.message.MessageRecipient;
 import dk.silverbullet.telemed.rest.bean.message.Messages;
 import dk.silverbullet.telemed.rest.listener.MessageListListener;
 import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
+import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.HashMap;
@@ -50,7 +51,7 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
         }
 
         setView();
-        dialog = ProgressDialog.show(questionnaire.getActivity(), "Henter beskeder", "Vent venligst...", true);
+        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.message_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 
         new RetrieveRecipientsTask(questionnaire, this).execute();
 
@@ -60,7 +61,7 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
     public void setView() {
         clearElements();
 
-        TextViewElement tve = new TextViewElement(this, "Beskeder");
+        TextViewElement tve = new TextViewElement(this, Util.getString(R.string.message_messages, questionnaire));
         addElement(tve);
         Log.d(TAG, "questionnaire.getUserId(): " + questionnaire.getUserId());
         Log.d(TAG, "questionnaire.getFullName(): " + questionnaire.getFullName());
@@ -113,7 +114,7 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
     @Override
     public void end(String result) {
         Log.d(TAG, result);
-        Messages messageResult = new Gson().fromJson(result, Messages.class);
+        Messages messageResult = Json.parse(result, Messages.class);
         for (MessageItem msg : messageResult.messages) {
             MessagePerson from = msg.getFrom();
             boolean fromDepartment = from.getType().equals("Department");
@@ -137,7 +138,7 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
             departmentNameMap = new LinkedHashMap<Long, String>();
             departmentMessageCountMap = new HashMap<Long, Integer>();
 
-            MessageRecipient[] messageRecipients = new Gson().fromJson(result, MessageRecipient[].class);
+            MessageRecipient[] messageRecipients = Json.parse(result, MessageRecipient[].class);
 
             for (MessageRecipient mc : messageRecipients) {
                 departmentNameMap.put(mc.getId(), mc.getName());

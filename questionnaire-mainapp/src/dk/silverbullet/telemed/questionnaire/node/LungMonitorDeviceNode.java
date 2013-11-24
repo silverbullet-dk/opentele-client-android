@@ -7,6 +7,7 @@ import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMonitorControll
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMonitorListener;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.VitalographLungMonitorController;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -47,7 +48,7 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
         addElement(new TextViewElement(this, text));
 
         statusText = new TextViewElement(this);
-        setStatusText("Tænd for apparatet og udfør lungefunktionstest.");
+        setStatusText(Util.getString(R.string.lung_monitor_connect, questionnaire));
         addElement(statusText);
 
         fev1DisplayText = new TextViewElement(this);
@@ -58,7 +59,7 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
 
         be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
-        be.setLeftText("Undlad");
+        be.setLeftText(Util.getString(R.string.default_omit, questionnaire));
         be.hideRightButton();
         addElement(be);
 
@@ -67,7 +68,7 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
         try {
             controller = createController();
         } catch (DeviceInitialisationException e) {
-            setStatusText("Kunne ikke forbinde til lungefunktionsmåler.");
+            setStatusText(Util.getString(R.string.lung_monitor_could_not_connect, questionnaire));
         }
     }
 
@@ -96,17 +97,17 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
 
     @Override
     public void connected() {
-        setStatusText("Udfør lungefunktionstest.");
+        setStatusText(Util.getString(R.string.lung_monitor_perform_test, questionnaire));
     }
 
     @Override
     public void permanentProblem() {
-        setStatusText("Der kan ikke skabes forbindelse.");
+        setStatusText(Util.getString(R.string.lung_monitor_permanent_problem, questionnaire));
     }
 
     @Override
     public void temporaryProblem() {
-        setStatusText("Kunne ikke hente data. Prøv evt. igen.");
+        setStatusText(Util.getString(R.string.lung_monitor_temporary_problem, questionnaire));
     }
 
     @Override
@@ -115,7 +116,7 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
             @Override
             public void run() {
                 if (measurement.isGoodTest()) {
-                    statusText.setText("Måling modtaget.");
+                    statusText.setText(Util.getString(R.string.lung_monitor_measurement_recieved, questionnaire));
                     setDeviceIdString(systemId);
                     setVariableValue(fev1, measurement.getFev1());
                     setVariableValue(fev6, measurement.getFev6());
@@ -128,9 +129,9 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
                     controller = null;
 
                     be.setRightNextNode(getNextNode());
-                    be.setRightText("Fortsæt");
+                    be.setRightText(Util.getString(R.string.default_proceed, questionnaire));
                 } else {
-                    statusText.setText("Dårlig måling modtaget. Prøv igen.");
+                    statusText.setText(Util.getString(R.string.lung_monitor_bad_measurement, questionnaire));
                 }
 
                 fev1DisplayText.setText(String.format("FEV1: %.2f", measurement.getFev1()));

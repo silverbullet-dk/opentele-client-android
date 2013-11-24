@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.utils.Util;
@@ -21,13 +22,13 @@ public class ErrorNode extends IONode {
     public ErrorNode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
         TextViewElement x = new TextViewElement(this);
-        x.setText("Der er sket en fejl :(");
+        x.setText(Util.getString(R.string.error_error_occured, questionnaire));
         addElement(x);
 
         textViewElement = new TextViewElement(this);
         addElement(textViewElement);
         button = new ButtonElement(this);
-        button.setText("OK");
+        button.setText(Util.getString(R.string.default_ok, questionnaire));
         addElement(button);
     }
 

@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -23,7 +24,7 @@ public class SetServerIpNode extends IONode {
         clearElements();
 
         TextViewElement tve = new TextViewElement(this);
-        tve.setText("Set server-ip");
+        tve.setText(Util.getString(R.string.set_server_server_ip, questionnaire));
         addElement(tve);
 
         EditTextElement ete = new EditTextElement(this);
@@ -32,7 +33,7 @@ public class SetServerIpNode extends IONode {
 
         ButtonElement be = new ButtonElement(this);
         be.setNextNode(nextNode);
-        be.setText("OK");
+        be.setText(Util.getString(R.string.default_ok, questionnaire));
         addElement(be);
 
         super.enter();

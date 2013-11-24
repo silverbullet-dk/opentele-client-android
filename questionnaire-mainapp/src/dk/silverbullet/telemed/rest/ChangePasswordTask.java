@@ -2,22 +2,18 @@ package dk.silverbullet.telemed.rest;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
-import dk.silverbullet.telemed.questionnaire.expression.Constant;
 import dk.silverbullet.telemed.rest.bean.ChangePasswordError;
+import dk.silverbullet.telemed.utils.Json;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.util.Log;
-
-import com.google.gson.Gson;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.rest.bean.ChangePasswordBean;
@@ -59,14 +55,14 @@ public class ChangePasswordTask extends AsyncTask<String, Void, ChangePasswordTa
         Util.setHeaders(httpPost, questionnaire);
 
         try {
-            httpPost.setEntity(new StringEntity(new Gson().toJson(changePasswordBean), "UTF-8"));
+            httpPost.setEntity(new StringEntity(Json.print(changePasswordBean), "UTF-8"));
 
             HttpResponse response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() != 200) {
                 return Result.COMMUNICATION_ERROR;
             }
 
-            ChangePasswordResponse responseBean = new Gson().fromJson(new InputStreamReader(response.getEntity().getContent(), "UTF-8"), ChangePasswordResponse.class);
+            ChangePasswordResponse responseBean = Json.parse(new InputStreamReader(response.getEntity().getContent(), "UTF-8"), ChangePasswordResponse.class);
             Log.d(TAG, "Response..:" + responseBean);
 
             if (responseBean.isError()) {

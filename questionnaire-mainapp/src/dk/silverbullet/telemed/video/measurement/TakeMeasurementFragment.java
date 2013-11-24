@@ -132,7 +132,7 @@ public class TakeMeasurementFragment extends Fragment implements MeasurementInfo
     private VideoMeasurementAdapter createVideoMeasurementAdapter(PendingMeasurement pendingMeasurement) {
         switch (pendingMeasurement.type) {
             case LUNG_FUNCTION:
-                return new LungMeasurementAdapter(this);
+                return new LungMeasurementAdapter(this, getActivity());
             case BLOOD_PRESSURE:
                 return new BloodPressureAdapter(this);
             case SATURATION:
