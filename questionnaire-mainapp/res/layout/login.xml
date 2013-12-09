@@ -128,7 +128,8 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="8dp"
+                android:textSize="9dp"
+                android:textColor="#404040"
                 android:paddingLeft="20dp"
                 android:id="@+id/login_debug_info"/>
     </LinearLayout>

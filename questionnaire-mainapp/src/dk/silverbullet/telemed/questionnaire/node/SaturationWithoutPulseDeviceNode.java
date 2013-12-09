@@ -94,7 +94,7 @@ public class SaturationWithoutPulseDeviceNode extends DeviceNode implements Cont
             public void run() {
                 noninController.close();
 
-                statusElement.setText(Util.getString(R.string.saturation_measuremen_without_pulse_recieved, questionnaire, measurement.getSaturation()));
+                statusElement.setText(Util.getString(R.string.saturation_measuremen_without_pulse_received, questionnaire, measurement.getSaturation()));
 
                 be.setRightText(Util.getString(R.string.default_next, questionnaire));
                 be.showRightButton();

@@ -91,7 +91,7 @@
     <string name="lung_monitor_bad_measurement">Bad measurement received. Please try again</string>
     <string name="lung_monitor_connect">Turn on the device and perform a lung function test.</string>
     <string name="lung_monitor_could_not_connect">Could not connect to lung function device.</string>
-    <string name="lung_monitor_measurement_recieved">Measurement received.</string>
+    <string name="lung_monitor_measurement_received">Measurement received.</string>
     <string name="lung_monitor_perform_test">Perform lung function test.</string>
     <string name="lung_monitor_permanent_problem">Could not establish a connection.</string>
     <string name="lung_monitor_temporary_problem">Could not fetch data. Please try again.</string>
@@ -104,6 +104,7 @@
     <string name="menu_messages"><![CDATA[Messages{0,choice,0#|1#\' (\'one new message\')\'|1<\' (\'{0,number,integer} new\')\'}]]></string>
     <string name="menu_my_measurements">My measurements</string>
 
+    <string name="message_unread_new"><![CDATA[<font color=\'red\' >New</font>]]></string>
     <string name="message_create">Create new message</string>
     <string name="message_error_while_sending">Error sending message.</string>
     <string name="message_fetching">Fetching messages</string>
@@ -166,7 +167,7 @@
     <string name="saturation_could_not_connect">Could not connect to device.</string>
     <string name="saturation_enter_pulse">Enter pulse:</string>
     <string name="saturation_enter_saturation">Enter saturation:</string>
-    <string name="saturation_measuremen_without_pulse_recieved">Measurement received\nSaturation: %1$d</string>
+    <string name="saturation_measuremen_without_pulse_received">Measurement received\nSaturation: %1$d</string>
     <string name="saturation_measurement_received">Measurement received\n Saturation: %1$d\nPulse: %2$d</string>
     <string name="saturation_permanent_problem">Could not connect to device</string>
     <string name="saturation_saturation">Saturation</string>
@@ -200,7 +201,7 @@
     <string name="top_panel_main_meni">Main menu</string>
 
     <string name="upload_measurements_error">Error</string>
-    <string name="upload_measurements_measurements_recieved">Measurement/Replies received.</string>
+    <string name="upload_measurements_measurements_received">Measurement/Replies received.</string>
     <string name="upload_measurements_sent">Send measurement/replies</string>
     <string name="upload_measurements_upload_failed">Upload of measurement/replies failed. Please check your network connection.</string>
     <string name="upload_measurements_uploading">Uploading measurements/replies…</string>
@@ -244,7 +245,7 @@
     <string name="video_saturation_connection_problem">Could not connect to device.</string>
     <string name="video_saturation_disconnected">Disconnected.</string>
     <string name="video_saturation_equip_device">Place the device on your finger.</string>
-    <string name="video_saturation_measurement_received">Measurement recieved.</string>
+    <string name="video_saturation_measurement_received">Measurement received.</string>
     <string name="video_saturation_permanent_problem">Could not connect to device.</string>
     <string name="video_saturation_saturation">Oxygen Saturation</string>
     <string name="video_saturation_temporary_problem">Could not fetch measurement. Please try turning the device off and on again.</string>
@@ -258,4 +259,5 @@
     <string name="weight_temporary_problem">Could not fetch data. Please try again.</string>
     <string name="weight_turn_on_and_wait">Turn on the weight and await instructions.</string>
     <string name="weight_weight">Weight:</string>
+
 </resources>

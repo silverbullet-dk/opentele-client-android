@@ -91,7 +91,7 @@
     <string name="lung_monitor_bad_measurement">Dårlig måling modtaget. Prøv igen.</string>
     <string name="lung_monitor_connect">Tænd for apparatet og udfør lungefunktionstest.</string>
     <string name="lung_monitor_could_not_connect">Kunne ikke forbinde til lungefunktionsmåler.</string>
-    <string name="lung_monitor_measurement_recieved">Måling modtaget.</string>
+    <string name="lung_monitor_measurement_received">Måling modtaget.</string>
     <string name="lung_monitor_perform_test">Udfør lungefunktionstest.</string>
     <string name="lung_monitor_permanent_problem">Der kan ikke skabes forbindelse.</string>
     <string name="lung_monitor_temporary_problem">Kunne ikke hente data. Prøv evt. igen.</string>
@@ -104,6 +104,7 @@
     <string name="menu_messages"><![CDATA[Beskeder{0,choice,0#|1#\' (\'én ny besked\')\'|1<\' (\'{0,number,integer} nye\')\'}]]></string>
     <string name="menu_my_measurements">Mine målinger</string>
 
+    <string name="message_unread_new"><![CDATA[<font color=\'red\' >Ny</font>]]></string>
     <string name="message_create">Opret ny besked</string>
     <string name="message_error_while_sending">Fejl ved afsendelse af besked!</string>
     <string name="message_fetching">Henter beskeder</string>
@@ -143,7 +144,7 @@
     <string name="monica_processing_data">Behandler data</string>
     <string name="monica_question_marks">\?\?</string>
     <string name="monica_reading_interrupted">Læsning af data er stoppet.</string>
-    <string name="monica_recieving_data">Modtager data...</string>
+    <string name="monica_receiving_data">Modtager data...</string>
     <string name="monica_set_time">Indstil tiden:</string>
     <string name="monica_switched_off">Monica-apparatet blev slukket!</string>
     <string name="monica_time_set_to">Indstillet til</string>
@@ -166,7 +167,7 @@
     <string name="saturation_could_not_connect">Kunne ikke forbinde til måler.</string>
     <string name="saturation_enter_pulse">Angiv puls:</string>
     <string name="saturation_enter_saturation">Angiv saturation:</string>
-    <string name="saturation_measuremen_without_pulse_recieved">Måling modtaget\nIltmætning: %1$d</string>
+    <string name="saturation_measuremen_without_pulse_received">Måling modtaget\nIltmætning: %1$d</string>
     <string name="saturation_measurement_received">Måling modtaget\n Iltmætning: %1$d\nPuls: %2$d</string>
     <string name="saturation_permanent_problem">Der kan ikke skabes forbindelse</string>
     <string name="saturation_saturation">Saturation</string>
@@ -200,7 +201,7 @@
     <string name="top_panel_main_meni">Hovedmenu</string>
 
     <string name="upload_measurements_error">Fejl</string>
-    <string name="upload_measurements_measurements_recieved">Indsendt måling/svar er modtaget.</string>
+    <string name="upload_measurements_measurements_received">Indsendt måling/svar er modtaget.</string>
     <string name="upload_measurements_sent">Indsendt måling/svar</string>
     <string name="upload_measurements_upload_failed">Indsendelse af måling/svar fejlede. Tjek evt. netværksforbindelsen og prøv igen.</string>
     <string name="upload_measurements_uploading">Indsender svar...</string>

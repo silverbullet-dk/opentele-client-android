@@ -116,7 +116,7 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
             @Override
             public void run() {
                 if (measurement.isGoodTest()) {
-                    statusText.setText(Util.getString(R.string.lung_monitor_measurement_recieved, questionnaire));
+                    statusText.setText(Util.getString(R.string.lung_monitor_measurement_received, questionnaire));
                     setDeviceIdString(systemId);
                     setVariableValue(fev1, measurement.getFev1());
                     setVariableValue(fev6, measurement.getFev6());

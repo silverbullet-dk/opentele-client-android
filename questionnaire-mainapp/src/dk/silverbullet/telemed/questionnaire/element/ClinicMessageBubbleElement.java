@@ -23,7 +23,7 @@ public class ClinicMessageBubbleElement extends MessageBubble {
         Activity activity = getQuestionnaire().getActivity();
         LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout messageBubbleLayout = (LinearLayout) inflater.inflate(R.layout.clinic_message_bubble, null);
-        formatMessageBubble(messageBubbleLayout, R.drawable.clinic_bubble_unread, "<font color='red' >NY</font>",
+        formatMessageBubble(messageBubbleLayout, R.drawable.clinic_bubble_unread, Util.getString(R.string.message_unread_new, activity),
                 R.drawable.clinic_bubble_read, "", Util.getString(R.string.message_received, getQuestionnaire()));
         return messageBubbleLayout;
     }

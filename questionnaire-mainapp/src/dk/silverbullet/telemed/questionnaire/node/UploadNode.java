@@ -73,7 +73,7 @@ public class UploadNode extends IONode implements UploadListener {
     public void end(boolean success) {
         if (success) {
             titleText = Util.getString(R.string.upload_measurements_sent, questionnaire);
-            statusText = Util.getString(R.string.upload_measurements_measurements_recieved, questionnaire);
+            statusText = Util.getString(R.string.upload_measurements_measurements_received, questionnaire);
             setupViewWithOkButton();
         } else {
             titleText = Util.getString(R.string.upload_measurements_error, questionnaire);

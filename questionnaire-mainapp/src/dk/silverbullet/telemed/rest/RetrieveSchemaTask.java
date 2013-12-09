@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.rest;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
@@ -31,22 +32,12 @@ public class RetrieveSchemaTask extends RetrieveTask {
         Log.d(TAG, "getSkema...");
         DefaultHttpClient httpclient = new DefaultHttpClient();
         Variable<?> id = questionnaire.getValuePool().get(Util.VARIABLE_ID);
-        HttpGet httppost = new HttpGet(Util.getServerUrl(questionnaire) + GET_URL_PREFIX
-                + id.getExpressionValue().getValue());
-
-        httppost.setHeader("Content-type", "application/json");
-        httppost.setHeader("Accept", "application/json");
-        httppost.setHeader("X-Requested-With", "json");
-
-        Variable<?> username = questionnaire.getValuePool().get(Util.VARIABLE_USERNAME);
-        Variable<?> password = questionnaire.getValuePool().get(Util.VARIABLE_PASSWORD);
-
-        UsernamePasswordCredentials creds = new UsernamePasswordCredentials(username.getExpressionValue().toString(),
-                password.evaluate().toString());
-        httppost.setHeader(BasicScheme.authenticate(creds, "UTF-8", false));
+        HttpGet httpGet = new HttpGet(Util.getServerUrl(questionnaire) + GET_URL_PREFIX
+                + id.getExpressionValue().getValue() + "?lang=" + Locale.getDefault().getLanguage());
+        setHeaders(httpGet);
 
         try {
-            String schemaResponse = httpclient.execute(httppost, new BasicResponseHandler());
+            String schemaResponse = httpclient.execute(httpGet, new BasicResponseHandler());
             return schemaResponse;
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());

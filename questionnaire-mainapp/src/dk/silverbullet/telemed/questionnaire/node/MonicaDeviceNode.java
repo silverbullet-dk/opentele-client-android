@@ -283,7 +283,7 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
             text = Util.getString(R.string.monica_waiting_for_data, questionnaire);
             break;
         case RECEIVING_DATA:
-            text = Util.getString(R.string.monica_recieving_data, questionnaire);
+            text = Util.getString(R.string.monica_receiving_data, questionnaire);
             break;
         case PROCESSING_DATA:
             text = Util.getString(R.string.monica_processing_data, questionnaire);
