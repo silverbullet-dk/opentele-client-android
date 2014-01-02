@@ -9,6 +9,7 @@ import dk.silverbullet.telemed.device.continua.DeviceController;
 import dk.silverbullet.telemed.device.continua.HdpController;
 import dk.silverbullet.telemed.device.continua.HdpProfile;
 import dk.silverbullet.telemed.device.continua.PacketCollector;
+import dk.silverbullet.telemed.device.continua.packet.SystemId;
 import dk.silverbullet.telemed.device.nonin.protocol.NoninProtocolStateController;
 
 /**
@@ -17,6 +18,7 @@ import dk.silverbullet.telemed.device.nonin.protocol.NoninProtocolStateControlle
 public class NoninController extends DeviceController<SaturationAndPulse> {
     private static final Pattern DEVICE_NAME_PATTERN = Pattern.compile("Nonin_Medical_Inc._\\d{6}");
     private static final String MAC_ADDRESS_FOR_NONIN_MEDICAL_INC = "00:1C:05:";
+    private long timestampForConnectionEstablishment;
 
     /**
      * Creates a new NoninController.
@@ -45,5 +47,23 @@ public class NoninController extends DeviceController<SaturationAndPulse> {
         hdpController.setPacketCollector(new PacketCollector(new NoninProtocolStateController(this)));
         hdpController.setPollForConnection(true);
         hdpController.initiate(DEVICE_NAME_PATTERN, MAC_ADDRESS_FOR_NONIN_MEDICAL_INC);
+    }
+
+    @Override
+    public void connectionEstablished() {
+        timestampForConnectionEstablishment = System.currentTimeMillis();
+        super.connectionEstablished();
+    }
+
+    @Override
+    public void measurementReceived(SystemId systemId, SaturationAndPulse measurement) {
+        // The Nonin device may have stored a previous measurement, in case it was unable to deliver the last
+        // measurement through Bluetooth. In that case, we quickly get a measurement after connection is
+        // established. We need to ignore these measurements.
+
+        long millisSinceConnectionEstablished = System.currentTimeMillis() - timestampForConnectionEstablishment;
+        if (millisSinceConnectionEstablished > 1000) {
+            super.measurementReceived(systemId, measurement);
+        }
     }
 }

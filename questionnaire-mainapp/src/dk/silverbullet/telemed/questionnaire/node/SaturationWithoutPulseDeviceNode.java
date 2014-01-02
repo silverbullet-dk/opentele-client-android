@@ -105,7 +105,7 @@ public class SaturationWithoutPulseDeviceNode extends DeviceNode implements Cont
 
     @Override
     public void disconnected() {
-        setStatusText(Util.getString(R.string.saturation_permanent_problem, questionnaire));
+        setStatusText(Util.getString(R.string.saturation_disconnected, questionnaire));
     }
 
     @Override

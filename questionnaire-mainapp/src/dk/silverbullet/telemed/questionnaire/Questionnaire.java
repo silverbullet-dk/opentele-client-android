@@ -179,6 +179,9 @@ public class Questionnaire {
         Variable<Boolean> isLoggedIn = (Variable<Boolean>) getValuePool().get(Util.VARIABLE_IS_LOGGED_IN);
         isLoggedIn.setValue(false);
 
+        Variable<Boolean> isLoggedInAsAdmin = (Variable<Boolean>) getValuePool().get(Util.VARIABLE_IS_LOGGED_IN_AS_ADMIN);
+        isLoggedInAsAdmin.setValue(false);
+
         Variable<String> userName = (Variable<String>) getValuePool().get(Util.VARIABLE_USERNAME);
         userName.setValue("");
 

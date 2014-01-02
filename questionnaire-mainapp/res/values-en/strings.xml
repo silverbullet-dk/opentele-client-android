@@ -71,8 +71,8 @@
     <string name="default_working">Working</string>
     <string name="default_yes">Yes</string>
 
-    <string name="delay_out_of">out of</string>
-    <string name="delay_seconds">seconds.</string>
+    <string name="delay_out_of">&#160;out of&#160;</string>
+    <string name="delay_seconds">&#160;seconds.</string>
     <string name="delay_time_elapsed">Time elapsed:</string>
     <string name="delay_time_left">Time remaining:</string>
 
@@ -162,15 +162,15 @@
     <string name="run_skema_do_you_want_to_send_data">Would you like to send your measurements/replies?</string>
 
     <string name="saturation__waiting_for_measurement">Waiting for measurement. Keep still.</string>
-    <string name="saturation_connecting">Connecting to device…</string>
-    <string name="saturation_connection_broken">Connection broken</string>
+    <string name="saturation_connecting">Put the device on your finger.</string>
+    <string name="saturation_disconnected">Disconnected.</string>
     <string name="saturation_could_not_connect">Could not connect to device.</string>
     <string name="saturation_enter_pulse">Enter pulse:</string>
     <string name="saturation_enter_saturation">Enter saturation:</string>
     <string name="saturation_measuremen_without_pulse_received">Measurement received\nSaturation: %1$d</string>
-    <string name="saturation_measurement_received">Measurement received\n Saturation: %1$d\nPulse: %2$d</string>
-    <string name="saturation_permanent_problem">Could not connect to device</string>
-    <string name="saturation_saturation">Saturation</string>
+    <string name="saturation_measurement_received">Measurement received\nSaturation: %1$d\nPulse: %2$d</string>
+    <string name="saturation_permanent_problem">Could not connect to device.</string>
+    <string name="saturation_saturation">Saturation.</string>
     <string name="saturation_temporary_problem">Could fetch data. Try turning the device off and on again.</string>
 
     <string name="save_file_data_saved_locally">Data saved locally</string>

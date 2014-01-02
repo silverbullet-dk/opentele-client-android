@@ -1,13 +1,7 @@
 package dk.silverbullet.telemed.rest;
 
-import java.io.IOException;
-import java.util.Locale;
-
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
+import dk.silverbullet.telemed.rest.client.RestClient;
+import dk.silverbullet.telemed.rest.client.RestException;
 
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
@@ -28,18 +22,14 @@ public class RetrieveSchemaTask extends RetrieveTask {
 
     @Override
     protected String doInBackground(String... params) {
-
         Log.d(TAG, "getSkema...");
-        DefaultHttpClient httpclient = new DefaultHttpClient();
         Variable<?> id = questionnaire.getValuePool().get(Util.VARIABLE_ID);
-        HttpGet httpGet = new HttpGet(Util.getServerUrl(questionnaire) + GET_URL_PREFIX
-                + id.getExpressionValue().getValue() + "?lang=" + Locale.getDefault().getLanguage());
-        setHeaders(httpGet);
+        String path = GET_URL_PREFIX + id.getExpressionValue().getValue();
 
         try {
-            String schemaResponse = httpclient.execute(httpGet, new BasicResponseHandler());
+            String schemaResponse = RestClient.get(questionnaire, path);
             return schemaResponse;
-        } catch (IOException e) {
+        } catch (RestException e) {
             Log.e(TAG, e.getMessage());
             skemaListener.sendError();
 

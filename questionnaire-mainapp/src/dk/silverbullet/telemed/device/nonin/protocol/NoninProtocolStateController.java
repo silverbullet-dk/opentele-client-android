@@ -35,7 +35,6 @@ public class NoninProtocolStateController extends
     public void handleConfirmedMeasurements(NoninConfirmedMeasurementDataPacket confirmedMeasurement) {
         pulse = confirmedMeasurement.getPulse();
         saturation = confirmedMeasurement.getSaturation();
-        currentState = State.MEASUREMENT_RECEIVED;
 
         listener.measurementReceived(systemId, new SaturationAndPulse(saturation, pulse));
     }

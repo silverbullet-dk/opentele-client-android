@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="#D9D5CC"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dip" >
+
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/top_panel" />
+
+    <LinearLayout
+        android:id="@+id/header"
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#777"
+            android:textSize="36sp"
+            android:text="@string/default_menu"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="0dip" >
+
+        <LinearLayout
+            style="@style/background_style"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dip">
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:text="@string/admin_change_server"
+                      android:id="@+id/admin_menu_change_server"
+                      android:background="@drawable/thin_black_line"
+                      android:visibility="gone"
+                      style="@style/menu_item_style"/>
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:text="@string/admin_show_upload_debug"
+                      android:id="@+id/admin_menu_show_upload_debug"
+                      android:background="@drawable/thin_black_line"
+                      style="@style/menu_item_style"/>
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:text="@string/admin_set_alarm"
+                      android:id="@+id/admin_menu_set_alarm"
+                      style="@style/menu_item_style"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

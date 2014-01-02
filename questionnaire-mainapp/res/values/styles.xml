@@ -57,5 +57,18 @@
     <style name="top_panel_style">
         <item name="android:background">@drawable/top_panel_shape</item>
     </style>
+    <style name="menu_item_style">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">36sp</item>
+        <item name="android:textColor">#ffb81845</item>
+        <item name="android:textColorHighlight">#00F</item>
+        <item name="android:background">#0000</item>
+        <item name="android:shadowColor">#8000</item>
+        <item name="android:shadowRadius">3</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+    </style>
 
 </resources>

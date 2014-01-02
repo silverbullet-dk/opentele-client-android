@@ -25,6 +25,7 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
     private static final String TAG = Util.getTag(FillOutQuestionnaireWithUserDetailsTask.class);
     private final LoginListener loginListener;
     Variable<Boolean> isLoggedIn;
+    Variable<Boolean> isLoggedInAsAdmin;
 
     static enum LoginResult {ACCOUNT_LOCKED, SUCCESS, WRONG_PASSWORD, FAILED, SUCCESS_CHANGE_PASSWORD}
 
@@ -32,6 +33,8 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
         this.questionnaire = questionnaire;
         this.loginListener = loginListener;
         isLoggedIn = (Variable<Boolean>) questionnaire.getValuePool().get(Util.VARIABLE_IS_LOGGED_IN);
+        isLoggedInAsAdmin = (Variable<Boolean>) questionnaire.getValuePool().get(Util.VARIABLE_IS_LOGGED_IN_AS_ADMIN);
+
     }
 
     @Override
@@ -41,6 +44,7 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
 
         if (isAdmin()) {
             isLoggedIn.setValue(true);
+            isLoggedInAsAdmin.setValue(true);
             return LoginResult.SUCCESS;
         } else {
             HttpClient httpclient = new DefaultHttpClient();

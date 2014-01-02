@@ -35,7 +35,6 @@ public class AcknowledgementsMenuNode extends IONode implements ListListener {
     public void enter() {
 
         hideBackButton();
-        getQuestionnaire().clearStack();
 
         dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.acknowledgements_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 

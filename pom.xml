@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.silverbullet.telemed</groupId>
     <artifactId>questionnaire-parent</artifactId>
-    <version>1.14.0</version>
+    <version>1.15.0</version>
     <packaging>pom</packaging>
     <name>Questionnaire Projects Parent</name>
 	
@@ -30,6 +30,7 @@
                 <groupId>com.google.android</groupId>
                 <artifactId>android</artifactId>
                 <version>4.1.1.4</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.android</groupId>

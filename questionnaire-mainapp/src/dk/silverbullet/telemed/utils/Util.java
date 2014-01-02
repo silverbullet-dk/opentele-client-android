@@ -39,6 +39,7 @@ public final class Util {
     private static final String TAG = getTag(Util.class);
 
     public static final String VARIABLE_IS_LOGGED_IN = "VARIABLE_IS_LOGGED_IN";
+    public static final String VARIABLE_IS_LOGGED_IN_AS_ADMIN = "VARIABLE_IS_LOGGED_IN_AS_ADMIN";
     public static final String VARIABLE_CLIENT_SUPPORTED = "CLIENT_VERSION_SUPPORTED";
     public static final String VARIABLE_USERNAME = "USERNAME";
     public static final String VARIABLE_PASSWORD = "PASSWORD";

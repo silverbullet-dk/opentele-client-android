@@ -1,17 +1,12 @@
 package dk.silverbullet.telemed.rest;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
 import dk.silverbullet.telemed.rest.bean.ChangePasswordError;
-import dk.silverbullet.telemed.utils.Json;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import dk.silverbullet.telemed.rest.client.RestClient;
+import dk.silverbullet.telemed.rest.client.RestException;
 
 import android.util.Log;
 
@@ -50,19 +45,8 @@ public class ChangePasswordTask extends AsyncTask<String, Void, ChangePasswordTa
         changePasswordBean.setPassword(password);
         changePasswordBean.setPasswordRepeat(passwordRepeat);
 
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(Util.getServerUrl(questionnaire) + CHANGE_PASSWORD_URL_PREFIX);
-        Util.setHeaders(httpPost, questionnaire);
-
         try {
-            httpPost.setEntity(new StringEntity(Json.print(changePasswordBean), "UTF-8"));
-
-            HttpResponse response = httpClient.execute(httpPost);
-            if (response.getStatusLine().getStatusCode() != 200) {
-                return Result.COMMUNICATION_ERROR;
-            }
-
-            ChangePasswordResponse responseBean = Json.parse(new InputStreamReader(response.getEntity().getContent(), "UTF-8"), ChangePasswordResponse.class);
+            ChangePasswordResponse responseBean = RestClient.postJson(questionnaire, CHANGE_PASSWORD_URL_PREFIX, changePasswordBean, ChangePasswordResponse.class);
             Log.d(TAG, "Response..:" + responseBean);
 
             if (responseBean.isError()) {
@@ -74,8 +58,8 @@ public class ChangePasswordTask extends AsyncTask<String, Void, ChangePasswordTa
             }
 
             return Result.SUCCESS;
-        } catch (IOException e) {
-            Log.e(TAG, "Got exception", e);
+        } catch (RestException e) {
+            Log.e(TAG, "Could not change password", e);
             return Result.COMMUNICATION_ERROR;
         }
     }

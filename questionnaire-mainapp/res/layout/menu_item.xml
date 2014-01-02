@@ -1,14 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="16dp"
-    android:textSize="36sp" 
-    android:textColor="#ffb81845"
-    android:textColorHighlight="#00F"
-    android:background="#0000"
-    android:shadowColor="#8000"
-    android:shadowRadius="3"
-    android:shadowDx="2"
-    android:shadowDy="2"
-    />
+<TextView style="@style/menu_item_style"/>

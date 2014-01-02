@@ -20,6 +20,10 @@ public class MainQuestionnaire extends Questionnaire {
         isLoggedIn.setValue(false);
         addVariable(isLoggedIn);
 
+        Variable<Boolean> isLoggedInAsAdmin = new Variable<Boolean>(Util.VARIABLE_IS_LOGGED_IN_AS_ADMIN, Boolean.class);
+        isLoggedInAsAdmin.setValue(false);
+        addVariable(isLoggedInAsAdmin);
+
         // Variables...
         Variable<String> menu = new Variable<String>("menu", "sdfoiausæogiu");
         Variable<String> userName = new Variable<String>(Util.VARIABLE_USERNAME, String.class);
@@ -34,25 +38,22 @@ public class MainQuestionnaire extends Questionnaire {
         addVariable(messageText);
 
         // Nodes...
-        IOMenuNode2 ioMenuNode2 = new IOMenuNode2(this, "MENU2");
-        ioMenuNode2.setMenu(menu);
 
-        IOMenuNode mainMenu = new IOMenuNode(this, "MENU");
-        mainMenu.setNextNode(ioMenuNode2);
-        mainMenu.setMenu(menu);
-
-        ioMenuNode2.setNextNode(mainMenu);
+        PatientMenuNode patientMenuNode = new PatientMenuNode(this, "MENU");
 
         ChangePasswordNode changePasswordNode = new ChangePasswordNode(this, "CHANGE_PASSWORD");
         changePasswordNode.setHideBackButton(true);
         changePasswordNode.setHideMenuButton(true);
-        changePasswordNode.setNext(mainMenu);
+        changePasswordNode.setNext(patientMenuNode);
 
         LoginNode loginNode = new LoginNode(this, "LOGIN");
         loginNode.setChangePasswordNode(changePasswordNode);
 
+        //If logged in as admin user show admin menu instead of patient menu
+        DecisionNode adminLoginDecisionNode = setupAdminMenu(isLoggedInAsAdmin, patientMenuNode);
+
         DecisionNode decisionNode = new DecisionNode(this, "decisionNode", isLoggedIn);
-        decisionNode.setNextNode(mainMenu);
+        decisionNode.setNextNode(adminLoginDecisionNode);
         decisionNode.setNextFalseNode(loginNode);
 
         loginNode.setNext(decisionNode);
@@ -61,6 +62,17 @@ public class MainQuestionnaire extends Questionnaire {
         startNode.setNext(decisionNode);
 
         super.setStartNode(startNode);
+    }
+
+    private DecisionNode setupAdminMenu(Variable<Boolean> isLoggedInAsAdmin, PatientMenuNode patientMenuNode) {
+
+        AdminMenuNode adminMenu = new AdminMenuNode(this, "ADMIN_MENU");
+
+        DecisionNode adminLoginDecisionNode = new DecisionNode(this, "adminLoginDecisionNode", isLoggedInAsAdmin);
+        adminLoginDecisionNode.setNextFalseNode(patientMenuNode);
+        adminLoginDecisionNode.setNextNode(adminMenu);
+
+        return adminLoginDecisionNode;
     }
 
     public void notifyActivityOfUserLogin() {

@@ -109,7 +109,7 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
 
     @Override
     public void disconnected() {
-        setStatusText(Util.getString(R.string.saturation_connection_broken, questionnaire));
+        setStatusText(Util.getString(R.string.saturation_disconnected, questionnaire));
     }
 
     @Override
