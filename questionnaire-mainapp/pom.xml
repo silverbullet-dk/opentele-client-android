@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>dk.silverbullet.telemed</groupId>
 		<artifactId>questionnaire-parent</artifactId>
-		<version>1.15.0</version>
+		<version>1.16.0</version>
 	</parent>
 
 	<artifactId>questionnaire-mainapp</artifactId>
@@ -40,7 +40,7 @@
             <groupId>dk.silverbullet.telemed</groupId>
             <artifactId>video-common-interfaces</artifactId>
             <scope>compile</scope>
-            <version>1.15.0</version>
+            <version>1.16.0</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
