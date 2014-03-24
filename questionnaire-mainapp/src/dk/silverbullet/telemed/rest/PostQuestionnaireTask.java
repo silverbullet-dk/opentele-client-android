@@ -2,12 +2,13 @@ package dk.silverbullet.telemed.rest;
 
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.rest.listener.UploadListener;
 import dk.silverbullet.telemed.utils.Util;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -26,13 +27,13 @@ public class PostQuestionnaireTask extends RetrieveTask {
     protected String doInBackground(String... params) {
         String jsonObject = params[0];
         Log.d(TAG, "upload...");
-        DefaultHttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
         HttpPost httppost = new HttpPost(Util.getServerUrl(questionnaire) + UPLOAD_URL_PREFIX);
         setHeaders(httppost);
 
         try {
             httppost.setEntity(new StringEntity(jsonObject, "UTF-8"));
-            return httpclient.execute(httppost, new BasicResponseHandler());
+            return httpClient.execute(httppost, new BasicResponseHandler());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             Log.w(TAG, e.getMessage());

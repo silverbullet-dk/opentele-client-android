@@ -2,14 +2,15 @@ package dk.silverbullet.telemed.video.measurement.adapters.submitters;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Util;
 import dk.silverbullet.telemed.video.measurement.MeasurementInformer;
 import dk.silverbullet.telemed.video.measurement.adapters.DeviceIdAndMeasurement;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,7 +40,7 @@ public abstract class SubmitMeasurementTask<T> extends AsyncTask<DeviceIdAndMeas
     }
 
     private void submitMeasurement(String measurementJson) {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = HttpClientFactory.createHttpClient(informer.getContext());
         URL url;
         try {
             String serverUrl = informer.getServerUrl();

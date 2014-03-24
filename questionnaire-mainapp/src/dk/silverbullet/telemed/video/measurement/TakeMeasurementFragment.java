@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.video.measurement;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,6 +128,11 @@ public class TakeMeasurementFragment extends Fragment implements MeasurementInfo
     @Override
     public String getServerUrl() {
         return getVideoActivity().getServerURL();
+    }
+
+    @Override
+    public Context getContext() {
+        return getActivity();
     }
 
     private VideoMeasurementAdapter createVideoMeasurementAdapter(PendingMeasurement pendingMeasurement) {

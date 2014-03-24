@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.http.SslCertificate;
+import android.net.http.SslError;
+import android.os.Build;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +18,25 @@ import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.utils.Util;
 
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 
 public class WebViewNode extends IONode {
 
+    private static final String TAG = Util.getTag(WebViewNode.class);
     private final String url;
     private final String title;
 
@@ -77,6 +95,19 @@ public class WebViewNode extends IONode {
             public void onPageFinished(WebView view, String url) {
                 dialog.dismiss();
             }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                if(Build.VERSION.SDK_INT == 17 /* Android 4.2, which does not trust our production certificates */) {
+                    if (isCertificateTrusted(error)) {
+                        handler.proceed();
+                    } else {
+                        handler.cancel();
+                    }
+                } else {
+                    super.onReceivedSslError(view, handler, error);
+                }
+            }
         });
 
         webView.loadUrl(url, getRequestMap());
@@ -119,5 +150,57 @@ public class WebViewNode extends IONode {
 
     public void goBack() {
         webView.goBack();
+    }
+
+    private boolean isCertificateTrusted(SslError error) {
+        try {
+            X509Certificate x509Certificate = getCertificateFromError(error);
+            KeyStore keyStore = createKeyStore();
+            X509TrustManager x590TrustManager = getTrustManager(keyStore);
+
+            X509Certificate[] chain = new X509Certificate[]{x509Certificate};
+
+            x590TrustManager.checkServerTrusted(chain, TrustManagerFactory.getDefaultAlgorithm());
+            //checkServerTrusted will throw a CertificateException so if we get this far the certificate is trusted
+            return true;
+        } catch (Exception ex) {
+            Log.e(TAG, "Cert validation failed", ex);
+            return false;
+        }
+    }
+
+    private X509TrustManager getTrustManager(KeyStore keyStore) throws NoSuchAlgorithmException, KeyStoreException {
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        trustManagerFactory.init(keyStore);
+        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+
+        return (X509TrustManager) trustManagers[0];
+    }
+
+    private KeyStore createKeyStore() throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
+        String keyStoreType = KeyStore.getDefaultType();
+        KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+        keyStore.load(null, null);
+
+        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+        InputStream certificateInputStream = questionnaire.getActivity().getResources().openRawResource(R.raw.certs);
+        Certificate certificate;
+        try {
+            certificate = certificateFactory.generateCertificate(certificateInputStream);
+        } finally {
+            certificateInputStream.close();
+        }
+
+        keyStore.setCertificateEntry("ca", certificate);
+
+        return keyStore;
+    }
+
+    private X509Certificate getCertificateFromError(SslError error) throws NoSuchFieldException, IllegalAccessException {
+        SslCertificate sslCertificate = error.getCertificate();
+        Field mX509CertificateField =  sslCertificate.getClass().getDeclaredField("mX509Certificate");
+        mX509CertificateField.setAccessible(true);
+
+        return (X509Certificate) mX509CertificateField.get(sslCertificate);
     }
 }

@@ -1,15 +1,16 @@
 package dk.silverbullet.telemed.rest.client;
 
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,7 +21,7 @@ public class RestClient {
     public static String get(Questionnaire questionnaire, String path) throws RestException {
         String url = urlForPath(questionnaire, path);
 
-        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
         HttpGet httpGet = new HttpGet(url);
         Util.setHeaders(httpGet, questionnaire);
 
@@ -34,7 +35,7 @@ public class RestClient {
     public static <T> T postJson(Questionnaire questionnaire, String path, Object object, Class<T> resultClass) throws RestException {
         String url = urlForPath(questionnaire, path);
 
-        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
         HttpPost httpPost = new HttpPost(url);
         Util.setHeaders(httpPost, questionnaire);
         httpPost.setEntity(createHttpEntityFromSerializedObject(object));

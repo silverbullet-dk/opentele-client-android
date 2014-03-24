@@ -4,11 +4,12 @@ import android.util.Log;
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.MainActivity;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 
@@ -67,7 +68,7 @@ public class JoinConferencePoller {
     }
 
     private PendingConferenceResponse checkForConference() {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = HttpClientFactory.createHttpClient(mainActivity);
 
         HttpParams httpParameters = httpClient.getParams();
         HttpConnectionParams.setConnectionTimeout(httpParameters, FIVE_SECONDS_IN_MILLIS);

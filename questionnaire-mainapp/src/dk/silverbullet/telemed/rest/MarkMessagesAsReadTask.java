@@ -3,12 +3,13 @@ package dk.silverbullet.telemed.rest;
 import android.os.AsyncTask;
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +30,7 @@ public class MarkMessagesAsReadTask extends AsyncTask<Long, Void, Void> {
         }
 
         try {
-            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
             URL url = new URL(Util.getServerUrl(questionnaire));
             HttpPost httpPost = new HttpPost(new URL(url, URL_PREFIX_MARK_MESSAGES_AS_READ).toExternalForm());
             Util.setHeaders(httpPost, questionnaire);

@@ -2,14 +2,15 @@ package dk.silverbullet.telemed.video.measurement;
 
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.video.VideoActivity;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,7 +59,7 @@ class PendingMeasurementPoller {
     }
 
     private PendingMeasurement checkForPendingMeasurement() {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = HttpClientFactory.createHttpClient(parentFragment.getActivity());
         URL url;
         try {
             VideoActivity videoActivity = (VideoActivity) parentFragment.getActivity();

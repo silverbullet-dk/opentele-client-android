@@ -1,5 +1,7 @@
 package dk.silverbullet.telemed.video.measurement;
 
+import android.content.Context;
+
 public interface MeasurementInformer {
     void setMeasurementTypeText(String measurementTypeText);
     void setStatusText(String statusText);
@@ -10,4 +12,6 @@ public interface MeasurementInformer {
     String getUsername();
     String getPassword();
     String getServerUrl();
+
+    Context getContext();
 }

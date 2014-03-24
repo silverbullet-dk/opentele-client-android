@@ -1,16 +1,16 @@
 package dk.silverbullet.telemed.rest;
 
-import java.io.IOException;
-import java.net.URL;
-
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.rest.listener.MessageListListener;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Util;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class RetrieveMessageListTask extends RetrieveTask {
     private static final String TAG = Util.getTag(RetrieveMessageListTask.class);
@@ -26,7 +26,7 @@ public class RetrieveMessageListTask extends RetrieveTask {
     protected String doInBackground(String... params) {
         try {
             Log.d(TAG, "list...");
-            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
             URL url = new URL(Util.getServerUrl(questionnaire));
             HttpGet httpGet = new HttpGet(new URL(url, URL_PREFIX_LIST).toExternalForm());
             setHeaders(httpGet);

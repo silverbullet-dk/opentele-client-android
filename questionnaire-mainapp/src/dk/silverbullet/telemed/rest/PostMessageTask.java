@@ -1,17 +1,17 @@
 package dk.silverbullet.telemed.rest;
 
-import java.io.IOException;
-import java.net.URL;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
 import dk.silverbullet.telemed.utils.Util;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class PostMessageTask extends RetrieveTask {
     private static final String TAG = Util.getTag(PostMessageTask.class);
@@ -29,14 +29,14 @@ public class PostMessageTask extends RetrieveTask {
 
         try {
             Log.d(TAG, "postMessage...");
-            DefaultHttpClient httpclient = new DefaultHttpClient();
+            HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
             URL url = new URL(Util.getServerUrl(questionnaire));
             HttpPost httpPost = new HttpPost(new URL(url, URL_PREFIX_WRITE).toExternalForm());
             setHeaders(httpPost);
 
             httpPost.setEntity(new StringEntity(message, "UTF-8"));
 
-            HttpResponse response = httpclient.execute(httpPost);
+            HttpResponse response = httpClient.execute(httpPost);
             return "" + response.getStatusLine().getStatusCode();
         } catch (IOException ioe) {
             messageWriteListener.sendError();

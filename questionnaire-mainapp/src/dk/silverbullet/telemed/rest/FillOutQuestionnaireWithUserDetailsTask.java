@@ -7,6 +7,7 @@ import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.rest.bean.LoginBean;
 import dk.silverbullet.telemed.rest.listener.LoginListener;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 import org.apache.http.HttpEntity;
@@ -47,7 +48,7 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
             isLoggedInAsAdmin.setValue(true);
             return LoginResult.SUCCESS;
         } else {
-            HttpClient httpclient = new DefaultHttpClient();
+            HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
             HttpGet httpGet;
 
             try {
@@ -55,7 +56,7 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
 
                 Util.setHeaders(httpGet, questionnaire);
 
-                HttpResponse response = httpclient.execute(httpGet);
+                HttpResponse response = httpClient.execute(httpGet);
                 HttpEntity httpEntity = response.getEntity();
                 String res = EntityUtils.toString(httpEntity);
 

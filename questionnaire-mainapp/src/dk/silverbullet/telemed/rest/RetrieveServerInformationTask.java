@@ -1,20 +1,20 @@
 package dk.silverbullet.telemed.rest;
 
-import java.io.IOException;
-
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.QuestionnaireFragment;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Util;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
+import java.io.IOException;
 
 public class RetrieveServerInformationTask extends AsyncTask<Void, Void, String> {
     private static final String TAG = Util.getTag(RetrieveServerInformationTask.class);
@@ -22,9 +22,11 @@ public class RetrieveServerInformationTask extends AsyncTask<Void, Void, String>
     private final String serverUrl;
     private ProgressDialog progress;
     private final QuestionnaireFragment fragment;
+    private Questionnaire questionnaire;
 
     public RetrieveServerInformationTask(QuestionnaireFragment fragment, Questionnaire questionnaire) {
         this.fragment = fragment;
+        this.questionnaire = questionnaire;
         this.serverUrl = Util.getServerUrl(questionnaire);
     }
 
@@ -51,7 +53,7 @@ public class RetrieveServerInformationTask extends AsyncTask<Void, Void, String>
     protected String doInBackground(Void... params) {
         Log.d(TAG, "Getting server version...");
 
-        DefaultHttpClient httpclient = httpClientWithTimeoutOf5Seconds();
+        HttpClient httpClient = httpClientWithTimeoutOf5Seconds();
 
         HttpGet httppost = new HttpGet(serverUrl + SERVER_VERSION_URL);
 
@@ -59,7 +61,7 @@ public class RetrieveServerInformationTask extends AsyncTask<Void, Void, String>
         httppost.setHeader("Accept", "application/json");
         httppost.setHeader("X-Requested-With", "json");
         try {
-            String response = httpclient.execute(httppost, new BasicResponseHandler());
+            String response = httpClient.execute(httppost, new BasicResponseHandler());
             return response;
         } catch (IOException e) {
             Log.e(TAG, "Faild to fetch version information from: " + SERVER_VERSION_URL);
@@ -68,13 +70,13 @@ public class RetrieveServerInformationTask extends AsyncTask<Void, Void, String>
         }
     }
 
-    private DefaultHttpClient httpClientWithTimeoutOf5Seconds() {
-        DefaultHttpClient httpclient = new DefaultHttpClient();
+    private HttpClient httpClientWithTimeoutOf5Seconds() {
+        HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
 
-        HttpParams httpParameters = httpclient.getParams();
+        HttpParams httpParameters = httpClient.getParams();
         HttpConnectionParams.setConnectionTimeout(httpParameters, 5000);
         HttpConnectionParams.setSoTimeout(httpParameters, 5000);
 
-        return httpclient;
+        return httpClient;
     }
 }
