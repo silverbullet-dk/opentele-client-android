@@ -1,69 +1,64 @@
 package dk.silverbullet.telemed.rest.client;
 
-import dk.silverbullet.telemed.questionnaire.Questionnaire;
-import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
-import dk.silverbullet.telemed.utils.Json;
-import dk.silverbullet.telemed.utils.Util;
-import org.apache.http.HttpEntity;
+import dk.silverbullet.telemed.rest.client.lowlevel.HttpHelper;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
 
+/**
+ * Methods to perform simple REST calls to the server, handling JSON serialization and deserialization. Hopefully the
+ * pain of having to handle HTTP status codes etc. is limited by using these methods.
+ *
+ * If the server returns an HTTP status code other than 200, a WrongHttpStatusCodeException is thrown, from which the
+ * response code etc. can be fetched.
+ *
+ * If something else goes wrong (i.e., some of Java's methods throw an IOException), the more general RestException is
+ * thrown. Usually the client cannot do anything about that, except log the error, fail the operation, and tell the
+ * user that something went wrong.
+ */
 public class RestClient {
-    public static String get(Questionnaire questionnaire, String path) throws RestException {
-        String url = urlForPath(questionnaire, path);
-
-        HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
-        HttpGet httpGet = new HttpGet(url);
-        Util.setHeaders(httpGet, questionnaire);
+    public static String getString(ServerInformation serverInformation, String path) throws RestException {
+        HttpGet httpGet = HttpHelper.createHttpGetForPath(serverInformation, path);
 
         try {
-            return httpClient.execute(httpGet, new BasicResponseHandler());
+            HttpResponse response = HttpHelper.get(serverInformation, httpGet);
+            return HttpHelper.parseResponseAsString(response);
         } catch (IOException e) {
-            throw new RestException("Could not GET from '" + url + "'", e);
+            throw new RestException("Could not GET from '" + httpGet.getURI() + "'", e);
         }
     }
 
-    public static <T> T postJson(Questionnaire questionnaire, String path, Object object, Class<T> resultClass) throws RestException {
-        String url = urlForPath(questionnaire, path);
-
-        HttpClient httpClient = HttpClientFactory.createHttpClient(questionnaire.getActivity());
-        HttpPost httpPost = new HttpPost(url);
-        Util.setHeaders(httpPost, questionnaire);
-        httpPost.setEntity(createHttpEntityFromSerializedObject(object));
+    public static<T> T getJson(ServerInformation serverInformation, String path, Class<T> resultClass) throws RestException {
+        HttpGet httpGet = HttpHelper.createHttpGetForPath(serverInformation, path);
 
         try {
-            HttpResponse response = httpClient.execute(httpPost);
-            int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode != 200) {
-                throw new RestException("Unexpected status code '" + statusCode + "' when POSTing to url '" + url + "'");
-            }
-
-            return Json.parse(new InputStreamReader(response.getEntity().getContent(), "UTF-8"), resultClass);
+            HttpResponse response = HttpHelper.get(serverInformation, httpGet);
+            return HttpHelper.parseResponseAsJson(response, resultClass);
         } catch (IOException e) {
-            throw new RestException("Could not POST to '" + url + "'", e);
+            throw new RestException("Could not GET from '" + httpGet.getURI() + "'", e);
         }
     }
 
-    private static String urlForPath(Questionnaire questionnaire, String path) {
-        return Util.getServerUrl(questionnaire) + path + "?lang=" + Locale.getDefault().getLanguage();
+    public static void postJson(ServerInformation serverInformation, String path, Object object) throws RestException {
+        HttpPost httpPost = HttpHelper.createHttpPostForPathWithEntity(serverInformation, path, HttpHelper.createHttpEntityFromSerializedObject(object));
+
+        try {
+            HttpHelper.post(serverInformation, httpPost);
+        } catch (IOException e) {
+            throw new RestException("Could not POST to '" + httpPost.getURI() + "'", e);
+        }
     }
 
-    private static HttpEntity createHttpEntityFromSerializedObject(Object object) {
-        String json = Json.print(object);
+    public static <T> T postJson(ServerInformation serverInformation, String path, Object object, Class<T> resultClass) throws RestException {
+        HttpPost httpPost = HttpHelper.createHttpPostForPathWithEntity(serverInformation, path, HttpHelper.createHttpEntityFromSerializedObject(object));
+
         try {
-            return new StringEntity(json, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            // Never, ever happens
-            throw new RuntimeException("Could not create HTTP entity", e);
+            HttpResponse response = HttpHelper.post(serverInformation, httpPost);
+            return HttpHelper.parseResponseAsJson(response, resultClass);
+        } catch (IOException e) {
+            throw new RestException("Could not POST to '" + httpPost.getURI() + "'", e);
         }
     }
 }

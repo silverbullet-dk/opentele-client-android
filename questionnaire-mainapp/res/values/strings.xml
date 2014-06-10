@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="abbott_freestyle_library_not_available">Abbott Freestyle kan ikke bruges i denne version af OpenTele</string>
+
     <string name="acknowledgements_acknowledgements">Kvitteringer</string>
     <string name="acknowledgements_fetching">Henter kvitteringer</string>
 
@@ -55,6 +57,12 @@
     <string name="crp_angiv_resultat_">Angiv resultat </string>
     <string name="crp_measurement_or">eller</string>
     <string name="crp_under_5"> &lt;5</string>
+
+    <string name="cgm_connected">Forbundet til enhed. Henter målinger.</string>
+    <string name="cgm_measurements_fetched">Blodsukkermålinger hentet.</string>
+    <string name="cgm_could_not_connect_to_device">Kunne ikke forbinde til enheden.</string>
+    <string name="cgm_connect_device">Tilslut din Abbott FreeStyle Navigator.\n Hvis du bliver spurgt om du vil give OpenTele adgang til USB-enheden skal du svare ”OK”.  </string>
+    <string name="cgm_access_denied">Du gav ikke OpenTele tilladelse til at tilgå din Abbott FreeStyle Navigator. Hvis du ønsker at overføre målinger, skal du give tilladelse til at tilgå USB-enheden.\n Tryk på ”Prøv igen” for at prøve igen.\n  Ellers vælg ”Undlad”.</string>
 
     <string name="default_cancel">Annuller</string>
     <string name="default_menu">Menu</string>
@@ -159,7 +167,7 @@
 
     <string name="questionnaire_fetching">Henter skema</string>
 
-    <string name="run_skema_do_you_want_to_send_data">Vil du sende data?</string>
+    <string name="run_skema_do_you_want_to_send_data">Vil du indsende dine målinger?</string>
 
     <string name="saturation__waiting_for_measurement">Venter på måling. Hold dig i ro.</string>
     <string name="saturation_connecting">Sæt iltmåleren på fingeren.</string>
@@ -259,4 +267,5 @@
     <string name="weight_temporary_problem">Kunne ikke hente data. Prøv evt. igen.</string>
     <string name="weight_turn_on_and_wait">Tænd for vægten og afvent ny besked i skærmbillede.</string>
     <string name="weight_weight">Vægt:</string>
+
 </resources>

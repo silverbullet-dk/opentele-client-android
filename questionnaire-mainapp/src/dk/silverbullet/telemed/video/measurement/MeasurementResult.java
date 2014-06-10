@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.device.andbloodpressure.BloodPressureAndPulse;
 import dk.silverbullet.telemed.device.nonin.SaturationAndPulse;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMeasurement;
-import dk.silverbullet.telemed.utils.Json;
 
 public class MeasurementResult {
     @Expose MeasurementType type;
@@ -27,9 +26,5 @@ public class MeasurementResult {
         this.type = MeasurementType.SATURATION;
         this.deviceId = deviceId;
         this.measurement = saturationAndPulse;
-    }
-
-    public String toJson() {
-        return Json.print(this);
     }
 }

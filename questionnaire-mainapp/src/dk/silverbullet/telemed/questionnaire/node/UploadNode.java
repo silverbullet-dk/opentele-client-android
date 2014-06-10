@@ -8,15 +8,13 @@ import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
-import dk.silverbullet.telemed.rest.PostQuestionnaireTask;
-import dk.silverbullet.telemed.rest.RetrieveTask;
-import dk.silverbullet.telemed.rest.listener.UploadListener;
-import dk.silverbullet.telemed.utils.Json;
+import dk.silverbullet.telemed.rest.Resources;
+import dk.silverbullet.telemed.rest.listener.PostEntityListener;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Date;
 
-public class UploadNode extends IONode implements UploadListener {
+public class UploadNode extends IONode implements PostEntityListener {
     private static final String TAG = Util.getTag(UploadNode.class);
 
     private Node nextNode;
@@ -35,10 +33,9 @@ public class UploadNode extends IONode implements UploadListener {
 
 
 
-        String json = getJson();
-        if (json != null) {
-            RetrieveTask asyncHttpPost = new PostQuestionnaireTask(questionnaire, this);
-            asyncHttpPost.execute(json);
+        OutputSkema outputSkema = getOutputSkema();
+        if (outputSkema != null) {
+            Resources.postSkema(outputSkema, questionnaire, this);
         }
 
         getQuestionnaire().cleanSkemaValuePool();
@@ -47,39 +44,38 @@ public class UploadNode extends IONode implements UploadListener {
         super.enter();
     }
 
-    public String getJson() {
-        OutputSkema out = questionnaire.getOutputSkema();
-        if (null == out) {
+    public OutputSkema getOutputSkema() {
+        OutputSkema result = questionnaire.getOutputSkema();
+        if (null == result) {
             return null;
         }
 
-        out.setDate(new Date());
+        result.setDate(new Date());
 
         // Fjerner dem som er null. For serverens skyld
         for (Variable<?> vv : getQuestionnaire().getSkemaValuePool().values()) {
             if (null != vv.getExpressionValue().getValue())
-                out.addVariable(vv);
+                result.addVariable(vv);
         }
 
-        return Json.print(out);
+        return result;
     }
 
     @Override
-    public void sendError() {
-        // Do nothing - we receive the end() method call later
+    public void postError() {
+        titleText = Util.getString(R.string.upload_measurements_error, questionnaire);
+        statusText = Util.getString(R.string.upload_measurements_upload_failed, questionnaire);
+        setupViewWithRetryCancelButtons();
+
+        createView();
     }
 
     @Override
-    public void end(boolean success) {
-        if (success) {
-            titleText = Util.getString(R.string.upload_measurements_sent, questionnaire);
-            statusText = Util.getString(R.string.upload_measurements_measurements_received, questionnaire);
-            setupViewWithOkButton();
-        } else {
-            titleText = Util.getString(R.string.upload_measurements_error, questionnaire);
-            statusText = Util.getString(R.string.upload_measurements_upload_failed, questionnaire);
-            setupViewWithRetryCancelButtons();
-        }
+    public void posted() {
+        titleText = Util.getString(R.string.upload_measurements_sent, questionnaire);
+        statusText = Util.getString(R.string.upload_measurements_measurements_received, questionnaire);
+        setupViewWithOkButton();
+
         createView();
     }
 

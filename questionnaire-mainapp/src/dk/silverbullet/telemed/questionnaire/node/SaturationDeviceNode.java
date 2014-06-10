@@ -2,12 +2,10 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
-import dk.silverbullet.telemed.device.continua.ContinuaDeviceController;
-import dk.silverbullet.telemed.device.continua.ContinuaListener;
-import dk.silverbullet.telemed.device.continua.HdpController;
-import dk.silverbullet.telemed.device.continua.android.AndroidHdpController;
 import dk.silverbullet.telemed.device.nonin.NoninController;
 import dk.silverbullet.telemed.device.nonin.SaturationAndPulse;
+import dk.silverbullet.telemed.device.nonin.SaturationController;
+import dk.silverbullet.telemed.device.nonin.SaturationPulseListener;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
@@ -18,7 +16,7 @@ import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Map;
 
-public class SaturationDeviceNode extends DeviceNode implements ContinuaListener<SaturationAndPulse> {
+public class SaturationDeviceNode extends DeviceNode implements SaturationPulseListener {
     @Expose
     private Variable<Integer> saturation;
 
@@ -28,7 +26,7 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
     String text;
     private TextViewElement statusElement;
     private TwoButtonElement be;
-    private ContinuaDeviceController noninController;
+    private SaturationController noninController;
 
     public SaturationDeviceNode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
@@ -54,8 +52,7 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
 
         if (noninController == null) {
             try {
-                HdpController bluetoothController = new AndroidHdpController(questionnaire.getActivity());
-                noninController = NoninController.create(this, bluetoothController);
+                noninController = NoninController.create(this);
             } catch (DeviceInitialisationException e) {
                 statusElement.setText(Util.getString(R.string.saturation_could_not_connect, questionnaire));
             }
@@ -105,11 +102,6 @@ public class SaturationDeviceNode extends DeviceNode implements ContinuaListener
                 be.setRightNextNode(getNextNode());
             }
         });
-    }
-
-    @Override
-    public void disconnected() {
-        setStatusText(Util.getString(R.string.saturation_disconnected, questionnaire));
     }
 
     @Override

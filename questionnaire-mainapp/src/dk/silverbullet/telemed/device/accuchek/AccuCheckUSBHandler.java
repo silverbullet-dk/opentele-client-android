@@ -1,8 +1,5 @@
 package dk.silverbullet.telemed.device.accuchek;
 
-import java.io.File;
-import java.io.IOException;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -10,14 +7,17 @@ import android.util.Log;
 import dk.silverbullet.telemed.device.usb.USBController;
 import dk.silverbullet.telemed.questionnaire.R;
 
+import java.io.File;
+import java.io.IOException;
+
 class AccuCheckUSBHandler implements Handler.Callback {
 
     private static final String TAG = AccuCheckUSBHandler.class.getName();
-    private final AccuChekListener listener;
+    private final BloodSugarDeviceListener listener;
     private final USBController usbController;
     private Handler handler;
 
-    public AccuCheckUSBHandler(AccuChekListener listener, USBController usbController) {
+    public AccuCheckUSBHandler(BloodSugarDeviceListener listener, USBController usbController) {
         this.listener = listener;
         this.usbController = usbController;
     }

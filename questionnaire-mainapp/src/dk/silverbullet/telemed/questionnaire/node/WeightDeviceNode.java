@@ -56,7 +56,7 @@ public class WeightDeviceNode extends DeviceNode implements ContinuaListener<Wei
 
         try {
             weightDeviceController = AndWeightScaleController.create(this, new AndroidHdpController(questionnaire
-                    .getActivity().getApplicationContext()));
+                    .getContext().getApplicationContext()));
         } catch (DeviceInitialisationException e) {
             setStatusText(Util.getString(R.string.weight_could_not_connect, questionnaire));
         }

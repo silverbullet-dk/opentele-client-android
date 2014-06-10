@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.silverbullet.telemed</groupId>
     <artifactId>questionnaire-parent</artifactId>
-    <version>1.18.1</version>
+    <version>1.24.0</version>
     <packaging>pom</packaging>
     <name>Questionnaire Projects Parent</name>
 	

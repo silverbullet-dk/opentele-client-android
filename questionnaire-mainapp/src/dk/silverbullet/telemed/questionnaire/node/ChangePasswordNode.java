@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
-import dk.silverbullet.telemed.rest.ChangePasswordTask;
+import dk.silverbullet.telemed.rest.tasks.ChangePasswordTask;
 import dk.silverbullet.telemed.rest.listener.ChangePasswordListener;
 import dk.silverbullet.telemed.utils.Util;
 
@@ -43,7 +43,7 @@ public class ChangePasswordNode extends IONode implements ChangePasswordListener
 
     private void setView() {
         ViewGroup rootLayout = questionnaire.getRootLayout();
-        LayoutInflater inflater = (LayoutInflater) questionnaire.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) questionnaire.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View changePasswordView = inflater.inflate(R.layout.change_password, rootLayout, false);
         rootLayout.addView(changePasswordView);
 

@@ -1,7 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
-import dk.silverbullet.telemed.device.accuchek.AccuChekListener;
+import dk.silverbullet.telemed.device.accuchek.BloodSugarDeviceListener;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
@@ -13,7 +13,7 @@ import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Map;
 
-public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements AccuChekListener {
+public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements BloodSugarDeviceListener {
     private TextViewElement infoElement;
     private TwoButtonElement be;
     @Expose

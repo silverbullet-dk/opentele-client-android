@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,8 +42,8 @@ public class RadioButtonElement<T> extends Element {
     @Override
     public View getView() {
         if (null == radioGroup) {
-            Activity activity = getQuestionnaire().getActivity();
-            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            Context context = getQuestionnaire().getContext();
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             radioGroup = (RadioGroup) inflater.inflate(R.layout.radiogroup, null);
             radioButton = new RadioButton[choices.length];
             for (int i = 0; i < choices.length; i++) {
@@ -79,7 +78,7 @@ public class RadioButtonElement<T> extends Element {
             }
         }
 
-        InputMethodManager imm = (InputMethodManager) getQuestionnaire().getActivity().getApplicationContext()
+        InputMethodManager imm = (InputMethodManager) getQuestionnaire().getContext().getApplicationContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(radioGroup.getWindowToken(), 0);
     }

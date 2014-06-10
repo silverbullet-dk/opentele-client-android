@@ -7,6 +7,7 @@ import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.QuestionnaireFragmentContainer;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.utils.ReflectionHelper;
 import dk.silverbullet.telemed.utils.Util;
 import dk.silverbullet.telemed.video.JoinConferencePoller;
 import dk.silverbullet.telemed.video.VideoActivity;
@@ -139,12 +140,6 @@ public class MainActivity extends Activity implements QuestionnaireFragmentConta
 
     @SuppressWarnings("rawtypes")
     public boolean clientIsVideoEnabled() {
-        try {
-            this.getClassLoader().loadClass("dk.silverbullet.telemed.video.VideoProvider");
-            return true;
-        } catch (ClassNotFoundException e) {
-            Log.d(TAG, "Client not video enabled");
-            return false;
-        }
+        return ReflectionHelper.classCanBeLoaded(this, "dk.silverbullet.telemed.video.VideoProvider");
     }
 }

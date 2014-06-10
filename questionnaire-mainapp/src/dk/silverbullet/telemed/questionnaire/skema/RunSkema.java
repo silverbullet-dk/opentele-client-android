@@ -21,7 +21,7 @@ public class RunSkema implements SkemaDef {
         // Variable
         OutputSkema outputSkema = new OutputSkema();
 
-        Variable<String> skemaName = new Variable<String>("skema", String.class);
+        Variable<String> skemaName = new Variable<String>("getSkema", String.class);
 
         outputSkema.addVariable(skemaName);
 

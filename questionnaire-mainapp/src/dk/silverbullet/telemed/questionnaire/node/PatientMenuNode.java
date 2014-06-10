@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
@@ -12,22 +11,19 @@ import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.skema.*;
-import dk.silverbullet.telemed.rest.ReminderTask;
-import dk.silverbullet.telemed.rest.RetrieveMessageListTask;
-import dk.silverbullet.telemed.rest.RetrieveRecipientsTask;
+import dk.silverbullet.telemed.rest.Resources;
+import dk.silverbullet.telemed.rest.bean.ReminderBean;
+import dk.silverbullet.telemed.rest.listener.RetrieveEntityListener;
 import dk.silverbullet.telemed.rest.bean.message.MessageRecipient;
 import dk.silverbullet.telemed.rest.bean.message.Messages;
-import dk.silverbullet.telemed.rest.listener.MessageListListener;
-import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
-import dk.silverbullet.telemed.utils.Json;
+import dk.silverbullet.telemed.schedule.ReminderService;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 
-public class PatientMenuNode extends MenuNode implements MessageListListener, MessageWriteListener {
-
+public class PatientMenuNode extends MenuNode {
     private static final String TAG = Util.getTag(PatientMenuNode.class);
-
     private Node nextNode;
     private ProgressDialog dialog;
 
@@ -49,10 +45,44 @@ public class PatientMenuNode extends MenuNode implements MessageListListener, Me
         Variable<?> user = questionnaire.getValuePool().get(Util.VARIABLE_USERNAME);
         if (null != user && null != user.getExpressionValue() && null != user.getExpressionValue().toString()
                 && !Util.ADMINUSER_NAME.equalsIgnoreCase(user.getExpressionValue().toString())) {
-            dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.default_working, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
-            new ReminderTask(questionnaire).execute();
-            new RetrieveRecipientsTask(questionnaire, this).execute();
-            new RetrieveMessageListTask(questionnaire, this).execute();
+            dialog = ProgressDialog.show(questionnaire.getContext(), Util.getString(R.string.default_working, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
+            Resources.getUpcomingReminders(questionnaire, new RetrieveEntityListener<ReminderBean[]>() {
+                @Override
+                public void retrieveError() {
+                    Log.e(TAG, "Could not retrieve upcoming reminders");
+                    Context context = questionnaire.getContext().getApplicationContext();
+                    ReminderService.setRemindersTo(context, new ReminderBean[0]);
+                }
+
+                @Override
+                public void retrieved(ReminderBean[] result) {
+                    Log.d(TAG, "Upcoming reminders: " + Arrays.asList(result));
+                    Context context = questionnaire.getContext().getApplicationContext();
+                    ReminderService.setRemindersTo(context, result);
+                }
+            });
+            Resources.getMessageRecipients(questionnaire, new RetrieveEntityListener<MessageRecipient[]>() {
+                @Override
+                public void retrieveError() {
+                    sendError();
+                }
+
+                @Override
+                public void retrieved(MessageRecipient[] result) {
+                    setRecipients(result);
+                }
+            });
+            Resources.getMessages(questionnaire, new RetrieveEntityListener<Messages>() {
+                @Override
+                public void retrieveError() {
+                    sendError();
+                }
+
+                @Override
+                public void retrieved(Messages result) {
+                    setMessages(result);
+                }
+            });
         } else {
             super.enter();
         }
@@ -63,15 +93,11 @@ public class PatientMenuNode extends MenuNode implements MessageListListener, Me
         return "PatientMenuNode(\"" + getNodeName() + "\") -> \"" + nextNode.getNodeName() + "\"";
     }
 
-    @Override
-    public void sendError() {
+    private void sendError() {
         dialog.dismiss();
     }
 
-    @Override
-    public void end(String result) {
-        Log.d(TAG, result);
-        Messages messages = Json.parse(result, Messages.class);
+    public void setMessages(Messages messages) {
         int numberOfUnreadMessages = messages.unread;
 
         boolean refreshGui = numberOfUnreadMessages != unreadMessages;
@@ -85,8 +111,8 @@ public class PatientMenuNode extends MenuNode implements MessageListListener, Me
 
     @Override
     protected void createView() {
-        Activity activity = questionnaire.getActivity();
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Context context = questionnaire.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup rootLayout = questionnaire.getRootLayout();
         rootLayout.removeAllViews();
 
@@ -176,20 +202,25 @@ public class PatientMenuNode extends MenuNode implements MessageListListener, Me
         setupAndRunSkema(new RunSkema());
     }
 
+    private void setRecipients(MessageRecipient[] messageRecipients) {
+        showMessagesMenuItem = messageRecipients != null && messageRecipients.length > 0;
 
-    @Override
-    public void setRecipients(String result) {
-        if (null != result && !"".equals(result)) {
-            MessageRecipient[] messageRecipients = Json.parse(result, MessageRecipient[].class);
-            showMessagesMenuItem = messageRecipients != null && messageRecipients.length > 0;
+        super.enter();
 
-            super.enter();
+        if (showMessagesMenuItem) {
+            Resources.getMessages(questionnaire, new RetrieveEntityListener<Messages>() {
+                @Override
+                public void retrieveError() {
+                    sendError();
+                }
 
-            if (showMessagesMenuItem) {
-                new RetrieveMessageListTask(questionnaire, this).execute();
-            } else {
-                dialog.dismiss();
-            }
+                @Override
+                public void retrieved(Messages result) {
+                    setMessages(result);
+                }
+            });
+        } else {
+            dialog.dismiss();
         }
     }
 

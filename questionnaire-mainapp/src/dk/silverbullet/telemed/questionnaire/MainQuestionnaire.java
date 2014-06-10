@@ -76,12 +76,12 @@ public class MainQuestionnaire extends Questionnaire {
     }
 
     public void notifyActivityOfUserLogin() {
-        QuestionnaireFragmentContainer parentActivity = (QuestionnaireFragmentContainer) getActivity();
+        QuestionnaireFragmentContainer parentActivity = (QuestionnaireFragmentContainer) getContext();
         parentActivity.userLoggedIn();
     }
 
     public void adviceActivityOfUserLogout() {
-        QuestionnaireFragmentContainer parentActivity = (QuestionnaireFragmentContainer) getActivity();
+        QuestionnaireFragmentContainer parentActivity = (QuestionnaireFragmentContainer) getContext();
         parentActivity.userLoggedOut();
     }
 

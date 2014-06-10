@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="abbott_freestyle_library_not_available">Abbott Freestyle not avaliable in this version of OpenTele</string>
+
     <string name="acknowledgements_acknowledgements">Acknowledgements</string>
     <string name="acknowledgements_fetching">Fetching acknowledgements</string>
 
@@ -25,7 +27,7 @@
 
     <string name="bloodsugar_after_meal">After meal</string>
     <string name="bloodsugar_before_meal">Before meal</string>
-    <string name="bloodsugar_connect_device">Connect your blood sugar device. Make sure that it is turned of before connecting it.</string>
+    <string name="bloodsugar_connect_device">Connect your blood sugar device. Make sure that it is turned off before connecting it.</string>
     <string name="bloodsugar_connected">Blood sugar device found.</string>
     <string name="bloodsugar_fetching_measurements">Fetching blood sugar measurements.</string>
     <string name="bloodsugar_measurements_fetched">Blood sugar measurements fetched.</string>
@@ -55,6 +57,12 @@
     <string name="crp_angiv_resultat_">Enter result </string>
     <string name="crp_measurement_or">or</string>
     <string name="crp_under_5"> &lt;5</string>
+
+    <string name="cgm_connected">Connected to device</string>
+    <string name="cgm_measurements_fetched">Blood sugar measurements fetched.</string>
+    <string name="cgm_could_not_connect_to_device">Could not connect to device</string>
+    <string name="cgm_connect_device">Connect your Abbott FreeStyle Navigator.\n If you are asked to allow OpenTele access to the USB-device please answer "OK".</string>
+    <string name="cgm_access_denied">You did not allow OpenTele to access the Abbott FreeStyle Navigator. If you want to transfer measurements to OpenTele you must allow access to the USB-device.</string>
 
     <string name="default_cancel">Cancel</string>
     <string name="default_menu">Menu</string>
@@ -259,5 +267,6 @@
     <string name="weight_temporary_problem">Could not fetch data. Please try again.</string>
     <string name="weight_turn_on_and_wait">Turn on the weight and await instructions.</string>
     <string name="weight_weight">Weight:</string>
+
 
 </resources>

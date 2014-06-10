@@ -11,7 +11,7 @@ public class SubmitBloodPressureMeasurementTask extends SubmitMeasurementTask<Bl
     }
 
     @Override
-    protected String createJson(DeviceIdAndMeasurement<BloodPressureAndPulse> measurement) {
-        return new MeasurementResult(measurement.getDeviceId(), measurement.getMeasurement()).toJson();
+    protected MeasurementResult createMeasurementResult(DeviceIdAndMeasurement<BloodPressureAndPulse> measurement) {
+        return new MeasurementResult(measurement.getDeviceId(), measurement.getMeasurement());
     }
 }

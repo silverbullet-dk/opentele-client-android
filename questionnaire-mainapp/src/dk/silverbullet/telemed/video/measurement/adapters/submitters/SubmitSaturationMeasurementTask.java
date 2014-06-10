@@ -11,7 +11,7 @@ public class SubmitSaturationMeasurementTask extends SubmitMeasurementTask<Satur
     }
 
     @Override
-    protected String createJson(DeviceIdAndMeasurement<SaturationAndPulse> measurement) {
-        return new MeasurementResult(measurement.getDeviceId(), measurement.getMeasurement()).toJson();
+    protected MeasurementResult createMeasurementResult(DeviceIdAndMeasurement<SaturationAndPulse> measurement) {
+        return new MeasurementResult(measurement.getDeviceId(), measurement.getMeasurement());
     }
 }

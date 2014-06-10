@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -65,8 +64,8 @@ public class TwoButtonElement extends Element {
         if (null == layout) {
 
             // Inflate our UI from its XML layout description.
-            Activity activity = getQuestionnaire().getActivity();
-            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            Context context = getQuestionnaire().getContext();
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             layout = (LinearLayout) inflater.inflate(R.layout.two_button_element, null);
             leftButton = (Button) layout.findViewById(R.id.left);
             leftButton.setText(leftText);

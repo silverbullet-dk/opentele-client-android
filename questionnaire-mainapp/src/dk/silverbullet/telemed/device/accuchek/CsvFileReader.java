@@ -1,10 +1,9 @@
 package dk.silverbullet.telemed.device.accuchek;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurement;
+import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
+
+import java.io.*;
 import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -75,6 +74,15 @@ public class CsvFileReader {
 
     private static double parseDouble(String d) throws IOException {
         try {
+
+            if(d.equalsIgnoreCase("HI")) {
+                return 33.3;
+            }
+
+            if(d.equalsIgnoreCase("LO")) {
+                return 0.6;
+            }
+
             return Double.parseDouble(d);
         } catch (NumberFormatException e) {
             throw new CsvFormatException("Could not parse double: '" + d + "'", e);

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>dk.silverbullet.telemed</groupId>
 		<artifactId>questionnaire-parent</artifactId>
-		<version>1.18.1</version>
+		<version>1.24.0</version>
 	</parent>
 
 	<artifactId>questionnaire-mainapp</artifactId>
@@ -40,7 +40,13 @@
             <groupId>dk.silverbullet.telemed</groupId>
             <artifactId>video-common-interfaces</artifactId>
             <scope>compile</scope>
-            <version>1.18.1</version>
+            <version>1.24.0</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.silverbullet.telemed</groupId>
+            <artifactId>continuous-bloodsugar-common</artifactId>
+            <scope>compile</scope>
+            <version>1.24.0</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -111,7 +117,8 @@
 		<profile>
 			<id>calabash</id>
 			<properties>
-				<server.url>http://10.0.2.2:8080/opentele-server/</server.url>
+				<server.url>http://10.0.1.14:8080/opentele-server/</server.url>
+                <device.id>DUMMY</device.id>
 			</properties>
 			<build>
 				<plugins>
@@ -146,10 +153,11 @@
 									<arguments>
 										<argument>run</argument>
 										<argument>target/questionnaire-mainapp.apk</argument>
+                                        <argument>ADB_DEVICE_ARG="${device.id}"</argument>
 										<argument>--format</argument>
 										<argument>junit</argument>
 										<argument>--out</argument>
-										<argument>target/calabash-junit-report/</argument>
+										<argument>target/calabash-junit-report/${device.id}/</argument>
 										<argument>--format</argument>
 										<argument>pretty</argument>
 									</arguments>

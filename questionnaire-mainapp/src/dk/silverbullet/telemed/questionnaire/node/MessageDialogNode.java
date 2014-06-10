@@ -10,20 +10,18 @@ import dk.silverbullet.telemed.questionnaire.element.PatientMessageBubbleElement
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
-import dk.silverbullet.telemed.rest.MarkMessagesAsReadTask;
-import dk.silverbullet.telemed.rest.RetrieveMessageListTask;
-import dk.silverbullet.telemed.rest.RetrieveTask;
+import dk.silverbullet.telemed.rest.Resources;
+import dk.silverbullet.telemed.rest.listener.RetrieveEntityListener;
+import dk.silverbullet.telemed.rest.tasks.MarkMessagesAsReadTask;
 import dk.silverbullet.telemed.rest.bean.message.MessageItem;
 import dk.silverbullet.telemed.rest.bean.message.Messages;
-import dk.silverbullet.telemed.rest.listener.MessageListListener;
-import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class MessageDialogNode extends IONode implements MessageListListener {
+public class MessageDialogNode extends IONode implements RetrieveEntityListener<Messages> {
 
     private static final String TAG = Util.getTag(MessageDialogNode.class);
 
@@ -46,10 +44,9 @@ public class MessageDialogNode extends IONode implements MessageListListener {
             clearElements();
         }
 
-        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.message_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
+        dialog = ProgressDialog.show(questionnaire.getContext(), Util.getString(R.string.message_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 
-        RetrieveTask messageTask = new RetrieveMessageListTask(questionnaire, this);
-        messageTask.execute();
+        Resources.getMessages(questionnaire, this);
 
         super.enter();
     }
@@ -105,19 +102,17 @@ public class MessageDialogNode extends IONode implements MessageListListener {
     }
 
     @Override
-    public void sendError() {
+    public void retrieveError() {
         dialog.dismiss();
     }
 
     @Override
-    public void end(String result) {
+    public void retrieved(Messages result) {
         messages = new LinkedList<MessageItem>();
         final List<Long> messagesToRead = new LinkedList<Long>();
 
-        Log.d(TAG, result);
         long departmentId = this.departmentId.getExpressionValue().getValue();
-        Messages messageResponse = Json.parse(result, Messages.class);
-        for (MessageItem message : messageResponse.messages) {
+        for (MessageItem message : result.messages) {
             boolean isFromDepartment = message.getFrom().getType().equals("Department") && message.getFrom().getId() == departmentId;
             boolean isToDepartment = message.getTo().getType().equals("Department") && message.getTo().getId() == departmentId;
 

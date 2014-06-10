@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -48,8 +47,8 @@ public class CRPNode extends DeviceNode {
     }
 
     public void setView() {
-        Activity activity = questionnaire.getActivity();
-        inflateView(activity);
+        Context context = questionnaire.getContext();
+        inflateView(context);
         getViews();
         setInputValidation();
         linkTopPanel(questionnaire.getRootLayout());
@@ -96,9 +95,9 @@ public class CRPNode extends DeviceNode {
         }
     }
 
-    private void inflateView(Activity activity) {
+    private void inflateView(Context context) {
         ViewGroup rootLayout = questionnaire.getRootLayout();
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View crpView = inflater.inflate(R.layout.crp_measurement, null);
 
         rootLayout.removeAllViews();

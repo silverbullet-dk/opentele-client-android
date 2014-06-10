@@ -68,19 +68,15 @@ public class JoinConferencePoller {
     }
 
     private PendingConferenceResponse checkForConference() {
-        HttpClient httpClient = HttpClientFactory.createHttpClient(mainActivity);
-
-        HttpParams httpParameters = httpClient.getParams();
-        HttpConnectionParams.setConnectionTimeout(httpParameters, FIVE_SECONDS_IN_MILLIS);
-        HttpConnectionParams.setSoTimeout(httpParameters, 0);
-
-        URL url;
         try {
-            url = new URL(mainActivity.getServerURL());
+            // We don't use the otherwise nice and simple RestClient here, since we want to set an infinite timeout
+            // period AND hold on to our HttpGet object since we might like to abort it.
 
+            URL url = new URL(mainActivity.getServerURL());
             httpGet = new HttpGet(new URL(url, "rest/conference/patientHasPendingConference").toExternalForm());
             Util.setHeaders(httpGet, mainQuestionnaire);
 
+            HttpClient httpClient = createHttpClientWithInfiniteTimeout();
             String result = httpClient.execute(httpGet, new BasicResponseHandler());
 
             if (!stopped && !result.isEmpty()) {
@@ -94,6 +90,15 @@ public class JoinConferencePoller {
             }
         }
         return new PendingConferenceResponse();
+    }
+
+    private HttpClient createHttpClientWithInfiniteTimeout() {
+        HttpClient httpClient = HttpClientFactory.createHttpClient(mainActivity);
+
+        HttpParams httpParameters = httpClient.getParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, FIVE_SECONDS_IN_MILLIS);
+        HttpConnectionParams.setSoTimeout(httpParameters, 0);
+        return httpClient;
     }
 
     class PendingConferenceResponse {

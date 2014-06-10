@@ -1,6 +1,6 @@
 package dk.silverbullet.telemed.device.accuchek;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class CsvFileReaderTest {
 	File properCsvFile = fileFor("ProperDiary.csv");
@@ -35,7 +35,7 @@ public class CsvFileReaderTest {
 	public void readsTheCorrectAmountOfMeasurements() throws Exception {
 		List<BloodSugarMeasurement> measurements = CsvFileReader.readFile(properCsvFile).measurements;
 		
-		assertEquals(9, measurements.size());
+		assertEquals(11, measurements.size());
 	}
 	
 	@Test
@@ -93,11 +93,23 @@ public class CsvFileReaderTest {
 		assertTrue(measurements.get(2).isBeforeMeal);
 		assertFalse(measurements.get(3).isBeforeMeal);
 	}
+
+    @Test
+    public void knowsThatHIMeans33Dot3() throws Exception {
+        List<BloodSugarMeasurement> measurements = CsvFileReader.readFile(properCsvFile).measurements;
+        assertEquals(measurements.get(9).result, (Double)33.3);
+    }
+
+    @Test
+    public void knowsThatLOMeans0Dot6() throws Exception {
+        List<BloodSugarMeasurement> measurements = CsvFileReader.readFile(properCsvFile).measurements;
+        assertEquals(measurements.get(10).result, (Double)0.6);
+    }
 	
 	@Test
 	public void knowsWhenMeasurementIsAfterMeal() throws Exception {
 		List<BloodSugarMeasurement> measurements = CsvFileReader.readFile(properCsvFile).measurements;
-		
+
 		assertFalse(measurements.get(6).isAfterMeal);
 		assertTrue(measurements.get(7).isAfterMeal);
 		assertFalse(measurements.get(8).isAfterMeal);

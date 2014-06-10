@@ -1,15 +1,15 @@
 package dk.silverbullet.telemed.device.test.accuchek;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import dk.silverbullet.telemed.device.accuchek.AccuChekListener;
+import dk.silverbullet.telemed.device.accuchek.BloodSugarDeviceListener;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurement;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
 import dk.silverbullet.telemed.device.continua.android.SingleShotTimer;
 import dk.silverbullet.telemed.device.continua.android.StopwatchListener;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class BloodSugarTestDeviceController implements StopwatchListener {
     // Is public, so the tests can set it low
@@ -19,10 +19,10 @@ public class BloodSugarTestDeviceController implements StopwatchListener {
         INITIALIZING, CONNECTED, FETCHING_DIARY, DONE
     }
 
-    private AccuChekListener listener;
+    private BloodSugarDeviceListener listener;
     private State currentState = State.INITIALIZING;
 
-    public BloodSugarTestDeviceController(AccuChekListener listener) {
+    public BloodSugarTestDeviceController(BloodSugarDeviceListener listener) {
         this.listener = listener;
         restartTimer();
     }

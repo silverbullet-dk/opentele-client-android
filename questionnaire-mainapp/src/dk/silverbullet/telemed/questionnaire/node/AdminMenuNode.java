@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,8 +47,8 @@ public class AdminMenuNode extends MenuNode  {
 
     @Override
     protected void createView() {
-        Activity activity = questionnaire.getActivity();
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Context context = questionnaire.getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup rootLayout = questionnaire.getRootLayout();
         inflater.inflate(R.layout.admin_menu, rootLayout, true);
 

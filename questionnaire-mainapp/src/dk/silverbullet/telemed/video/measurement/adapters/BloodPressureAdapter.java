@@ -22,11 +22,11 @@ public class BloodPressureAdapter implements VideoMeasurementAdapter, ContinuaLi
     @Override
     public void start() {
         try {
-            fragment.setMeasurementTypeText(Util.getString(R.string.video_bloodpressure_bloodpressure_and_pulse, fragment.getActivity()));
-            fragment.setStatusText(Util.getString(R.string.video_bloodpressure_press_start, fragment.getActivity()));
-            controller = AndBloodPressureController.create(this, new AndroidHdpController(fragment.getActivity()));
+            fragment.setMeasurementTypeText(Util.getString(R.string.video_bloodpressure_bloodpressure_and_pulse, fragment.getContext()));
+            fragment.setStatusText(Util.getString(R.string.video_bloodpressure_press_start, fragment.getContext()));
+            controller = AndBloodPressureController.create(this, new AndroidHdpController(fragment.getContext()));
         } catch (DeviceInitialisationException e) {
-            fragment.setStatusText(Util.getString(R.string.video_bloodpressure_could_not_connect, fragment.getActivity()));
+            fragment.setStatusText(Util.getString(R.string.video_bloodpressure_could_not_connect, fragment.getContext()));
         }
     }
 
@@ -39,27 +39,27 @@ public class BloodPressureAdapter implements VideoMeasurementAdapter, ContinuaLi
 
     @Override
     public void connected() {
-        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_waiting_for_measurement, fragment.getActivity()));
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_waiting_for_measurement, fragment.getContext()));
     }
 
     @Override
     public void disconnected() {
-        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_disconnected, fragment.getActivity()));
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_disconnected, fragment.getContext()));
     }
 
     @Override
     public void permanentProblem() {
-        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_permanent_problem, fragment.getActivity()));
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_permanent_problem, fragment.getContext()));
     }
 
     @Override
     public void temporaryProblem() {
-        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_temporary_problem, fragment.getActivity()));
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_temporary_problem, fragment.getContext()));
     }
 
     @Override
     public void measurementReceived(String deviceId, BloodPressureAndPulse measurement) {
-        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_measurement_received, fragment.getActivity()));
+        fragment.setStatusText(Util.getString(R.string.video_bloodpressure_measurement_received, fragment.getContext()));
         controller.close();
 
         DeviceIdAndMeasurement<BloodPressureAndPulse> deviceIdAndMeasurement = new DeviceIdAndMeasurement<BloodPressureAndPulse>(deviceId, measurement);

@@ -11,17 +11,16 @@ import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
 import dk.silverbullet.telemed.questionnaire.skema.Skema;
-import dk.silverbullet.telemed.rest.RetrieveSchemaTask;
-import dk.silverbullet.telemed.rest.RetrieveTask;
-import dk.silverbullet.telemed.rest.bean.QuestionnairListBean;
-import dk.silverbullet.telemed.rest.listener.SkemaListener;
+import dk.silverbullet.telemed.rest.Resources;
+import dk.silverbullet.telemed.rest.bean.QuestionnaireListBean;
+import dk.silverbullet.telemed.rest.listener.RetrieveEntityListener;
 import dk.silverbullet.telemed.schedule.ReminderService;
 import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Map;
 
-public class RunQuestionnaireNode extends Node implements SkemaListener {
+public class RunQuestionnaireNode extends Node implements RetrieveEntityListener<Skema> {
 
     private static final String TAG = Util.getTag(RunQuestionnaireNode.class);
 
@@ -41,7 +40,7 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
     public void enter() {
         questionnaire.cleanSkemaValuePool();
 
-        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.questionnaire_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
+        dialog = ProgressDialog.show(questionnaire.getContext(), Util.getString(R.string.questionnaire_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 
         try {
             if (skemaName.evaluate().startsWith("dk.silverbullet.telemed.deleteme")) {
@@ -50,7 +49,7 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
             } else {
                 String questionnaireJson = skemaName.evaluate();
                 Context context = questionnaire.getActivity().getBaseContext();
-                QuestionnairListBean deserializedQuestionnaire = deserializeQuestionnaire(questionnaireJson);
+                QuestionnaireListBean deserializedQuestionnaire = deserializeQuestionnaire(questionnaireJson);
 
                 getFromServer(questionnaireJson);
                 ReminderService.clearRemindersForQuestionnaire(context, deserializedQuestionnaire.getName());
@@ -70,7 +69,7 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
     }
 
     public void getFromServer(String questionnaireJson) {
-        QuestionnairListBean bean = deserializeQuestionnaire(questionnaireJson);
+        QuestionnaireListBean bean = deserializeQuestionnaire(questionnaireJson);
 
         Variable<String> id = new Variable<String>(Util.VARIABLE_ID, String.class);
         id.setValue(bean.getId().toString());
@@ -83,8 +82,8 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
 
         questionnaire.setOutputSkema(outputSkema);
 
-        RetrieveTask retrieveTask = new RetrieveSchemaTask(questionnaire, this);
-        retrieveTask.execute();
+        String skemaId = questionnaire.getValuePool().get(Util.VARIABLE_ID).getExpressionValue().getValue().toString();
+        Resources.getSkema(skemaId, questionnaire, this);
     }
 
     public void getLocal(String skemaName) throws ClassNotFoundException, InstantiationException,
@@ -124,9 +123,9 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
     }
 
     @Override
-    public void setJson(String json) {
+    public void retrieved(Skema result) {
         try {
-            skema = Json.parse(json, Skema.class);
+            skema = result;
             setup();
         } catch (Exception e) {
             ErrorNode errorNode = new ErrorNode(questionnaire, "errorNode");
@@ -139,15 +138,15 @@ public class RunQuestionnaireNode extends Node implements SkemaListener {
     }
 
     @Override
-    public void sendError() {
+    public void retrieveError() {
         ErrorNode errorNode = new ErrorNode(questionnaire, "errorNode");
         errorNode.setNextNode(nextNode);
 
         questionnaire.setCurrentNode(errorNode);
     }
 
-    private QuestionnairListBean deserializeQuestionnaire(String skemaName) {
-        return Json.parse(skemaName, QuestionnairListBean.class);
+    private QuestionnaireListBean deserializeQuestionnaire(String skemaName) {
+        return Json.parse(skemaName, QuestionnaireListBean.class);
     }
 
     public void setNextNode(Node nextNode) {

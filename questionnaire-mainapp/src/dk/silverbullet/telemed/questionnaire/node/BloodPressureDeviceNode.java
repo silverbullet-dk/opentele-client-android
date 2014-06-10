@@ -70,7 +70,7 @@ public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListe
         super.enter();
 
         try {
-            controller = AndBloodPressureController.create(this, new AndroidHdpController(questionnaire.getActivity()));
+            controller = AndBloodPressureController.create(this, new AndroidHdpController(questionnaire.getContext()));
         } catch (DeviceInitialisationException e) {
             setStatusText(Util.getString(R.string.bloodpressure_could_not_connect, questionnaire));
         }

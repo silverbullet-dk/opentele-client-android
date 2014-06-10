@@ -1,7 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.http.SslCertificate;
@@ -64,9 +63,9 @@ public class WebViewNode extends IONode {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void inflateLayout() {
-        Activity activity = questionnaire.getActivity();
+        Context context = questionnaire.getContext();
         ViewGroup rootLayout = questionnaire.getRootLayout();
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View webviewLayout = inflater.inflate(R.layout.webview_node, null);
         webView = (WebView) webviewLayout.findViewById(R.id.webView);
@@ -75,7 +74,7 @@ public class WebViewNode extends IONode {
         settings.setSaveFormData(false);
         settings.setSavePassword(false);
 
-        CookieSyncManager.createInstance(activity);
+        CookieSyncManager.createInstance(context);
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(false);
         cookieManager.removeAllCookie();
@@ -94,6 +93,11 @@ public class WebViewNode extends IONode {
             @Override
             public void onPageFinished(WebView view, String url) {
                 dialog.dismiss();
+            }
+
+            @Override
+            public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
+                handler.proceed(username(), password());
             }
 
             @Override
@@ -133,7 +137,7 @@ public class WebViewNode extends IONode {
     }
 
     private void showDialog() {
-        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.web_view_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
+        dialog = ProgressDialog.show(questionnaire.getContext(), Util.getString(R.string.web_view_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
     }
 
     private String username() {
@@ -183,7 +187,7 @@ public class WebViewNode extends IONode {
         keyStore.load(null, null);
 
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-        InputStream certificateInputStream = questionnaire.getActivity().getResources().openRawResource(R.raw.certs);
+        InputStream certificateInputStream = questionnaire.getContext().getResources().openRawResource(R.raw.certs);
         Certificate certificate;
         try {
             certificate = certificateFactory.generateCertificate(certificateInputStream);

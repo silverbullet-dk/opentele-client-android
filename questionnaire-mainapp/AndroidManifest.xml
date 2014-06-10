@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dk.silverbullet.telemed.questionnaire"
-    android:versionCode="1181"
-    android:versionName="1.18.1" >
+    android:versionCode="1240"
+    android:versionName="1.24.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="14" />
 
     <uses-feature android:name="android.hardware.usb.host" />
+    <uses-feature>android.hardware.usb</uses-feature>
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />

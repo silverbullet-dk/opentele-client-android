@@ -13,9 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.utils.ReflectionHelper;
 import dk.silverbullet.telemed.video.measurement.TakeMeasurementFragment;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class VideoActivity extends Activity implements VideoCallbacks {
@@ -48,17 +48,9 @@ public class VideoActivity extends Activity implements VideoCallbacks {
 
     private Fragment getVideoFragment() {
         try {
-            Class videoProviderClass = this.getClassLoader().loadClass("dk.silverbullet.telemed.video.VideoProvider");
-            Method createVideoFragmentMethod = videoProviderClass.getMethod("createVideoFragment", String.class, String.class, String.class, Activity.class, VideoCallbacks.class);
-
+            Method createVideoFragmentMethod = ReflectionHelper.getMethod(this, "dk.silverbullet.telemed.video.VideoProvider", "createVideoFragment", String.class, String.class, String.class, Activity.class, VideoCallbacks.class);
             return (Fragment) createVideoFragmentMethod.invoke(null, guestName, roomKey, serviceUrl, this, this);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Could not create video fragment", e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Could not create video fragment", e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException("Could not create video fragment", e);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Could not create video fragment", e);
         }
     }

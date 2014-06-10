@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -59,13 +58,13 @@ public class ListViewElement<T> extends Element {
         if (null == listView) {
 
             // Inflate our UI from its XML layout description.
-            Activity activity = getQuestionnaire().getActivity();
-            Context context = getQuestionnaire().getActivity().getApplicationContext();
+            Context context = getQuestionnaire().getContext();
+            Context applicationContext = context.getApplicationContext();
 
-            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             listView = (ListView) inflater.inflate(R.layout.list_view_element, null);
-            listAdapter = new HighlightingArrayAdapter(context, values, valuesToHighlight);
+            listAdapter = new HighlightingArrayAdapter(applicationContext, values, valuesToHighlight);
             listView.setAdapter(listAdapter);
 
             if (clickAhead) {

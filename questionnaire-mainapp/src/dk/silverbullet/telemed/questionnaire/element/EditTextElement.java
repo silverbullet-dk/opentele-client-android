@@ -3,6 +3,7 @@ package dk.silverbullet.telemed.questionnaire.element;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.text.InputType;
 import android.text.method.DigitsKeyListener;
 import android.view.View;
@@ -44,7 +45,7 @@ public class EditTextElement extends Element {
     }
 
     public void showPopup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getQuestionnaire().getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getQuestionnaire().getContext());
         builder.setTitle(popupTitle);
         builder.setItems(popupItems, new DialogInterface.OnClickListener() {
             @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -66,7 +67,10 @@ public class EditTextElement extends Element {
     @Override
     public View getView() {
         if (editText == null) {
-            editText = new EditText(getQuestionnaire().getActivity().getApplicationContext());
+            editText = new EditText(getQuestionnaire().getContext().getApplicationContext());
+            editText.setTextColor(Color.parseColor("#777777"));
+            editText.setBackgroundColor(Color.WHITE);
+            editText.setBackgroundResource(android.R.drawable.edit_text);
 
             if (password) {
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -138,7 +142,7 @@ public class EditTextElement extends Element {
         }
 
         // Remove keyboard after use....
-        InputMethodManager imm = (InputMethodManager) getQuestionnaire().getActivity().getApplicationContext()
+        InputMethodManager imm = (InputMethodManager) getQuestionnaire().getContext().getApplicationContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }

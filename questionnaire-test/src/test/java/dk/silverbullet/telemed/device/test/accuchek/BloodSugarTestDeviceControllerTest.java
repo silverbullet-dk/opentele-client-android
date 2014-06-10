@@ -1,5 +1,7 @@
 package dk.silverbullet.telemed.device.test.accuchek;
 
+import dk.silverbullet.telemed.device.accuchek.BloodSugarDeviceListener;
+import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -8,12 +10,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.*;
 
-import dk.silverbullet.telemed.device.accuchek.AccuChekListener;
-import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
-
 @RunWith(MockitoJUnitRunner.class)
 public class BloodSugarTestDeviceControllerTest {
-	@Mock AccuChekListener listener;
+	@Mock
+    BloodSugarDeviceListener listener;
 	
 	@Test
 	public void goesThroughWholeCallbackSequence() throws Exception {

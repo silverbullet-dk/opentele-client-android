@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -43,9 +42,8 @@ public class TextViewElement extends Element {
     @Override
     public View getView() {
         if (null == textView) {
-
-            Activity activity = getQuestionnaire().getActivity();
-            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            Context context = getQuestionnaire().getContext();
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (header)
                 textView = (TextView) inflater.inflate(R.layout.text_header_element, null);
             else

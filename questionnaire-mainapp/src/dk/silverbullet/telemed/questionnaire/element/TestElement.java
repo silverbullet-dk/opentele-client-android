@@ -19,7 +19,7 @@ public class TestElement extends Element {
 
     @Override
     public View getView() {
-        Context ctx = getQuestionnaire().getActivity().getApplicationContext();
+        Context ctx = getQuestionnaire().getContext().getApplicationContext();
         Map<String, Variable<?>> vars = getQuestionnaire().getSkemaValuePool();
         StringBuffer sb2 = new StringBuffer();
         for (String name : vars.keySet()) {

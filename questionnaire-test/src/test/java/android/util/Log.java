@@ -34,4 +34,11 @@ public class Log {
         System.out.flush();
         return 0;
     }
+
+    public static int w(String tag, String message, Throwable throwable) {
+        System.out.println("W: " + tag + ": " + message);
+        throwable.printStackTrace();
+        System.out.flush();
+        return 0;
+    }
 }

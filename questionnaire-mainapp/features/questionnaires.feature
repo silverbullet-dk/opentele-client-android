@@ -1,12 +1,5 @@
 Feature: Questionnaire
 
-Scenario: As a citizen I am able to complete the CTG m/tid questionnaire
-	Given I am logged in as Linda with password abcd1234
-	And I start the "CTG m/tid" questionnaire
-	When I answer "1"
-	And I go to the next page
-	Then I can send the results
-
 Scenario: As a citizen I am able to complete the C-reaktivt Protein questionnaire
 	Given I am logged in as Linda with password abcd1234
 	And I start the "C-reaktivt Protein" questionnaire

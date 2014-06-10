@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.rest.listener;
 
-public interface LoginListener extends Listener {
+public interface LoginListener {
+    void sendError();
     void loggedIn();
     void loginFailed();
     void changePassword();

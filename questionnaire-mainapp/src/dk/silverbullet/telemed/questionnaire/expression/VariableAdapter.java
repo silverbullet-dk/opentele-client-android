@@ -1,18 +1,11 @@
 package dk.silverbullet.telemed.questionnaire.expression;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
-
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-
+import com.google.gson.*;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurement;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 
 public class VariableAdapter implements JsonSerializer<Variable<?>>, JsonDeserializer<Variable<?>> {
 

@@ -31,3 +31,7 @@ def enter_text_into_numbered_field(text, field_number)
 	return performAction('enter_text_into_numbered_field', text, field_number)
 end
 
+def clear_username
+    return performAction('clear_numbered_field', 1)
+end
+

@@ -1,10 +1,10 @@
 package dk.silverbullet.telemed.device.accuchek;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.google.gson.annotations.Expose;
 
 /**
  * Simple value object representing a transferred CSV file with blood sugar measurements.

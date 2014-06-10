@@ -11,7 +11,7 @@ public class SubmitLungMeasurementTask extends SubmitMeasurementTask<LungMeasure
     }
 
     @Override
-    protected String createJson(DeviceIdAndMeasurement<LungMeasurement> measurement) {
-        return new MeasurementResult(measurement.getDeviceId(), measurement.getMeasurement()).toJson();
+    protected MeasurementResult createMeasurementResult(DeviceIdAndMeasurement<LungMeasurement> measurement) {
+        return new MeasurementResult(measurement.getDeviceId(), measurement.getMeasurement());
     }
 }

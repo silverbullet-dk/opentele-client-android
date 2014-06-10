@@ -8,10 +8,9 @@ import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.rest.RetrieveQuestionnaireListTask;
-import dk.silverbullet.telemed.rest.RetrieveTask;
+import dk.silverbullet.telemed.rest.Resources;
 import dk.silverbullet.telemed.rest.bean.ListBean;
-import dk.silverbullet.telemed.rest.listener.ListListener;
+import dk.silverbullet.telemed.rest.listener.RetrieveEntityListener;
 import dk.silverbullet.telemed.schedule.ReminderService;
 import dk.silverbullet.telemed.schedule.bean.QuestionnaireSchedule;
 import dk.silverbullet.telemed.utils.Json;
@@ -24,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class IOSkemaMenuNode extends IONode implements ListListener {
+public class IOSkemaMenuNode extends IONode implements RetrieveEntityListener<ListBean> {
 
     private static final String TAG = Util.getTag(IOSkemaMenuNode.class);
 
@@ -71,10 +70,9 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
         Log.d(TAG, "enter....");
         hideBackButton();
 
-        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.skema_menu_fetching_questionnaires, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
+        dialog = ProgressDialog.show(questionnaire.getContext(), Util.getString(R.string.skema_menu_fetching_questionnaires, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 
-        RetrieveTask asyncHttpPost = new RetrieveQuestionnaireListTask(questionnaire, this);
-        asyncHttpPost.execute(TestOutputSkema.getOutputSkema());
+        Resources.getSkemas(questionnaire, this);
 
         buildView();
         super.enter();
@@ -91,9 +89,7 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
     }
 
     @Override
-    public void setJson(String json) {
-        ListBean listBean = Json.parse(json, ListBean.class);
-
+    public void retrieved(ListBean listBean) {
         for (QuestionnaireSchedule schedule : listBean.getQuestionnaires()) {
             skemaer.put(schedule.getSkemaName(), Json.print(schedule));
         }
@@ -108,7 +104,7 @@ public class IOSkemaMenuNode extends IONode implements ListListener {
     }
 
     @Override
-    public void sendError() {
+    public void retrieveError() {
         dialog.dismiss();
     }
 

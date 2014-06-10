@@ -1,38 +1,31 @@
 package dk.silverbullet.telemed.utils;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.*;
+import dk.silverbullet.telemed.rest.client.ServerInformation;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.auth.BasicScheme;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SuppressLint("SimpleDateFormat")
 public final class Util {
-
     private static final String DEFAULT_SERVER_URL = "https://opentele-devel.silverbullet.dk/opentele-server/";
 
     @SuppressWarnings("unused")
@@ -73,22 +66,12 @@ public final class Util {
         return serverUrl;
     }
 
-    public static URI getServerUrl(Questionnaire questionnaire, String x) throws URISyntaxException, IOException {
-        String url = getServerUrl(questionnaire);
-        url += x;
-
-        // Test the server...
-        new URL(url).openConnection().connect();
-
-        return new URI(url);
-    }
-
     public static boolean isServerUrlLocked(Questionnaire questionnaire) {
-        return "true".equals(questionnaire.getActivity().getString(R.string.server_url_locked));
+        return "true".equals(questionnaire.getContext().getString(R.string.server_url_locked));
     }
 
     public static boolean shouldClearUserNameOnLogin(Questionnaire questionnaire) {
-        return "true".equals(questionnaire.getActivity().getString(R.string.clear_user_name_on_login));
+        return "true".equals(questionnaire.getContext().getString(R.string.clear_user_name_on_login));
     }
 
     public static boolean shouldHidePasswordText(Questionnaire questionnaire) {
@@ -97,7 +80,7 @@ public final class Util {
     }
 
     private static String staticServerUrl(Questionnaire questionnaire) {
-        return questionnaire.getActivity().getString(R.string.server_url);
+        return questionnaire.getContext().getString(R.string.server_url);
     }
 
     private static boolean hasStaticServerUrl(Questionnaire questionnaire) {
@@ -114,7 +97,6 @@ public final class Util {
     }
 
     public static void showToast(Questionnaire questionnaire, String text) {
-
         LayoutInflater inflater = questionnaire.getActivity().getLayoutInflater();
 
         View layout = inflater.inflate(R.layout.custom_toast,
@@ -123,33 +105,11 @@ public final class Util {
         TextView text2 = (TextView) layout.findViewById(R.id.text);
         text2.setText(text);
 
-        Toast toast = new Toast(questionnaire.getActivity().getApplicationContext());
+        Toast toast = new Toast(questionnaire.getContext().getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
-    }
-
-    public static void showDialog(Questionnaire questionnaire, String text) {
-        final Dialog dialog = new Dialog(questionnaire.getActivity());
-        dialog.setContentView(R.layout.custom_dialog);
-        dialog.setTitle("Title...");
-
-        TextView textView = (TextView) dialog.findViewById(R.id.text);
-        textView.setText(text);
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(R.drawable.ic_launcher);
-
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-        dialogButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
     }
 
     public static String getTag(Class<?> klass) {
@@ -185,39 +145,39 @@ public final class Util {
     }
 
     public static String toString(float[] f) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("[");
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
         for (int i = 0; i < f.length; i++) {
             if (i != 0)
-                sb.append(", ");
-            sb.append(f[i]);
+                builder.append(", ");
+            builder.append(f[i]);
         }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     public static String toString(int[] f) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("[");
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
         for (int i = 0; i < f.length; i++) {
             if (i != 0)
-                sb.append(", ");
-            sb.append(f[i]);
+                builder.append(", ");
+            builder.append(f[i]);
         }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     public static String toString(Object[] f) {
-        StringBuffer sb = new StringBuffer();
-        sb.append("[");
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
         for (int i = 0; i < f.length; i++) {
             if (i != 0)
-                sb.append(", ");
-            sb.append(f[i]);
+                builder.append(", ");
+            builder.append(f[i]);
         }
-        sb.append("]");
-        return sb.toString();
+        builder.append("]");
+        return builder.toString();
     }
 
     public static <T> Variable<T> linkVariable(Map<String, Variable<?>> variablePool, Variable<T> var)
@@ -255,7 +215,7 @@ public final class Util {
         return sw.toString();
     }
 
-    public static final float random(final float pMin, final float pMax) {
+    public static float random(final float pMin, final float pMax) {
         Random random = new Random(System.nanoTime());
         return pMin + random.nextFloat() * (pMax - pMin);
     }
@@ -266,7 +226,7 @@ public final class Util {
         Variable<Boolean> showUploadDebugNode = (Variable<Boolean>) questionnaire.getValuePool().get(
                 Util.VARIABLE_SHOW_UPLOAD_DEBUG);
 
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(questionnaire.getActivity())
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(questionnaire.getContext())
                 .edit();
 
         editor.putString(PREF_SERVER_IP, serverIP.getExpressionValue().toString());
@@ -291,30 +251,12 @@ public final class Util {
     }
 
     public static String toHexString(byte[] bytes) {
-        StringBuffer sb = new StringBuffer(bytes.length * 2);
+        StringBuilder builder = new StringBuilder(bytes.length * 2);
         String hex = "0123456789abcdef";
         for (byte b : bytes) {
-            sb.append(hex.charAt((b >> 4) & 0xf)).append(hex.charAt(b & 0xf));
+            builder.append(hex.charAt((b >> 4) & 0xf)).append(hex.charAt(b & 0xf));
         }
-        return sb.toString();
-    }
-
-    public static byte[] hex2bytes(String hex) {
-        String raw = hex.replaceAll("[\\.,\\ -]", "");
-        if (raw.length() % 2 != 0)
-            throw new IllegalArgumentException("Illegal hex string length:" + raw.length() + " \"" + hex + "\"");
-        byte[] bytes = new byte[raw.length() / 2];
-        String hexDigits = "0123456789abcdef";
-        for (int i = 0; i < bytes.length; i++) {
-            int highNible = hexDigits.indexOf(raw.charAt(i * 2));
-            if (highNible < 0 || highNible > 15)
-                throw new IllegalArgumentException("Illegal hex digit: " + raw.charAt(i * 2));
-            int lowNible = hexDigits.indexOf(raw.charAt(i * 2 + 1));
-            if (lowNible < 0 || lowNible > 15)
-                throw new IllegalArgumentException("Illegal hex digit: " + raw.charAt(i * 2 + 1));
-            bytes[i] = (byte) ((highNible << 4) | lowNible);
-        }
-        return bytes;
+        return builder.toString();
     }
 
     public static String escapeHtml(String string) {
@@ -339,10 +281,10 @@ public final class Util {
         return new SimpleDateFormat("d/M HH:mm").format(date);
     }
 
-    public static void setHeaders(HttpRequestBase request, Questionnaire questionnaire) {
-        String clientVersion = questionnaire.getActivity().getString(R.string.client_version);
-        String userName = Util.getStringVariableValue(questionnaire, Util.VARIABLE_USERNAME);
-        String password = Util.getStringVariableValue(questionnaire, Util.VARIABLE_PASSWORD);
+    public static void setHeaders(HttpRequestBase request, ServerInformation serverInformation) {
+        String clientVersion = serverInformation.getContext().getString(R.string.client_version);
+        String userName = serverInformation.getUserName();
+        String password = serverInformation.getPassword();
 
         setHeaders(request, clientVersion, userName, password);
     }
@@ -352,6 +294,7 @@ public final class Util {
         request.setHeader("Accept", "application/json");
         request.setHeader("X-Requested-With", "json");
         request.setHeader("Client-version", clientVersion);
+        request.setHeader("User-Agent", userAgentString(clientVersion));
 
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(userName, password);
         request.setHeader(BasicScheme.authenticate(credentials, "UTF-8", false));
@@ -371,7 +314,7 @@ public final class Util {
     }
 
     public static String getString(int resourceId, Questionnaire questionnaire) {
-        return Util.getString(resourceId, questionnaire.getActivity());
+        return Util.getString(resourceId, questionnaire.getContext());
     }
 
     public static String getString(int resourceId, Context context) {
@@ -383,7 +326,20 @@ public final class Util {
     }
 
     public static String getString(int resourceId, Questionnaire questionnaire, Object... formatArgs) {
-        return Util.getString(resourceId, questionnaire.getActivity(), formatArgs);
+        return Util.getString(resourceId, questionnaire.getContext(), formatArgs);
     }
 
+    private static String userAgentString(String clientVersion) {
+        // We'll construct a User-Agent string which resembles browser strings a bit.
+        // Have a look here:
+        // http://user-agents.my-addr.com/user_agent_request/user_agent_examples-and-user_agent_types.php
+        return "Android/" + Build.VERSION.RELEASE +
+                " [" + Locale.getDefault().getLanguage() + "]" +
+                " (" + Build.MANUFACTURER + ";" +
+                " " + Build.MODEL + ";" +
+                " " + Build.PRODUCT + ";" +
+                " " + Build.BRAND + ";" +
+                " " + Build.DEVICE + ")" +
+                " OpenTeleClient/" + clientVersion;
+    }
 }

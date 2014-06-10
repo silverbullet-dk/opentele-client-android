@@ -4,12 +4,11 @@ import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
+import dk.silverbullet.telemed.utils.Util;
 import dk.silverbullet.telemed.video.VideoActivity;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
 
 import java.io.IOException;
@@ -59,15 +58,17 @@ class PendingMeasurementPoller {
     }
 
     private PendingMeasurement checkForPendingMeasurement() {
-        HttpClient httpClient = HttpClientFactory.createHttpClient(parentFragment.getActivity());
-        URL url;
         try {
-            VideoActivity videoActivity = (VideoActivity) parentFragment.getActivity();
-            url = new URL(videoActivity.getServerURL());
+            // We don't use the otherwise nice and simple RestClient here, since we want to hold on to our HttpGet
+            // object since we might like to abort it.
 
+            VideoActivity videoActivity = (VideoActivity) parentFragment.getActivity();
+
+            URL url = new URL(videoActivity.getServerURL());
             httpGet = new HttpGet(new URL(url, "rest/conference/patientHasPendingMeasurement").toExternalForm());
             setHeaders(httpGet);
 
+            HttpClient httpClient = HttpClientFactory.createHttpClient(videoActivity);
             String result = httpClient.execute(httpGet, new BasicResponseHandler());
 
             if (!stopped && !result.isEmpty()) {
@@ -82,12 +83,10 @@ class PendingMeasurementPoller {
 
     private void setHeaders(HttpRequestBase requestBase) {
         VideoActivity videoActivity = (VideoActivity) parentFragment.getActivity();
-        requestBase.setHeader("Content-type", "application/json");
-        requestBase.setHeader("Accept", "application/json");
-        requestBase.setHeader("X-Requested-With", "json");
-        requestBase.setHeader("Client-version", parentFragment.getString(R.string.client_version));
+        String clientVersion = parentFragment.getString(R.string.client_version);
+        String userName = videoActivity.getUsername();
+        String password = videoActivity.getPassword();
 
-        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(videoActivity.getUsername(), videoActivity.getPassword());
-        requestBase.setHeader(BasicScheme.authenticate(credentials, "UTF-8", false));
+        Util.setHeaders(requestBase, clientVersion, userName, password);
     }
 }

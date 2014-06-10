@@ -30,7 +30,7 @@ public class SetAlarmTestNode extends IONode {
         setView();
         super.enter();
 
-        Context context = getQuestionnaire().getActivity().getApplicationContext();
+        Context context = getQuestionnaire().getContext().getApplicationContext();
 
         ReminderBean reminder = new ReminderBean();
         reminder.setQuestionnaireName(new TestBloodSugar().getSkema().getName());

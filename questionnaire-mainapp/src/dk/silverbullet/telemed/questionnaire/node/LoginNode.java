@@ -10,13 +10,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import dk.silverbullet.telemed.MainActivity;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
-import dk.silverbullet.telemed.rest.FillOutQuestionnaireWithUserDetailsTask;
+import dk.silverbullet.telemed.rest.tasks.FillOutQuestionnaireWithUserDetailsTask;
 import dk.silverbullet.telemed.rest.listener.LoginListener;
 import dk.silverbullet.telemed.utils.Util;
 
@@ -91,7 +92,7 @@ public class LoginNode extends IONode implements LoginListener {
 
     private void setDebugInfo(View loginView) {
         TextView debugInfo = (TextView) loginView.findViewById(R.id.login_debug_info);
-        MainActivity mainActivity = (MainActivity)questionnaire.getActivity();
+        MainActivity mainActivity = (MainActivity) questionnaire.getActivity();
         String clientVersion = mainActivity.getResources().getString(R.string.client_version);
         String serverUrl = mainActivity.getResources().getString(R.string.server_url);
         boolean videoEnabled = mainActivity.clientIsVideoEnabled();
@@ -113,6 +114,10 @@ public class LoginNode extends IONode implements LoginListener {
     private void hideLoginForm() {
         form.setVisibility(View.GONE);
         loginInProgressTextView.setVisibility(View.VISIBLE);
+
+        // Removing the keyboard
+        InputMethodManager imm = (InputMethodManager) getQuestionnaire().getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
     private void showLoginForm() {
@@ -129,7 +134,7 @@ public class LoginNode extends IONode implements LoginListener {
 
     private View inflateView() {
         ViewGroup rootLayout = questionnaire.getRootLayout();
-        LayoutInflater inflater = (LayoutInflater) questionnaire.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) questionnaire.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View loginView = inflater.inflate(R.layout.login, rootLayout, false);
         rootLayout.addView(loginView);
         return loginView;
@@ -199,16 +204,16 @@ public class LoginNode extends IONode implements LoginListener {
             return null;
         }
 
-        Activity activity = questionnaire.getActivity();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        Context context = questionnaire.getContext();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString(SHARED_PREFERENCES_LAST_USERNAME, null);
     }
 
     private void saveUsername() {
-        Activity activity = questionnaire.getActivity();
+        Context context = questionnaire.getContext();
         String username = Util.getStringVariableValue(questionnaire, Util.VARIABLE_USERNAME);
 
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         if (Util.shouldClearUserNameOnLogin(questionnaire)) {
             editor.remove(SHARED_PREFERENCES_LAST_USERNAME);
         } else {

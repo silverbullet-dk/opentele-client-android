@@ -113,30 +113,30 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
                 device = new MonicaDeviceController(this, activity);
         } catch (BluetoothDisabledException e) {
             Log.d(TAG, "Exception: " + e);
-            Toast.makeText(questionnaire.getActivity().getApplicationContext(), Util.getString(R.string.monica_bluetooth_off, questionnaire),
+            Toast.makeText(questionnaire.getContext().getApplicationContext(), Util.getString(R.string.monica_bluetooth_off, questionnaire),
                     Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (BluetoothNotAvailableException e) {
             Log.d(TAG, "Exception: " + e);
-            Toast.makeText(questionnaire.getActivity().getApplicationContext(),
+            Toast.makeText(questionnaire.getContext().getApplicationContext(),
                     Util.getString(R.string.monica_bluetooth_unavaliable, questionnaire), Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (AmbiguousDeviceException e) {
             Log.d(TAG, "Exception: " + e);
-            Toast.makeText(questionnaire.getActivity().getApplicationContext(),
+            Toast.makeText(questionnaire.getContext().getApplicationContext(),
                     Util.getString(R.string.monica_multiple_devices, questionnaire), Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (DeviceInitialisationException e) {
             Log.d(TAG, "Exception: " + e);
-            Toast.makeText(questionnaire.getActivity().getApplicationContext(), Util.getString(R.string.monica_failed_to_start, questionnaire),
+            Toast.makeText(questionnaire.getContext().getApplicationContext(), Util.getString(R.string.monica_failed_to_start, questionnaire),
                     Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         }
     }
 
-    private void inflateView(Activity activity) {
+    private void inflateView(Context context) {
         ViewGroup rootLayout = questionnaire.getRootLayout();
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View monicaView = inflater.inflate(R.layout.monica, null);
 
         rootLayout.removeAllViews();
@@ -345,7 +345,7 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
             @Override
             public void run() {
                 progressStatusText.setText(message);
-                Toast.makeText(questionnaire.getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(questionnaire.getContext().getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 questionnaire.setCurrentNode(getNextFailNode());
             }
         });
@@ -357,7 +357,7 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
             @Override
             public void run() {
                 progressStatusText.setText(message);
-                Toast.makeText(questionnaire.getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(questionnaire.getContext().getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 questionnaire.setCurrentNode(getNextNode());
             }
         });

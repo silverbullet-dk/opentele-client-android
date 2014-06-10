@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,8 +32,7 @@ public class DebugListPoolNode extends Node {
 
     @Override
     public void enter() {
-
-        inflateView(questionnaire.getActivity());
+        inflateView(questionnaire.getContext());
 
         Button okButton = (Button) questionnaire.getActivity().findViewById(R.id.debugOk);
         okButton.setOnClickListener(new OnClickListener() {
@@ -60,7 +58,7 @@ public class DebugListPoolNode extends Node {
             mylist.add(map);
         }
 
-        SimpleAdapter mSchedule = new SimpleAdapter(questionnaire.getActivity().getApplicationContext(), mylist,
+        SimpleAdapter mSchedule = new SimpleAdapter(questionnaire.getContext().getApplicationContext(), mylist,
                 R.layout.row, new String[] { "name", "type", "value" }, new int[] { R.id.name, R.id.type, R.id.value });
         list.setAdapter(mSchedule);
 
@@ -69,9 +67,9 @@ public class DebugListPoolNode extends Node {
         }
     }
 
-    private void inflateView(Activity activity) {
+    private void inflateView(Context context) {
         ViewGroup rootLayout = questionnaire.getRootLayout();
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View monicaView = inflater.inflate(R.layout.debug, null);
 
         rootLayout.removeAllViews();

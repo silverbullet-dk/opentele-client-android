@@ -14,7 +14,7 @@ import dk.silverbullet.telemed.video.measurement.adapters.*;
 public class TakeMeasurementFragment extends Fragment implements MeasurementInformer {
     private MeasurementType currentMeasurementType;
     private TextView statusText;
-    VideoMeasurementAdapter measurementAdapter;
+    private VideoMeasurementAdapter measurementAdapter;
     private TextView measurementTypeText;
     private PendingMeasurementPoller pendingMeasurementPoller;
     private ViewGroup takeMeasurementViewGroup;
@@ -116,7 +116,7 @@ public class TakeMeasurementFragment extends Fragment implements MeasurementInfo
     }
 
     @Override
-    public String getUsername() {
+    public String getUserName() {
         return getVideoActivity().getUsername();
     }
 

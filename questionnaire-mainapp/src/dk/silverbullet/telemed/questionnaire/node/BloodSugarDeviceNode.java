@@ -17,7 +17,7 @@ public class BloodSugarDeviceNode extends AbstractBloodSugarDeviceNode {
 
         if (accuChekController == null) {
             accuChekController = new AccuChekContoller(this, new AndroidUSBMAssStorageController(
-                    questionnaire.getActivity()));
+                    questionnaire.getContext()));
         }
     }
 

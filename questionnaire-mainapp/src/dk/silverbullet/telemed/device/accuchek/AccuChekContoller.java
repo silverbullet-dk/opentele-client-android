@@ -9,7 +9,7 @@ public class AccuChekContoller {
     private final AccuCheckUSBHandler usbHandler;
     private final Handler handler;
 
-    public AccuChekContoller(AccuChekListener listener, USBController usbController) {
+    public AccuChekContoller(BloodSugarDeviceListener listener, USBController usbController) {
         HandlerThread handlerThread = new HandlerThread("AccutChek handler thread");
         handlerThread.start();
 

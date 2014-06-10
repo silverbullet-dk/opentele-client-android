@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -10,42 +11,53 @@ import dk.silverbullet.telemed.questionnaire.node.IONode;
 import dk.silverbullet.telemed.questionnaire.node.Node;
 import dk.silverbullet.telemed.questionnaire.node.WebViewNode;
 import dk.silverbullet.telemed.questionnaire.output.OutputSkema;
+import dk.silverbullet.telemed.rest.client.ServerInformation;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.*;
 
-public class Questionnaire {
+public class Questionnaire implements ServerInformation {
     private static final String TAG = Util.getTag(Questionnaire.class);
-
-    private boolean running;
-
-    private Node startNode;
-    private Node pastNode;
-
-
-    private Node currentNode;
-
     private final Map<String, Variable<?>> valuePool = new HashMap<String, Variable<?>>();
-
     private final Map<String, Variable<?>> skemaValuePool = new HashMap<String, Variable<?>>();
-
+    private final Stack<Map<String, Constant<?>>> varStack = new Stack<Map<String, Constant<?>>>();
+    private final QuestionnaireFragment parentFragment;
+    private boolean running;
+    private Node startNode;
+    private Node currentNode;
     private OutputSkema outputSkema;
+    private Node previousNode;
+    private boolean backPressed;
+    private Stack<IONode> ioNodeStack = new Stack<IONode>();
+    private Activity activity;
+
+    @Override
+    public String getServerUrl() {
+        return Util.getServerUrl(this);
+    }
+
+    @Override
+    public String getUserName() {
+        return Util.getStringVariableValue(this, Util.VARIABLE_USERNAME);
+    }
+
+    @Override
+    public String getPassword() {
+        return Util.getStringVariableValue(this, Util.VARIABLE_PASSWORD);
+    }
+
+    @Override
+    public Context getContext() {
+        return activity;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
 
     public void cleanSkemaValuePool() {
         skemaValuePool.clear();
     }
-
-    private Node previousNode;
-
-    private boolean backPressed;
-
-    private Stack<IONode> ioNodeStack = new Stack<IONode>();
-
-    private final Stack<Map<String, Constant<?>>> varStack = new Stack<Map<String, Constant<?>>>();
-
-    private final QuestionnaireFragment parentFragment;
-
-    private Activity activity;
 
     public Questionnaire(QuestionnaireFragment parentFragment) {
         this.parentFragment = parentFragment;
@@ -83,7 +95,7 @@ public class Questionnaire {
 
     public void setCurrentNode(Node newNode) {
         if (null == newNode) {
-            Toast.makeText(getActivity().getApplicationContext(), "NextNode is undefined", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext().getApplicationContext(), "NextNode is undefined", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -240,10 +252,6 @@ public class Questionnaire {
 
     public ViewGroup getRootLayout() {
         return parentFragment.getRootLayout();
-    }
-
-    public Activity getActivity() {
-        return activity;
     }
 
     public Node getCurrentNode() {

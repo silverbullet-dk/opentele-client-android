@@ -6,16 +6,14 @@ import dk.silverbullet.telemed.questionnaire.element.ButtonElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
-import dk.silverbullet.telemed.rest.PostMessageTask;
-import dk.silverbullet.telemed.rest.RetrieveTask;
+import dk.silverbullet.telemed.rest.Resources;
 import dk.silverbullet.telemed.rest.bean.message.MessageWrite;
-import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
-import dk.silverbullet.telemed.utils.Json;
+import dk.silverbullet.telemed.rest.listener.PostEntityListener;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.Map;
 
-public class MessageSendNode extends IONode implements MessageWriteListener {
+public class MessageSendNode extends IONode implements PostEntityListener {
     private Node next;
     private String screenText;
 
@@ -41,8 +39,7 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
         messageWrite.setTitle(title.getExpressionValue().getValue());
         messageWrite.setText(text.getExpressionValue().getValue());
 
-        RetrieveTask retrieveFeedTask = new PostMessageTask(questionnaire, this);
-        retrieveFeedTask.execute(Json.print(messageWrite));
+        Resources.postMessage(messageWrite, questionnaire, this);
 
         super.enter();
     }
@@ -86,7 +83,7 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
     }
 
     @Override
-    public void sendError() {
+    public void postError() {
         screenText = Util.getString(R.string.default_server_communication_error, questionnaire);
 
         enabled = true;
@@ -95,19 +92,11 @@ public class MessageSendNode extends IONode implements MessageWriteListener {
     }
 
     @Override
-    public void setRecipients(String result) {
-        // Not used here...
-    }
-
-    @Override
-    public void end(String result) {
-        if ("200".equals(result)) {
-            screenText = Util.getString(R.string.message_message_sent, questionnaire);
-            // departmentId.setValue((Long)null); // TODO ??
-            title.setValue("");
-            text.setValue("");
-        } else
-            screenText = Util.getString(R.string.message_error_while_sending, questionnaire);
+    public void posted() {
+        screenText = Util.getString(R.string.message_message_sent, questionnaire);
+        // departmentId.setValue((Long)null); // TODO ??
+        title.setValue("");
+        text.setValue("");
 
         enabled = true;
         setView();

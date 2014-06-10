@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
-import dk.silverbullet.telemed.rest.RetrieveServerInformationTask;
+import dk.silverbullet.telemed.rest.tasks.RetrieveServerInformationTask;
 import dk.silverbullet.telemed.utils.Util;
 import dk.silverbullet.telemed.utils.VersionMatcher;
 
@@ -50,7 +50,7 @@ public class QuestionnaireFragment extends Fragment {
     public void fetchServerVersionFinished(String serverVersionJson) {
 
         String clientVersion = getString(R.string.client_version);
-        String serverVersion = parseServerMinumumRequiredVersion(serverVersionJson);
+        String serverVersion = parseServerMinimumRequiredVersion(serverVersionJson);
         addServerEnvironmentVariable(serverVersionJson);
 
         Log.d(TAG, "Client version: " + clientVersion);
@@ -122,7 +122,7 @@ public class QuestionnaireFragment extends Fragment {
         questionnaire.addVariable(serverEnvironmentVariable);
     }
 
-    private String parseServerMinumumRequiredVersion(String serverVersionJson) {
+    private String parseServerMinimumRequiredVersion(String serverVersionJson) {
         if (serverVersionJson == null) {
             return SERVER_VERSION_UNKNOWN;
         }

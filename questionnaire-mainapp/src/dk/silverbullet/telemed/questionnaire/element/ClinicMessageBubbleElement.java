@@ -1,6 +1,5 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +18,10 @@ public class ClinicMessageBubbleElement extends MessageBubble {
 
     @Override
     public View getView() {
-
-        Activity activity = getQuestionnaire().getActivity();
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Context context = getQuestionnaire().getContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         LinearLayout messageBubbleLayout = (LinearLayout) inflater.inflate(R.layout.clinic_message_bubble, null);
-        formatMessageBubble(messageBubbleLayout, R.drawable.clinic_bubble_unread, Util.getString(R.string.message_unread_new, activity),
+        formatMessageBubble(messageBubbleLayout, R.drawable.clinic_bubble_unread, Util.getString(R.string.message_unread_new, context),
                 R.drawable.clinic_bubble_read, "", Util.getString(R.string.message_received, getQuestionnaire()));
         return messageBubbleLayout;
     }

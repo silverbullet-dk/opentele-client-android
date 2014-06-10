@@ -8,15 +8,12 @@ import dk.silverbullet.telemed.questionnaire.element.ListViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
-import dk.silverbullet.telemed.rest.RetrieveMessageListTask;
-import dk.silverbullet.telemed.rest.RetrieveRecipientsTask;
+import dk.silverbullet.telemed.rest.Resources;
 import dk.silverbullet.telemed.rest.bean.message.MessageItem;
 import dk.silverbullet.telemed.rest.bean.message.MessagePerson;
 import dk.silverbullet.telemed.rest.bean.message.MessageRecipient;
 import dk.silverbullet.telemed.rest.bean.message.Messages;
-import dk.silverbullet.telemed.rest.listener.MessageListListener;
-import dk.silverbullet.telemed.rest.listener.MessageWriteListener;
-import dk.silverbullet.telemed.utils.Json;
+import dk.silverbullet.telemed.rest.listener.RetrieveEntityListener;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.util.HashMap;
@@ -24,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class MessageListNode extends IONode implements MessageListListener, MessageWriteListener {
+public class MessageListNode extends IONode {
 
     private static final String TAG = Util.getTag(MessageListNode.class);
     private Node readMessagesNode;
@@ -51,9 +48,19 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
         }
 
         setView();
-        dialog = ProgressDialog.show(questionnaire.getActivity(), Util.getString(R.string.message_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
+        dialog = ProgressDialog.show(questionnaire.getContext(), Util.getString(R.string.message_fetching, questionnaire), Util.getString(R.string.default_please_wait, questionnaire), true);
 
-        new RetrieveRecipientsTask(questionnaire, this).execute();
+        Resources.getMessageRecipients(questionnaire, new RetrieveEntityListener<MessageRecipient[]>() {
+            @Override
+            public void retrieveError() {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void retrieved(MessageRecipient[] result) {
+                setRecipients(result);
+            }
+        });
 
         super.enter();
     }
@@ -106,15 +113,7 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
         Util.linkVariable(variablePool, departmentNameMap2);
     }
 
-    @Override
-    public void sendError() {
-        dialog.dismiss();
-    }
-
-    @Override
-    public void end(String result) {
-        Log.d(TAG, result);
-        Messages messageResult = Json.parse(result, Messages.class);
+    public void setMessages(Messages messageResult) {
         for (MessageItem msg : messageResult.messages) {
             MessagePerson from = msg.getFrom();
             boolean fromDepartment = from.getType().equals("Department");
@@ -131,31 +130,36 @@ public class MessageListNode extends IONode implements MessageListListener, Mess
         dialog.dismiss();
     }
 
-    @Override
-    public void setRecipients(String result) {
-        if (null != result && !"".equals(result)) {
+    private void setRecipients(MessageRecipient[] messageRecipients) {
+        departmentNameMap = new LinkedHashMap<Long, String>();
+        departmentMessageCountMap = new HashMap<Long, Integer>();
 
-            departmentNameMap = new LinkedHashMap<Long, String>();
-            departmentMessageCountMap = new HashMap<Long, Integer>();
-
-            MessageRecipient[] messageRecipients = Json.parse(result, MessageRecipient[].class);
-
-            for (MessageRecipient mc : messageRecipients) {
-                departmentNameMap.put(mc.getId(), mc.getName());
-                departmentMessageCountMap.put(mc.getId(), 0);
-            }
-            if (messageRecipients.length == 1) {
-                departmentId.setValue(messageRecipients[0].getId());
-                questionnaire.chainToNextIONode();
-                questionnaire.setCurrentNode(readMessagesNode);
-                dialog.dismiss();
-            } else {
-                new RetrieveMessageListTask(questionnaire, this).execute();
-            }
-
-            departmentNameMap2.setValue(departmentNameMap);
+        for (MessageRecipient mc : messageRecipients) {
+            departmentNameMap.put(mc.getId(), mc.getName());
+            departmentMessageCountMap.put(mc.getId(), 0);
         }
+        if (messageRecipients.length == 1) {
+            departmentId.setValue(messageRecipients[0].getId());
+            questionnaire.chainToNextIONode();
+            questionnaire.setCurrentNode(readMessagesNode);
+            dialog.dismiss();
+        } else {
+            Resources.getMessages(questionnaire, new RetrieveEntityListener<Messages>() {
+                @Override
+                public void retrieveError() {
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void retrieved(Messages result) {
+                    setMessages(result);
+                }
+            });
+        }
+
+        departmentNameMap2.setValue(departmentNameMap);
     }
+
     public void setDepartmentId(Variable<Long> departmentId) {
         this.departmentId = departmentId;
     }

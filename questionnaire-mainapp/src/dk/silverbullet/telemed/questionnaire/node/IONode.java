@@ -33,7 +33,6 @@ public class IONode extends Node {
     @Expose
     private List<Element> elements = new ArrayList<Element>();
 
-    private Context ctx;
     private Activity activity;
 
     private View topPanel;
@@ -69,12 +68,12 @@ public class IONode extends Node {
     }
 
     protected void showKeyboard(EditText editTextView) {
-        InputMethodManager imm = (InputMethodManager)questionnaire.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager)questionnaire.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editTextView, InputMethodManager.SHOW_IMPLICIT);
     }
 
     protected void hideKeyboard(EditText editTextView) {
-        InputMethodManager imm = (InputMethodManager)questionnaire.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager)questionnaire.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
     }
 
@@ -106,7 +105,6 @@ public class IONode extends Node {
         }
 
         activity = questionnaire.getActivity();
-        ctx = activity.getApplicationContext();
 
         // Figure out how to do the layout...
         // text, any*, list, any2*, [buttons] -> { _text_ } {any*} list {any2} {buttons}
