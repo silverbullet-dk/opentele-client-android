@@ -16,4 +16,4 @@ can change the server URL. This is only possible if the Maven variable ``server.
 
 Please note
 ----------------------
-This repository is maintained exclusively by Silverbullet. The official version maintained by 4S can be found [https://bitbucket.org/4s/opentele-client-android]here.
+This repository is maintained exclusively by Silverbullet. The official version maintained by 4S can be found [here](https://bitbucket.org/4s/opentele-client-android).
