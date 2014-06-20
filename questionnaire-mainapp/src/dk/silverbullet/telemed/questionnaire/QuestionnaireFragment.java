@@ -68,7 +68,6 @@ public class QuestionnaireFragment extends Fragment {
             isClientSupported.setValue(clientSupported);
         }
 
-        isClientSupported.setValue(true);
         questionnaire.addVariable(isClientSupported);
 
         Variable<Boolean> showUploadDebugNode = new Variable<Boolean>(Util.VARIABLE_SHOW_UPLOAD_DEBUG, Boolean.class);
@@ -80,7 +79,6 @@ public class QuestionnaireFragment extends Fragment {
         questionnaire.addVariable(serverIP);
 
         questionnaire.start();
-
     }
 
     @Override

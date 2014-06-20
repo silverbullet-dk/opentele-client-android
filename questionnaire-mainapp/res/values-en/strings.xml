@@ -179,7 +179,7 @@
     <string name="saturation_measurement_received">Measurement received\nSaturation: %1$d\nPulse: %2$d</string>
     <string name="saturation_permanent_problem">Could not connect to device.</string>
     <string name="saturation_saturation">Saturation.</string>
-    <string name="saturation_temporary_problem">Could fetch data. Try turning the device off and on again.</string>
+    <string name="saturation_temporary_problem">Could not fetch data. Try turning the device off and on again.</string>
 
     <string name="save_file_data_saved_locally">Data saved locally</string>
     <string name="save_file_error">Error:</string>

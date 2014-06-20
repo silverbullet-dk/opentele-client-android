@@ -30,6 +30,8 @@ public class LoginNode extends IONode implements LoginListener {
     private EditText passwordInput;
     private EditText usernameInput;
     private TextView errorTextView;
+    private TextView usernameTextView;
+    private TextView passwordTextView;
     private Button loginButton;
     private TextView loginInProgressTextView;
 
@@ -52,6 +54,8 @@ public class LoginNode extends IONode implements LoginListener {
         usernameInput = (EditText) loginView.findViewById(R.id.login_username_input);
         passwordInput = (EditText) loginView.findViewById(R.id.login_password_input);
         errorTextView = (TextView) loginView.findViewById(R.id.login_error_text);
+        usernameTextView = (TextView) loginView.findViewById(R.id.login_username_view);
+        passwordTextView = (TextView) loginView.findViewById(R.id.login_password_view);
         loginButton = (Button) loginView.findViewById(R.id.login_button);
 
         showKeyboard(usernameInput);
@@ -63,6 +67,7 @@ public class LoginNode extends IONode implements LoginListener {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                 errorTextView.setText("");
+                errorTextView.setVisibility(View.GONE);
             }
 
             @Override
@@ -145,6 +150,11 @@ public class LoginNode extends IONode implements LoginListener {
 
         if(clientSupported != null && !clientSupported) {
             showError(Util.getString(R.string.login_client_must_be_upgraded, questionnaire));
+            loginButton.setVisibility(View.INVISIBLE);
+            passwordInput.setVisibility(View.INVISIBLE);
+            usernameInput.setVisibility(View.INVISIBLE);
+            usernameTextView.setVisibility(View.INVISIBLE);
+            passwordTextView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -154,6 +164,7 @@ public class LoginNode extends IONode implements LoginListener {
     }
 
     private void showError(String errorText) {
+        errorTextView.setVisibility(View.VISIBLE);
         errorTextView.setText(errorText);
     }
 

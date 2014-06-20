@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.silverbullet.telemed</groupId>
     <artifactId>continuous-bloodsugar-common</artifactId>
-    <version>1.24.0</version>
+    <version>1.25.0</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>dk.silverbullet.telemed</groupId>
         <artifactId>questionnaire-parent</artifactId>
-        <version>1.24.0</version>
+        <version>1.25.0</version>
     </parent>
 
     <dependencies>

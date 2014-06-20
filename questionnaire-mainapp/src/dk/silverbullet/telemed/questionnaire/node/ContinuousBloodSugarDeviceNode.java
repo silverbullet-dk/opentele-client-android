@@ -65,7 +65,7 @@ public class ContinuousBloodSugarDeviceNode  extends DeviceNode implements Conti
     }
 
     @Override
-    public void deviceLeave() {} //TODO:Tell CGM driver to close
+    public void deviceLeave() {}
 
     @Override
     public void connected() {
