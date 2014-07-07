@@ -144,13 +144,13 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
     }
 
     private void initialize(Activity activity) {
-        mainProgress = (ProgressBar) activity.findViewById(R.id.mainProgress);
-        userTimeSet = (LinearLayout) activity.findViewById(R.id.userTimeSet);
+
+        resolveViews(activity);
+
         progressiveProgress = new ProgressiveProgress(15, 10, 5, 15, 30);
         Log.d(TAG, "measuringTime: " + measuringTime);
         if (measuringTime == null || measuringTime.evaluate() == null || measuringTime.evaluate() == 0) {
-            measureTime = (SeekBar) activity.findViewById(R.id.measureTime);
-            measureTimeText = (TextView) activity.findViewById(R.id.measureTimeText);
+
             measureTime.setOnSeekBarChangeListener(this);
             measureTime.setMax(progressiveProgress.getStepCount() - 1);
             sampleTimeInMinutes = 30;
@@ -159,14 +159,6 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
             sampleTimeInMinutes = measuringTime.evaluate();
             userTimeSet.setVisibility(View.GONE);
         }
-
-        progressStatusText = (TextView) activity.findViewById(R.id.progressStatusText);
-
-        buttonOrange = (CheckBox) activity.findViewById(R.id.buttonOrange);
-        buttonWhite = (CheckBox) activity.findViewById(R.id.buttonWhite);
-        buttonGreen = (CheckBox) activity.findViewById(R.id.buttonGreen);
-        buttonBlack = (CheckBox) activity.findViewById(R.id.buttonBlack);
-        buttonYellow = (CheckBox) activity.findViewById(R.id.buttonYellow);
 
         buttonOrange.setChecked(false);
         buttonWhite.setChecked(false);
@@ -183,6 +175,19 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
         signalToNoiseBuf = new ArrayList<Integer>(SAMPLE_SECONDS / 20);
         signalBuf = new ArrayList<String>();
 
+    }
+
+    private void resolveViews(Activity activity) {
+        mainProgress = (ProgressBar) activity.findViewById(R.id.mainProgress);
+        userTimeSet = (LinearLayout) activity.findViewById(R.id.userTimeSet);
+        progressStatusText = (TextView) activity.findViewById(R.id.progressStatusText);
+        measureTime = (SeekBar) activity.findViewById(R.id.measureTime);
+        measureTimeText = (TextView) activity.findViewById(R.id.measureTimeText);
+        buttonOrange = (CheckBox) activity.findViewById(R.id.buttonOrange);
+        buttonWhite = (CheckBox) activity.findViewById(R.id.buttonWhite);
+        buttonGreen = (CheckBox) activity.findViewById(R.id.buttonGreen);
+        buttonBlack = (CheckBox) activity.findViewById(R.id.buttonBlack);
+        buttonYellow = (CheckBox) activity.findViewById(R.id.buttonYellow);
     }
 
     private String[] asStringArray(List<String> stringList) {

@@ -111,6 +111,7 @@
     <string name="menu_complete_questionnaire">Gennemfør måling</string>
     <string name="menu_messages"><![CDATA[Beskeder{0,choice,0#|1#\' (\'én ny besked\')\'|1<\' (\'{0,number,integer} nye\')\'}]]></string>
     <string name="menu_my_measurements">Mine målinger</string>
+    <string name="menu_realtime_CTG">Løbende CTG måling</string>
 
     <string name="message_unread_new"><![CDATA[<font color=\'red\' >Ny</font>]]></string>
     <string name="message_create">Opret ny besked</string>
@@ -161,6 +162,11 @@
     <string name="monica_waiting_for_data">Venter på data...</string>
     <string name="monica_white">Hvid (W)</string>
     <string name="monica_yellow">Gul (Y)</string>
+
+    <string name="realtime_ctg_headline">Løbende CTG måling</string>
+    <string name="realtime_ctg_monica_status">Status</string>
+    <string name="realtime_ctg_stop_measurement">Stop</string>
+    <string name="realtime_ctg_start_measurement">Start</string>
 
 
     <string name="patient_measurements_my_measurements">Mine målinger</string>

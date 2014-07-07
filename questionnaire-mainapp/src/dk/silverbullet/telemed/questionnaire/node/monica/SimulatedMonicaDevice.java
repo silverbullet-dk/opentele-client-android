@@ -1,9 +1,9 @@
 package dk.silverbullet.telemed.questionnaire.node.monica;
 
+import dk.silverbullet.telemed.device.monica.MonicaDevice;
+
 import java.util.Date;
 import java.util.Random;
-
-import dk.silverbullet.telemed.device.monica.MonicaDevice;
 
 public class SimulatedMonicaDevice implements Runnable, MonicaDevice {
 
@@ -93,6 +93,11 @@ public class SimulatedMonicaDevice implements Runnable, MonicaDevice {
             }
             sampleCount++;
             samples = monicaDeviceCallback.getSampleTimeMinutes() * 60;
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         monicaDeviceCallback.setEndTimeValue(new Date(start + sampleCount * 1000));
         monicaDeviceCallback.done();

@@ -133,6 +133,20 @@ public class PatientMenuNode extends MenuNode {
             setAcknowledgementsMenuItem(rootLayout);
         }
 
+        Boolean showRealTimeCTGMenu = (Boolean) questionnaire.getValuePool().get(Util.VARIABLE_SHOW_REALTIME_CTG_MENU).evaluate();
+
+        if(showRealTimeCTGMenu) {
+            View ctgMenuItem = rootLayout.findViewById(R.id.patient_menu_realtime_ctg);
+            ctgMenuItem.setVisibility(View.VISIBLE);
+            ctgMenuItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showRealTimeCTG();
+                }
+            });
+
+        }
+
         rootLayout.findViewById(R.id.patient_menu_my_measurements).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,6 +214,10 @@ public class PatientMenuNode extends MenuNode {
 
     private void startQuestionnaire() {
         setupAndRunSkema(new RunSkema());
+    }
+
+    private void showRealTimeCTG() {
+        setupAndRunSkema(new RealTimeCTGSkema());
     }
 
     private void setRecipients(MessageRecipient[] messageRecipients) {

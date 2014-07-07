@@ -43,6 +43,7 @@ public final class Util {
     public static final String VARIABLE_USER_ID = "VARIABLE_USER_ID";
     public static final String VARIABLE_ALARM_TEST = "VARIABLE_ALARM_TEST";
     public static final String VARIABLE_MESSAGE_TEXT = "VARIABLE_MESSAGE_TEXT";
+    public static final String VARIABLE_SHOW_REALTIME_CTG_MENU = "VARIABLE_SHOW_REALTIME_CTG_MENU";
 
     public static final String PREF_SERVER_IP = "PREF_SERVER_IP";
     public static final String PREF_SHOW_UPLOAD_DEBUG = "PREF_SHOW_UPLOAD_DEBUG";

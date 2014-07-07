@@ -65,17 +65,6 @@
                 android:layout_gravity="fill_horizontal"
                 android:max="60" />
         </LinearLayout>
-<!--         </LinearLayout>
-
-    <LinearLayout
-        style="@style/background_style"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_margin="10dp"
-        android:layout_weight="1.0"
-        android:orientation="vertical"
-        android:padding="10dip" >
- -->
         <CheckBox
             android:id="@+id/buttonOrange"
             android:layout_width="wrap_content"
@@ -129,7 +118,7 @@
             android:text="@string/monica_yellow"
             android:textColor="#FF0"
             android:textSize="36sp" />
-        
+
         <TextView
             android:id="@+id/ceDisclaimerText"
             android:layout_width="fill_parent"
@@ -138,7 +127,7 @@
             android:textSize="24sp"
             android:text="@string/monica_indcators_or_only_guides"
              />
-        
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

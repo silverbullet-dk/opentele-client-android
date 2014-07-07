@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="#D9D5CC"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dip" >
+
+    <include layout="@layout/top_panel" />
+
+    <LinearLayout
+        android:id="@+id/header"
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+		android:gravity="center_horizontal"
+		android:layout_gravity="center_horizontal"
+        android:padding="10dip" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/headlineText"
+            android:text="@string/realtime_ctg_headline"
+            android:gravity="center_horizontal"
+		    android:textColor="#777"
+		    android:textSize="48sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/background_style"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_margin="10dp"
+        android:layout_weight="1.0"
+        android:orientation="vertical"
+        android:padding="10dip" >
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/realtime_ctg_monica_status"
+                android:textColor="#777"
+                android:textSize="36sp"
+                />
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/realtime_ctg_current_status"
+                android:textColor="#777"
+                android:textSize="26sp"
+                />
+
+        <CheckBox
+                android:id="@+id/buttonOrange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:clickable="false"
+                android:text="@string/monica_orange"
+                android:textColor="#F60"
+                android:textSize="36sp" />
+
+        <CheckBox
+                android:id="@+id/buttonWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:clickable="false"
+                android:shadowColor="#000"
+                android:shadowRadius="4.0"
+                android:text="@string/monica_white"
+                android:textColor="#FFF"
+                android:textSize="36sp" />
+
+        <CheckBox
+                android:id="@+id/buttonGreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:clickable="false"
+                android:text="@string/monica_green"
+                android:textColor="#0F0"
+                android:textSize="36sp" />
+
+        <CheckBox
+                android:id="@+id/buttonBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:clickable="false"
+                android:shadowColor="#FFF"
+                android:shadowRadius="4.0"
+                android:text="@string/monica_black"
+                android:textColor="#000"
+                android:textSize="36sp" />
+
+        <CheckBox
+                android:id="@+id/buttonYellow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:clickable="false"
+                android:text="@string/monica_yellow"
+                android:textColor="#FF0"
+                android:textSize="36sp" />
+
+        <TextView
+                android:id="@+id/ceDisclaimerText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textSize="24sp"
+                android:text="@string/monica_indcators_or_only_guides"/>
+    </LinearLayout>
+
+
+    <RelativeLayout
+            style="@layout/framestyle"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/frameshape"
+
+
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:id="@+id/realtime_ctg_start_measurement"
+                android:layout_alignParentLeft="true"
+                style="@style/buttonstyle"
+                android:layout_width="wrap_content"
+                android:textSize="36sp"
+                android:text="@string/realtime_ctg_start_measurement"
+                android:layout_height="wrap_content"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"/>
+
+        <Button
+                android:id="@+id/realtime_ctg_stop_measurement"
+                style="@style/buttonstyle"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:textSize="36sp"
+                android:text="@string/realtime_ctg_stop_measurement"
+                android:layout_height="wrap_content"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"/>
+    </RelativeLayout>
+</LinearLayout>

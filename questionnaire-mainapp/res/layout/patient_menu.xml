@@ -70,6 +70,12 @@
                       android:background="@drawable/thin_black_line"
                       style="@style/menu_item_style"/>
 
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:text="@string/menu_realtime_CTG"
+                      android:id="@+id/patient_menu_realtime_ctg"
+                      android:background="@drawable/thin_black_line"
+                      android:visibility="gone"
+                      style="@style/menu_item_style"/>
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                       android:text="@string/menu_change_password"

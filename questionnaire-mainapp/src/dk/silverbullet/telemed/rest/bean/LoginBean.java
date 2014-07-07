@@ -11,6 +11,7 @@ public class LoginBean implements Serializable {
     @Expose private String firstName;
     @Expose private String lastName;
     @Expose private MessagePerson user;
+    @Expose private Boolean showRealtimeCTG;
 
     public String getFullName() {
         return firstName + " " + lastName;
@@ -22,5 +23,9 @@ public class LoginBean implements Serializable {
 
     public MessagePerson getUser() {
         return user;
+    }
+
+    public Boolean getShowRealtimeCTG() {
+        return showRealtimeCTG;
     }
 }
