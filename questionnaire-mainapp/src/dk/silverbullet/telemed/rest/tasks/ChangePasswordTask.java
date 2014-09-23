@@ -1,20 +1,19 @@
 package dk.silverbullet.telemed.rest.tasks;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.AsyncTask;
-import dk.silverbullet.telemed.rest.bean.ChangePasswordError;
-import dk.silverbullet.telemed.rest.client.RestClient;
-import dk.silverbullet.telemed.rest.client.RestException;
-
 import android.util.Log;
-
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.rest.bean.ChangePasswordBean;
+import dk.silverbullet.telemed.rest.bean.ChangePasswordError;
 import dk.silverbullet.telemed.rest.bean.ChangePasswordResponse;
+import dk.silverbullet.telemed.rest.client.RestClient;
+import dk.silverbullet.telemed.rest.client.RestException;
 import dk.silverbullet.telemed.rest.listener.ChangePasswordListener;
 import dk.silverbullet.telemed.utils.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChangePasswordTask extends AsyncTask<String, Void, ChangePasswordTask.Result> {
     private static final String TAG = Util.getTag(ChangePasswordTask.class);
@@ -59,6 +58,7 @@ public class ChangePasswordTask extends AsyncTask<String, Void, ChangePasswordTa
 
             return Result.SUCCESS;
         } catch (RestException e) {
+            OpenTeleApplication.instance().logException(e);
             Log.e(TAG, "Could not change password", e);
             return Result.COMMUNICATION_ERROR;
         }

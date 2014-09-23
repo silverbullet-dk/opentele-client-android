@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.andweightscale.AndWeightScaleController;
 import dk.silverbullet.telemed.device.andweightscale.Weight;
@@ -58,6 +59,7 @@ public class WeightDeviceNode extends DeviceNode implements ContinuaListener<Wei
             weightDeviceController = AndWeightScaleController.create(this, new AndroidHdpController(questionnaire
                     .getContext().getApplicationContext()));
         } catch (DeviceInitialisationException e) {
+            OpenTeleApplication.instance().logException(e);
             setStatusText(Util.getString(R.string.weight_could_not_connect, questionnaire));
         }
     }

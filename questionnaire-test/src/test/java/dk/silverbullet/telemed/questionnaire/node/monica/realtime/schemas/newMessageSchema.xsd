@@ -1,0 +1,31 @@
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://schemas.datacontract.org/2004/07/Milou.Server.OpenTeleRT" schemaLocation="newMessageSchema1.xsd"/>
+    <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" schemaLocation="newMessageSchema1.xsd"/>
+    <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" schemaLocation="arrays.xsd"/>
+    <xsd:element name="NewMessage">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="0" name="message" nillable="true" type="q1:CtgMessage" xmlns:q1="http://schemas.datacontract.org/2004/07/Milou.Server.OpenTeleRT"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="NewMessageResponse">
+        <xsd:complexType>
+            <xsd:sequence/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="StopRegistration">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element minOccurs="0" name="deviceID" nillable="true" type="xsd:string"/>
+                <xsd:element minOccurs="0" name="registrationID" type="q2:guid" xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                <xsd:element minOccurs="0" name="stopTime" type="xsd:dateTime"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="StopRegistrationResponse">
+        <xsd:complexType>
+            <xsd:sequence/>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

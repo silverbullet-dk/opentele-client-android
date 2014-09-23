@@ -9,7 +9,7 @@ public abstract class ReceiverState {
 
     public static final byte STX = 0x2;
     public static final byte ETX = 0x3;
-    public static final int NULL_START_SYNC = 0x00;
+    public static final byte ACK = 0x6;
 
 
     protected final NoninPacketCollector stateController;

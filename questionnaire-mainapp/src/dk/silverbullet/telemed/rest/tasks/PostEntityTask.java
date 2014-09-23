@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.rest.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.rest.client.RestClient;
 import dk.silverbullet.telemed.rest.client.RestException;
@@ -29,6 +30,7 @@ public class PostEntityTask<T> extends AsyncTask<String, String, Void> {
             RestClient.postJson(questionnaire, path, entity);
             success = true;
         } catch (RestException e) {
+            OpenTeleApplication.instance().logException(e);
             Log.e(TAG, "Could not post", e);
         }
         return null;

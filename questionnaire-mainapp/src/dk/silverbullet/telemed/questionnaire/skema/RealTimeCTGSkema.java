@@ -3,7 +3,7 @@ package dk.silverbullet.telemed.questionnaire.skema;
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.node.EndNode;
-import dk.silverbullet.telemed.questionnaire.node.RealTimeCTGNode;
+import dk.silverbullet.telemed.questionnaire.node.monica.realtime.RealTimeCTGNode;
 import dk.silverbullet.telemed.questionnaire.node.UnknownNodeException;
 import dk.silverbullet.telemed.utils.Util;
 

@@ -11,7 +11,8 @@ import dk.silverbullet.telemed.rest.bean.message.MessageWrite;
 import dk.silverbullet.telemed.rest.bean.message.Messages;
 import dk.silverbullet.telemed.rest.listener.PostEntityListener;
 import dk.silverbullet.telemed.rest.listener.RetrieveEntityListener;
-import dk.silverbullet.telemed.rest.tasks.*;
+import dk.silverbullet.telemed.rest.tasks.PostEntityTask;
+import dk.silverbullet.telemed.rest.tasks.RetrieveEntityTask;
 
 /**
  * Encapsulates access to the various server resources accessed by the app.

@@ -5,224 +5,196 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class NoninMeasurementPacketTest {
-    Integer[] validNonMemoryMeasurementPacket = {
-            0x02, // STX
-            0x00, // OP_CODE Most significant byte
-            0x0d, // OP_CODE Least significant byte
-            0x00, // Data length Most siginifant byte
-            0x0e, // Data length Least siginifant byte
-            0x20, // Date information
-            0x07, // Date information
-            0x10, // Date information
-            0x01, // Date information
-            0x00, // Date information
-            0x00, // Date information
-            0x54, // Date information
-            0x00, // Date information
-            0x02, // Status Most significant byte
-            0x00, // Status Least significant byte
-            0x00, // Pulse rate most significant byte
-            0x3c, // Pulse rate Least significant byte
-            0x00, // Reserved for future use
-            0x63, // SpO2
-            0x2d, // Checksum
-            0x03  // ETX
+ /*
+OOT: An absence of consecutive good pulse signals.
+LPRF: Low Perfusion: Amplitude representation of low/no signal quality
+MPRF: Marginal Perfusion: Amplitude representation of low/marginal signal quality
+SNSA: Sensor Alarm: Device is providing unusable data for analysis (set when the finger is removed)
+ARTF: Artifact: Indicated artifact condition on each pulse
+SPA: SmartPoint: Algorithm High quality SmartPoint measurement
+LOW BAT: Low Battery condition Low Batteries. Replace batteries as soon as possible
+
+  */
+
+
+
+    Integer[] validMeasurement = {
+            Integer.parseInt("10000000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00100000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
     };
 
-    Integer[] validMemoryMeasurementPacket = {
-            0x02, // STX
-            0x00, // OP_CODE Most significant byte
-            0x0d, // OP_CODE Least significant byte
-            0x00, // Data length Most siginifant byte
-            0x0e, // Data length Least siginifant byte
-            0x20, // Date information
-            0x07, // Date information
-            0x10, // Date information
-            0x01, // Date information
-            0x18, // Date information
-            0x48, // Date information
-            0x21, // Date information
-            0x00, // Date information
-            0x02, // Status Most significant byte
-            0x10, // Status Least significant byte
-            0x00, // Pulse rate most significant byte
-            0x34, // Pulse rate Least significant byte
-            0x00, // Reserved for future use
-            0x63, // SpO2
-            0x62, // Checksum
-            0x03 // ETX
+    Integer[] validMeasurementNotSmartPoint = {
+            Integer.parseInt("10000000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
     };
+
+    Integer[] lowPerfusion = {
+            Integer.parseInt("10010000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] marginalPerfusion = {
+            Integer.parseInt("10001000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] pulseOverflow =  {
+            Integer.parseInt("10001001", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            Integer.parseInt("11111111", 2), //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] pulseOverflow1 =  {
+            Integer.parseInt("10001001", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            Integer.parseInt("01101011", 2), //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] pulseOverflow2 =  {
+            Integer.parseInt("10001011", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            Integer.parseInt("01100010", 2), //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] fingerRemoved = {
+            Integer.parseInt("10000000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00001000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] lowBatteryRemoved = {
+            Integer.parseInt("10000000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000001", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] outOfTrack = {
+            Integer.parseInt("10100000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000001", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] artifact = {
+            Integer.parseInt("10000100", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000001", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] dataMissingPulseIndicator = {
+            Integer.parseInt("10001011", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            Integer.parseInt("11111111", 2), //Pulse rate
+            0x62, //SpO2-D
+            Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+    Integer[] dataMissingSpO2Indicator = {
+            Integer.parseInt("10000000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            0x39, //Pulse rate
+            0x7f, //SpO2-D
+            Integer.parseInt("00001000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
+    };
+
+
+
+
+
+
 
     @Test
     public void canParseSpO2Values() throws IOException {
-        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(validNonMemoryMeasurementPacket);
-        assertEquals(99, noninMeasurementPacket.sp02);
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(validMeasurement);
+        assertEquals(98, noninMeasurementPacket.sp02);
     }
 
     @Test
     public void canParsePulseValues() throws IOException {
-        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(validNonMemoryMeasurementPacket);
-        assertEquals(60, noninMeasurementPacket.pulse);
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(validMeasurement);
+        assertEquals(57, noninMeasurementPacket.pulse);
     }
 
     @Test
-    public void canParsePulseValuesThatOverflowIntoMostSignificantBit() throws IOException {
-        Integer[] pulseOverflowingMeasurement = {
-                0x02, // STX
-                0x00, // OP_CODE Most significant byte
-                0x0d, // OP_CODE Least significant byte
-                0x00, // Data length Most significant byte
-                0x0e, // Data length Least significant byte
-                0x20, // Date information
-                0x07, // Date information
-                0x10, // Date information
-                0x01, // Date information
-                0x18, // Date information
-                0x48, // Date information
-                0x21, // Date information
-                0x00, // Date information
-                0x02, // Status Most significant byte
-                0x10, // Status Least significant byte
-                0x01, // Pulse rate most significant byte
-                0xf2, // Pulse rate Least significant byte
-                0x00, // Reserved for future use
-                0x63, // SpO2
-                0x21, // Checksum
-                0x03 // ETX
-        };
+    public void canHandlePulseRateOverflow() throws IOException {
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(pulseOverflow);
+        assertEquals(511, noninMeasurementPacket.pulse);
 
-        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(pulseOverflowingMeasurement);
-        assertEquals(498, noninMeasurementPacket.pulse);
+        NoninMeasurementPacket noninMeasurementPacket1 = new NoninMeasurementPacket(pulseOverflow1);
+        assertEquals(363, noninMeasurementPacket1.pulse);
+
+        NoninMeasurementPacket noninMeasurementPacket2 = new NoninMeasurementPacket(pulseOverflow2);
+        assertEquals(354, noninMeasurementPacket2.pulse);
     }
 
     @Test
-    public void canDiscernMeasurementFromMemoryFromRecentMeasurements() throws IOException {
-        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(validNonMemoryMeasurementPacket);
-        assertEquals(false, noninMeasurementPacket.isFromMemory);
+    public void willSetSmartPointFlag() throws IOException {
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(validMeasurement);
+        assertTrue(noninMeasurementPacket.highQuality);
 
-        NoninMeasurementPacket noninMeasurementPacketFromMemory = new NoninMeasurementPacket(validMemoryMeasurementPacket);
-        assertEquals(true, noninMeasurementPacketFromMemory.isFromMemory);
+        noninMeasurementPacket = new NoninMeasurementPacket(validMeasurementNotSmartPoint);
+        assertFalse(noninMeasurementPacket.highQuality);
     }
 
-    @Test(expected = IOException.class)
-    public void willThrowIOExceptionOnBadChecksum() throws IOException {
-        Integer[] badChecksumMeasurementPacket = {
-                0x02, // STX
-                0x00, // OP_CODE Most significant byte
-                0x0d, // OP_CODE Least significant byte
-                0x00, // Data length Most significant byte
-                0x0e, // Data length Least significant byte
-                0x20, // Date information
-                0x07, // Date information
-                0x10, // Date information
-                0x01, // Date information
-                0x18, // Date information
-                0x48, // Date information
-                0x21, // Date information
-                0x00, // Date information
-                0x02, // Status Most significant byte
-                0x10, // Status Least significant byte
-                0x00, // Pulse rate most significant byte
-                0x34, // Pulse rate Least significant byte
-                0x00, // Reserved for future use
-                0x63, // SpO2
-                0x12, // Checksum, should have been 0x62
-                0x03 // ETX
-        };
-
-        new NoninMeasurementPacket(badChecksumMeasurementPacket);
-
+    @Test
+    public void willSetLowPerfusionFlag() throws IOException {
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(lowPerfusion);
+        assertTrue(noninMeasurementPacket.lowPerfusion);
     }
 
-    @Test(expected = IOException.class)
-    public void willThrowIOExceptionOnUnexpectedDataLengthIndicationOnMostSignificantByte() throws IOException {
-        Integer[] badDataLengthMSBValue = {
-                0x02, // STX
-                0x00, // OP_CODE Most significant byte
-                0x0d, // OP_CODE Least significant byte
-                0x01, // Data length Most significant byte, should have been 00
-                0x0e, // Data length Least significant byte
-                0x20, // Date information
-                0x07, // Date information
-                0x10, // Date information
-                0x01, // Date information
-                0x18, // Date information
-                0x48, // Date information
-                0x21, // Date information
-                0x00, // Date information
-                0x02, // Status Most significant byte
-                0x10, // Status Least significant byte
-                0x00, // Pulse rate most significant byte
-                0x34, // Pulse rate Least significant byte
-                0x00, // Reserved for future use
-                0x63, // SpO2
-                0x62, // Checksum
-                0x03 // ETX
-        };
-
-        new NoninMeasurementPacket(badDataLengthMSBValue);
+    @Test
+    public void willSetMarginalPerfusionFlag() throws IOException {
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(marginalPerfusion);
+        assertTrue(noninMeasurementPacket.marginalPerfusion);
     }
 
-    @Test(expected = IOException.class)
-    public void willThrowIOExceptionOnUnexpectedDataLengthIndicationOnLeastSignificantByte() throws IOException {
-        Integer[] badDataLengthLSBValue = {
-                0x02, // STX
-                0x00, // OP_CODE Most significant byte
-                0x0d, // OP_CODE Least significant byte
-                0x00, // Data length Most significant byte
-                0x01, // Data length Least significant byte, should have been 0e
-                0x20, // Date information
-                0x07, // Date information
-                0x10, // Date information
-                0x01, // Date information
-                0x18, // Date information
-                0x48, // Date information
-                0x21, // Date information
-                0x00, // Date information
-                0x02, // Status Most significant byte
-                0x10, // Status Least significant byte
-                0x00, // Pulse rate most significant byte
-                0x34, // Pulse rate Least significant byte
-                0x00, // Reserved for future use
-                0x63, // SpO2
-                0x62, // Checksum
-                0x03 // ETX
-        };
+    @Test
+    public void willSetFingerRemoved() throws IOException {
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(fingerRemoved);
+        assertTrue(noninMeasurementPacket.fingerRemoved);
+    }
 
-        new NoninMeasurementPacket(badDataLengthLSBValue);
+    @Test
+    public void willSetLowBattery() throws IOException {
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(lowBatteryRemoved);
+        assertTrue(noninMeasurementPacket.lowBattery);
+    }
+
+    @Test
+    public void willSetOutOfTrack() throws IOException {
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(outOfTrack);
+        assertTrue(noninMeasurementPacket.outOfTrack);
+    }
+
+    @Test
+    public void willSetArtifact() throws IOException {
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(artifact);
+        assertTrue(noninMeasurementPacket.artifact);
     }
 
     @Test
     public void willDetectMissingData() throws IOException {
-        Integer[] missingDataPacket = {
-                0x02, // STX
-                0x00, // OP_CODE Most significant byte
-                0x0d, // OP_CODE Least significant byte
-                0x00, // Data length Most significant byte
-                0x0e, // Data length Least significant byte
-                0x20, // Date information
-                0x07, // Date information
-                0x10, // Date information
-                0x01, // Date information
-                0x18, // Date information
-                0x48, // Date information
-                0x21, // Date information
-                0x00, // Date information
-                0x02, // Status Most significant byte
-                0x10, // Status Least significant byte
-                0x01, // Pulse rate most significant byte
-                0x7F, // Pulse rate Least significant byte
-                0x00, // Reserved for future use
-                0x7F, // SpO2
-                0xCA, // Checksum
-                0x03 // ETX
-        };
+        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(dataMissingPulseIndicator);
+        assertTrue(noninMeasurementPacket.measurementMissing);
 
-        NoninMeasurementPacket noninMeasurementPacket = new NoninMeasurementPacket(missingDataPacket);
-        assertTrue(noninMeasurementPacket.isDataMissing);
+        noninMeasurementPacket = new NoninMeasurementPacket(dataMissingSpO2Indicator);
+        assertTrue(noninMeasurementPacket.measurementMissing);
     }
 
 }

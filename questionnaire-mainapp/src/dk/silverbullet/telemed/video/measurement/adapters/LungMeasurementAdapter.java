@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.video.measurement.adapters;
 
 import android.content.Context;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.DeviceController;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMeasurement;
@@ -28,6 +29,7 @@ public class LungMeasurementAdapter implements VideoMeasurementAdapter, LungMoni
             informer.setStatusText(Util.getString(R.string.video_lung_function_turn_on_device, context));
             controller = VitalographLungMonitorController.create(this);
         } catch (DeviceInitialisationException e) {
+            OpenTeleApplication.instance().logException(e);
             informer.setStatusText(Util.getString(R.string.video_lung_function_could_not_connect, context));
         }
     }

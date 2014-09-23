@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMeasurement;
 import dk.silverbullet.telemed.device.vitalographlungmonitor.LungMonitorController;
@@ -68,6 +69,7 @@ public class LungMonitorDeviceNode extends DeviceNode implements LungMonitorList
         try {
             controller = createController();
         } catch (DeviceInitialisationException e) {
+            OpenTeleApplication.instance().logException(e);
             setStatusText(Util.getString(R.string.lung_monitor_could_not_connect, questionnaire));
         }
     }

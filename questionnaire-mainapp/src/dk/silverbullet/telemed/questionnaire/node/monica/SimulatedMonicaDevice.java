@@ -1,5 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node.monica;
 
+import android.util.Log;
 import dk.silverbullet.telemed.device.monica.MonicaDevice;
 
 import java.util.Date;
@@ -63,6 +64,10 @@ public class SimulatedMonicaDevice implements Runnable, MonicaDevice {
             return;
         }
         for (int i = 0; i < samples; i++) {
+            if(thread.isInterrupted()) {
+                Log.d("SIMULATED", "Was interrupted" );
+                return;
+            }
             // CBlockMessage cblk= new CBlockMessage("");
             // float[] fhr = cblk.getFHR1();
             // int[] qfhr = cblk.getQFHR1();
@@ -94,9 +99,9 @@ public class SimulatedMonicaDevice implements Runnable, MonicaDevice {
             sampleCount++;
             samples = monicaDeviceCallback.getSampleTimeMinutes() * 60;
             try {
-                Thread.sleep(1);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                return;
             }
         }
         monicaDeviceCallback.setEndTimeValue(new Date(start + sampleCount * 1000));
@@ -123,6 +128,10 @@ public class SimulatedMonicaDevice implements Runnable, MonicaDevice {
     @Override
     public void close() {
         thread.interrupt();
+    }
+
+    public String getDeviceName() {
+        return "Simulated-AN24";
     }
 
 }

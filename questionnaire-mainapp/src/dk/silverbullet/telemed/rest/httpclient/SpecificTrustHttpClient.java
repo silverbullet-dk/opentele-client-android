@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.rest.httpclient;
 
 import android.content.Context;
 import android.util.Log;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.R;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -52,6 +53,7 @@ class SpecificTrustHttpClient extends DefaultHttpClient {
 
             return new SSLSocketFactory(keyStore);
         } catch (Exception e) {
+            OpenTeleApplication.instance().logException(e);
             throw new RuntimeException(e);
         }
     }

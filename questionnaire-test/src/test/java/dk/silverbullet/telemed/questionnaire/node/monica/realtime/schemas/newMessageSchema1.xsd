@@ -1,0 +1,45 @@
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Milou.Server.OpenTeleRT" xmlns:tns="http://schemas.datacontract.org/2004/07/Milou.Server.OpenTeleRT" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" schemaLocation="serialization.xsd"/>
+    <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" schemaLocation="arrays.xsd"/>
+    <xsd:complexType name="CtgMessage">
+        <xsd:sequence>
+            <xsd:element name="ctgField" nillable="true" type="tns:ArrayOfCtgMessageBlock"/>
+            <xsd:element name="deviceIDField" nillable="true" type="xsd:string"/>
+            <xsd:element name="markersField" nillable="true" type="q3:ArrayOfdateTime" xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+            <xsd:element name="patientField" nillable="true" type="tns:CtgMessagePatient"/>
+            <xsd:element name="registrationIDField" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="CtgMessage" nillable="true" type="tns:CtgMessage"/>
+    <xsd:complexType name="ArrayOfCtgMessageBlock">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="CtgMessageBlock" nillable="true" type="tns:CtgMessageBlock"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="ArrayOfCtgMessageBlock" nillable="true" type="tns:ArrayOfCtgMessageBlock"/>
+    <xsd:complexType name="CtgMessageBlock">
+        <xsd:sequence>
+            <xsd:element name="fhrField" nillable="true" type="xsd:string"/>
+            <xsd:element name="mhrField" nillable="true" type="xsd:string"/>
+            <xsd:element name="sequenceNbrField" type="xsd:int"/>
+            <xsd:element name="sqField" nillable="true" type="xsd:string"/>
+            <xsd:element name="timeField" type="xsd:dateTime"/>
+            <xsd:element name="tocoField" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="CtgMessageBlock" nillable="true" type="tns:CtgMessageBlock"/>
+    <xsd:complexType name="CtgMessagePatient">
+        <xsd:sequence>
+            <xsd:element name="idField" nillable="true" type="xsd:string"/>
+            <xsd:element name="nameField" nillable="true" type="tns:CtgMessagePatientName"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="CtgMessagePatient" nillable="true" type="tns:CtgMessagePatient"/>
+    <xsd:complexType name="CtgMessagePatientName">
+        <xsd:sequence>
+            <xsd:element name="firstField" nillable="true" type="xsd:string"/>
+            <xsd:element name="lastField" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="CtgMessagePatientName" nillable="true" type="tns:CtgMessagePatientName"/>
+</xsd:schema>

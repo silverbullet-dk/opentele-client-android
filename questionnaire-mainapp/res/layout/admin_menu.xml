@@ -61,7 +61,15 @@
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                       android:text="@string/admin_set_alarm"
                       android:id="@+id/admin_menu_set_alarm"
+                      android:background="@drawable/thin_black_line"
                       style="@style/menu_item_style"/>
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:text="@string/admin_set_nonin_data_mode"
+                      android:id="@+id/admin_menu_set_nonin_data_mode"
+                      style="@style/menu_item_style"/>
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

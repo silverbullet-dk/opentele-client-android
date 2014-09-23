@@ -1,8 +1,8 @@
-package dk.silverbullet.telemed.questionnaire.node;
+package dk.silverbullet.telemed.questionnaire.node.monica.realtime;
 
 import java.util.Date;
 
-public class SignalMessage extends RealTimeCTGMessage {
+public class SignalMessage implements RealTimeCTGMessage {
     Date dateTime;
 
     public SignalMessage(Date dateTime) {

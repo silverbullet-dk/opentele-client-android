@@ -1,8 +1,7 @@
 package dk.silverbullet.telemed.video.measurement.adapters;
 
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
-import dk.silverbullet.telemed.device.continua.ContinuaDeviceController;
-import dk.silverbullet.telemed.device.continua.ContinuaListener;
 import dk.silverbullet.telemed.device.nonin.NoninController;
 import dk.silverbullet.telemed.device.nonin.SaturationAndPulse;
 import dk.silverbullet.telemed.device.nonin.SaturationController;
@@ -27,6 +26,7 @@ public class SaturationMeasurementAdapter implements VideoMeasurementAdapter, Sa
             fragment.setStatusText(Util.getString(R.string.video_saturation_equip_device, fragment.getContext()));
             controller = NoninController.create(this);
         } catch (DeviceInitialisationException e) {
+            OpenTeleApplication.instance().logException(e);
             fragment.setStatusText(Util.getString(R.string.video_saturation_connection_problem, fragment.getContext()));
         }
     }
@@ -44,11 +44,6 @@ public class SaturationMeasurementAdapter implements VideoMeasurementAdapter, Sa
     }
 
     @Override
-    public void permanentProblem() {
-        fragment.setStatusText(Util.getString(R.string.video_saturation_permanent_problem, fragment.getContext()));
-    }
-
-    @Override
     public void temporaryProblem() {
         fragment.setStatusText(Util.getString(R.string.video_saturation_temporary_problem, fragment.getContext()));
     }
@@ -60,5 +55,20 @@ public class SaturationMeasurementAdapter implements VideoMeasurementAdapter, Sa
 
         DeviceIdAndMeasurement<SaturationAndPulse> deviceIdAndMeasurement = new DeviceIdAndMeasurement<SaturationAndPulse>(deviceId, measurement);
         new SubmitSaturationMeasurementTask(fragment).execute(deviceIdAndMeasurement);
+    }
+
+    @Override
+    public void firstTimeOut() {
+        fragment.setStatusText(Util.getString(R.string.video_saturation_first_timeout, fragment.getContext()));
+    }
+
+    @Override
+    public void finalTimeOut(String serial, SaturationAndPulse measurement) {
+        if(measurement != null) {
+            measurementReceived(serial, measurement);
+        } else {
+            fragment.setStatusText(Util.getString(R.string.video_saturation_connection_problem, fragment.getContext()));
+        }
+
     }
 }

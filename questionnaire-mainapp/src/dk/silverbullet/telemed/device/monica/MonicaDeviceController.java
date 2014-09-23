@@ -25,10 +25,12 @@ public class MonicaDeviceController extends Thread implements MonicaDevice {
     private boolean green;
     private boolean black;
     private boolean yellow;
+    private boolean abort;
 
     public MonicaDeviceController(MonicaDeviceCallback monicaCallback, Context context) throws DeviceInitialisationException {
         this.monicaCallback = monicaCallback;
         this.context = context;
+        this.abort = false;
         try {
             monicaCallback.setState(DeviceState.WAITING_FOR_CONNECTION);
             btio = new MonicaBluetoothIOController();
@@ -99,10 +101,10 @@ public class MonicaDeviceController extends Thread implements MonicaDevice {
 
         long lastMessageTime = System.currentTimeMillis();
 
-        while (count < monicaCallback.getSampleTimeMinutes() * 60) {
+        while (count < monicaCallback.getSampleTimeMinutes() * 60 && !abort) {
 
             try {
-                if (btio.messagesWaiting() == 0) {
+                if (btio != null && btio.messagesWaiting() == 0) {
                     if (count > 0 && System.currentTimeMillis() - lastMessageTime > 30000) {
                         Log.d(TAG, "Read timeout - no connection for " + (System.currentTimeMillis() - lastMessageTime)
                                 + " ms");
@@ -122,18 +124,18 @@ public class MonicaDeviceController extends Thread implements MonicaDevice {
                     sleep(500);
                 }
 
-                if (btio.messagesWaiting() == 0 && count == 0) {
+                if (btio != null && btio.messagesWaiting() == 0 && count == 0) {
                     Log.d(TAG, "*** Ping....");
                     btio.writeMessage(MessageFactory.downloadData(), 1, 3000);
                 }
 
-                MonicaMessage msg;
-                if (count == 0)
+                MonicaMessage msg = null;
+                if (btio != null && count == 0)
                     msg = btio.readMessage(10000);
-                else
+                else if(btio != null)
                     msg = btio.readMessage(3000);
 
-                if (msg instanceof CBlockMessage) {
+                if (msg != null && msg instanceof CBlockMessage) {
                     count++;
 
                     if (msg.getReadTime() == null)
@@ -142,15 +144,15 @@ public class MonicaDeviceController extends Thread implements MonicaDevice {
                         lastMessageTime = msg.getReadTime().getTime();
 
                     mp.process((CBlockMessage) msg);
-                } else if (msg instanceof MmMessage) {
+                } else if (msg != null && msg instanceof MmMessage) {
                     mp.process((MmMessage) msg);
-                } else if (msg instanceof FetalHeightAndSignalToNoise) {
+                } else if (msg != null && msg instanceof FetalHeightAndSignalToNoise) {
                     mp.process((FetalHeightAndSignalToNoise) msg);
-                } else if (msg instanceof DeviceOffMessage) {
+                } else if (msg != null && msg instanceof DeviceOffMessage) {
                     btio.close();
                     btio = null;
                     throw new DeviceSwitchedOffException();
-                } else if (msg instanceof ImpedanceStatus) { // May never be received at this stage
+                } else if (msg != null && msg instanceof ImpedanceStatus) { // May never be received at this stage
                     updateImpedanceStatus((ImpedanceStatus) msg);
                 } else
                     Log.i(TAG, "Unexpected message: " + msg);
@@ -249,8 +251,9 @@ public class MonicaDeviceController extends Thread implements MonicaDevice {
         DataLogger.close();
         if (btio != null) {
             try {
+                abort = true;
                 interrupt();
-                join();
+                join(10000); //Dont block for more than 10 seconds
                 btio.clearReadQueue();
                 btio.writeMessage(MessageFactory.deleteDataAndSwitchOff());
                 btio.close();
@@ -261,5 +264,9 @@ public class MonicaDeviceController extends Thread implements MonicaDevice {
                 // Ignore
             }
         }
+    }
+
+    public String getDeviceName() {
+        return btio.getDeviceName();
     }
 }

@@ -47,15 +47,7 @@
                 android:text="@string/realtime_ctg_monica_status"
                 android:textColor="#777"
                 android:textSize="36sp"
-                />
-
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:id="@+id/realtime_ctg_current_status"
-                android:textColor="#777"
-                android:textSize="26sp"
                 />
 
         <CheckBox
@@ -154,6 +146,7 @@
                 android:text="@string/realtime_ctg_stop_measurement"
                 android:layout_height="wrap_content"
                 android:paddingLeft="50dp"
-                android:paddingRight="50dp"/>
+                android:paddingRight="50dp"
+                android:visibility="invisible"/>
     </RelativeLayout>
 </LinearLayout>

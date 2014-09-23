@@ -3,6 +3,7 @@ package dk.silverbullet.telemed.rest.tasks;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.QuestionnaireFragment;
 import dk.silverbullet.telemed.questionnaire.R;
@@ -48,6 +49,7 @@ public class RetrieveServerInformationTask extends AsyncTask<Void, Void, String>
             return RestClient.getString(questionnaire, SERVER_VERSION_PATH);
         } catch (RestException e) {
             Log.e(TAG, "Failed to fetch version information", e);
+            OpenTeleApplication.instance().logException(e);
             return null;
         }
     }

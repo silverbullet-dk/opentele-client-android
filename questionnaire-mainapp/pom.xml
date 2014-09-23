@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>dk.silverbullet.telemed</groupId>
 		<artifactId>questionnaire-parent</artifactId>
-		<version>1.26.0</version>
+		<version>1.27.0</version>
 	</parent>
 
 	<artifactId>questionnaire-mainapp</artifactId>
@@ -40,13 +40,19 @@
             <groupId>dk.silverbullet.telemed</groupId>
             <artifactId>video-common-interfaces</artifactId>
             <scope>compile</scope>
-            <version>1.26.0</version>
+            <version>1.27.0</version>
         </dependency>
         <dependency>
             <groupId>dk.silverbullet.telemed</groupId>
             <artifactId>continuous-bloodsugar-common</artifactId>
             <scope>compile</scope>
-            <version>1.26.0</version>
+            <version>1.27.0</version>
+        </dependency>
+        <dependency>
+            <groupId>dk.silverbullet.telemed</groupId>
+            <artifactId>crash-reports-common-interfaces</artifactId>
+            <scope>compile</scope>
+            <version>1.27.0</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -168,7 +174,7 @@
 				</plugins>
 			</build>
 		</profile>
-    </profiles>
+	</profiles>
 	<repositories>
 		<repository>
 			<id>build.silverbullet.dk</id>

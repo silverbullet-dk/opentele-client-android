@@ -1,5 +1,6 @@
 package dk.silverbullet.telemed.video.measurement.adapters;
 
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.andbloodpressure.AndBloodPressureController;
 import dk.silverbullet.telemed.device.andbloodpressure.BloodPressureAndPulse;
@@ -26,6 +27,7 @@ public class BloodPressureAdapter implements VideoMeasurementAdapter, ContinuaLi
             fragment.setStatusText(Util.getString(R.string.video_bloodpressure_press_start, fragment.getContext()));
             controller = AndBloodPressureController.create(this, new AndroidHdpController(fragment.getContext()));
         } catch (DeviceInitialisationException e) {
+            OpenTeleApplication.instance().logException(e);
             fragment.setStatusText(Util.getString(R.string.video_bloodpressure_could_not_connect, fragment.getContext()));
         }
     }

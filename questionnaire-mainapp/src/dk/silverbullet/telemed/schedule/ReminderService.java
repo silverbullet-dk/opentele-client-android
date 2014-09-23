@@ -1,11 +1,5 @@
 package dk.silverbullet.telemed.schedule;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -13,12 +7,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import com.google.gson.JsonParseException;
-
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.rest.bean.ReminderBean;
 import dk.silverbullet.telemed.utils.Json;
 import dk.silverbullet.telemed.utils.Util;
+
+import java.util.*;
 
 public class ReminderService {
     private static final String TAG = Util.getTag(ReminderService.class);
@@ -125,6 +120,7 @@ public class ReminderService {
                 reminderBeans = Json.parse(reminderBeansAsJson, ReminderBean[].class);
             } catch (JsonParseException e) {
                 Log.e(TAG, "Could not deserialize reminder beans");
+                OpenTeleApplication.instance().logException(e);
                 return noReminders();
             }
             return new UpcomingReminders(baselineDate, Arrays.asList(reminderBeans));

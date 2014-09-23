@@ -1,9 +1,7 @@
 package dk.silverbullet.telemed.device.nonin.packet;
 
 import android.util.Log;
-import dk.silverbullet.telemed.device.nonin.packet.states.DataState;
-import dk.silverbullet.telemed.device.nonin.packet.states.IdleState;
-import dk.silverbullet.telemed.device.nonin.packet.states.ReceiverState;
+import dk.silverbullet.telemed.device.nonin.packet.states.*;
 import dk.silverbullet.telemed.utils.Util;
 
 import java.io.IOException;
@@ -11,12 +9,38 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class NoninPacketCollector {
-    private static final String TAG = Util.getTag(NoninPacketCollector.class);
+    public static final String TAG = Util.getTag(NoninPacketCollector.class);
 
-    public final ReceiverState IDLE_STATE = new IdleState(this);
-    public final ReceiverState DATA_STATE = new DataState(this);
+    public final ReceiverState WAIT_FOR_SERIAL_NUMBER_STATE = new WaitForSerialNumberState(this);
+    public final ReceiverState WAIT_FOR_DATAFORMAT_CHANGE_ACK_STATE = new WaitForDataFormatAckState(this);
+    public final ReceiverState SERIAL_NUMBER_DATA_STATE = new SerialNumberDataState(this);
+    public final ReceiverState MEASUREMENT_DATA_STATE = new MeasurementDataState(this);
 
-    protected ReceiverState currentState = IDLE_STATE;
+    /***
+     * State flow diagram, items in parens are actions performed by either NoninController or the bluetooth device
+     *
+     *  WAIT_FOR_SERIAL_NUMBER_STATE
+     *      ↓
+     *  (NoninController sends get get serial number command to device. Device responds with: 0x02 (STX) and 0xF4 (the opcode for serial number reponse))
+     *      ↓
+     *  SERIAL_NUMBER_DATA_STATE
+     *      ↓
+     *  (NoninController sends change data format command to device)
+     *      ↓
+     *  WAIT_FOR_DATAFORMAT_CHANGE_ACK_STATE
+     *      ↓
+     *  (Device responds with 0x06 (ACK)
+     *      ↓
+     *  MEASUREMENT_DATA_STATE
+     *      ↺
+     * (Measurements are recieved once each second. We wait for the first measurement with the Smart Point Algorithm indicator set to true.)
+     *      ↓
+     *    end
+     */
+
+
+
+    protected ReceiverState currentState = WAIT_FOR_SERIAL_NUMBER_STATE;
     private ArrayList<Integer> read = new ArrayList<Integer>(512);
     private PacketReceiver listener;
 
@@ -30,7 +54,8 @@ public class NoninPacketCollector {
     }
 
     public void reset() {
-        setState(IDLE_STATE);
+        clearBuffer();
+        setState(WAIT_FOR_SERIAL_NUMBER_STATE);
     }
 
     public void clearBuffer() {
@@ -42,12 +67,12 @@ public class NoninPacketCollector {
     }
 
     public void setState(ReceiverState newState) {
-        // Log.d(TAG, newState.getClass().getName());
+        Log.d(TAG, newState.getClass().getName());
         currentState = newState;
     }
 
     public Integer[] getRead() {
-        return read.toArray(new Integer[0]);
+        return read.toArray(new Integer[read.size()]);
     }
 
     public void setReadTime(Date readTime) {
@@ -62,13 +87,19 @@ public class NoninPacketCollector {
         listener.error(e);
     }
 
-    public void sendPacket(NoninPacket packet) {
-        if(packet instanceof NoninSerialNumberPacket) {
-            listener.setSerialNumber((NoninSerialNumberPacket) packet);
-        } else if(packet instanceof NoninMeasurementPacket) {
-            listener.addMeasurement((NoninMeasurementPacket) packet);
-        } else {
-            Log.e(TAG, "Unknown packet type:" + packet.getClass().getName());
-        }
+    public void setSerialNumberPacket(NoninSerialNumberPacket serialNumberPacket) {
+        Log.d(TAG, "Got serial number");
+        listener.setSerialNumber(serialNumberPacket);
+
+        setState(WAIT_FOR_DATAFORMAT_CHANGE_ACK_STATE);
+        listener.sendChangeDataFormatCommand();
+    }
+
+    public void receivedDataFormatChanged() {
+        setState(MEASUREMENT_DATA_STATE);
+    }
+
+    public void addMeasurement(NoninMeasurementPacket measurementPacket) {
+        listener.addMeasurement(measurementPacket);
     }
 }

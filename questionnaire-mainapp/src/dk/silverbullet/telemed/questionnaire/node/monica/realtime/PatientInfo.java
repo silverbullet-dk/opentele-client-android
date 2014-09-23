@@ -1,4 +1,4 @@
-package dk.silverbullet.telemed.questionnaire.node;
+package dk.silverbullet.telemed.questionnaire.node.monica.realtime;
 
 public class PatientInfo {
     Long id;

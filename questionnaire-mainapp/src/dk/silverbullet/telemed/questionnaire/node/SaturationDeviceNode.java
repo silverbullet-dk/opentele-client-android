@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.nonin.NoninController;
 import dk.silverbullet.telemed.device.nonin.SaturationAndPulse;
@@ -54,6 +55,7 @@ public class SaturationDeviceNode extends DeviceNode implements SaturationPulseL
             try {
                 noninController = NoninController.create(this);
             } catch (DeviceInitialisationException e) {
+                OpenTeleApplication.instance().logException(e);
                 statusElement.setText(Util.getString(R.string.saturation_could_not_connect, questionnaire));
             }
         }
@@ -105,8 +107,26 @@ public class SaturationDeviceNode extends DeviceNode implements SaturationPulseL
     }
 
     @Override
-    public void permanentProblem() {
-        setStatusText(Util.getString(R.string.saturation_permanent_problem, questionnaire));
+    public void firstTimeOut() {
+        setStatusText(Util.getString(R.string.saturation_first_timeout, questionnaire));
+    }
+
+    @Override
+    public void finalTimeOut(String systemId, SaturationAndPulse measurement) {
+        //TODO: Eventually we'll have to send extra information to the server indicating that this was low quality measurement.
+        if(measurement == null) {
+            questionnaire.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    noninController.close();
+                    setStatusText(Util.getString(R.string.saturation_could_not_collect_measurement, questionnaire));
+                    be.setRightNextNode(SaturationDeviceNode.this);
+                    be.setRightText(Util.getString(R.string.default_retry, questionnaire));
+                    be.showRightButton();
+                }});
+        } else {
+            measurementReceived(systemId, measurement);
+        }
     }
 
     @Override

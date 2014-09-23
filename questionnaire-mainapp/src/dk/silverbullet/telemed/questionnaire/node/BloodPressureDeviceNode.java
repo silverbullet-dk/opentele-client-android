@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 
 import android.util.Log;
 import com.google.gson.annotations.Expose;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.DeviceInitialisationException;
 import dk.silverbullet.telemed.device.andbloodpressure.AndBloodPressureController;
 import dk.silverbullet.telemed.device.andbloodpressure.BloodPressureAndPulse;
@@ -72,6 +73,7 @@ public class BloodPressureDeviceNode extends DeviceNode implements ContinuaListe
         try {
             controller = AndBloodPressureController.create(this, new AndroidHdpController(questionnaire.getContext()));
         } catch (DeviceInitialisationException e) {
+            OpenTeleApplication.instance().logException(e);
             setStatusText(Util.getString(R.string.bloodpressure_could_not_connect, questionnaire));
         }
     }

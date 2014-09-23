@@ -72,6 +72,13 @@ public class AdminMenuNode extends MenuNode  {
             }
         });
 
+        rootLayout.findViewById(R.id.admin_menu_set_nonin_data_mode).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setupAndRunSkema(new ChangeNoninDataModeSkema());
+            }
+        });
+
     }
 
     private void showChangeSeverUrl(ViewGroup rootLayout) {

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.google.gson.annotations.Expose;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.AmbiguousDeviceException;
 import dk.silverbullet.telemed.device.BluetoothDisabledException;
 import dk.silverbullet.telemed.device.BluetoothNotAvailableException;
@@ -112,21 +113,25 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
             else
                 device = new MonicaDeviceController(this, activity);
         } catch (BluetoothDisabledException e) {
+            OpenTeleApplication.instance().logException(e);
             Log.d(TAG, "Exception: " + e);
             Toast.makeText(questionnaire.getContext().getApplicationContext(), Util.getString(R.string.monica_bluetooth_off, questionnaire),
                     Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (BluetoothNotAvailableException e) {
+            OpenTeleApplication.instance().logException(e);
             Log.d(TAG, "Exception: " + e);
             Toast.makeText(questionnaire.getContext().getApplicationContext(),
                     Util.getString(R.string.monica_bluetooth_unavaliable, questionnaire), Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (AmbiguousDeviceException e) {
+            OpenTeleApplication.instance().logException(e);
             Log.d(TAG, "Exception: " + e);
             Toast.makeText(questionnaire.getContext().getApplicationContext(),
                     Util.getString(R.string.monica_multiple_devices, questionnaire), Toast.LENGTH_LONG).show();
             questionnaire.setCurrentNode(getNextFailNode());
         } catch (DeviceInitialisationException e) {
+            OpenTeleApplication.instance().logException(e);
             Log.d(TAG, "Exception: " + e);
             Toast.makeText(questionnaire.getContext().getApplicationContext(), Util.getString(R.string.monica_failed_to_start, questionnaire),
                     Toast.LENGTH_LONG).show();

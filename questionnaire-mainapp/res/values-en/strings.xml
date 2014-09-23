@@ -8,6 +8,12 @@
     <string name="admin_change_server">Change server-URL</string>
     <string name="admin_set_alarm">Set alarm</string>
     <string name="admin_show_upload_debug">Show Upload-debug-node?</string>
+    <string name="admin_set_nonin_data_mode">Set Nonin data format</string>
+    <string name="admin_set_nonin_data_mode_8">Set to data format #8</string>
+    <string name="admin_set_nonin_data_mode_13">Set to data format #13</string>
+    <string name="admin_set_nonin_data_mode_setting">Changing dataformat</string>
+    <string name="admin_set_nonin_data_mode_set">Changed dataformat</string>
+
 
     <string name="alarm_alarm">Alarm</string>
     <string name="alarm_user_prompt">It\'s time to answer a questionnaire</string>
@@ -165,8 +171,13 @@
 
     <string name="realtime_ctg_headline">Real-Time CTG measurement</string>
     <string name="realtime_ctg_monica_status">Status</string>
+    <string name="realtime_ctg_start_measurement">Start</string>
     <string name="realtime_ctg_stop_measurement">Stop</string>
-
+    <string name="realtime_ctg_stopped_network_error">Measurement stopped due to network problems. Please check your network connection and try again.</string>
+    <string name="realtime_ctg_stopping">Stopping</string>
+    <string name="realtime_ctg_stopping_detail">Stopping measurement. Please wait while the last measurements are being sent.</string>
+    <string name="realtime_ctg_starting">Starting</string>
+    <string name="realtime_ctg_starting_detail">Checking connection. Please wait a moment.</string>
 
     <string name="patient_measurements_my_measurements">My measurements</string>
 
@@ -174,7 +185,7 @@
 
     <string name="run_skema_do_you_want_to_send_data">Would you like to send your measurements/replies?</string>
 
-    <string name="saturation__waiting_for_measurement">Waiting for measurement. Keep still.</string>
+    <string name="saturation__waiting_for_measurement">Waiting for measurement. Keep still. You may have to wait for up to 45 seconds.</string>
     <string name="saturation_connecting">Put the device on your finger.</string>
     <string name="saturation_disconnected">Disconnected.</string>
     <string name="saturation_could_not_connect">Could not connect to device.</string>
@@ -185,6 +196,8 @@
     <string name="saturation_permanent_problem">Could not connect to device.</string>
     <string name="saturation_saturation">Saturation.</string>
     <string name="saturation_temporary_problem">Could not fetch data. Try turning the device off and on again.</string>
+    <string name="saturation_first_timeout">Could not fetch data. Please try taking the device off your finger. Let it turn off. Then put the device back on your finger and wait (You may have to wait up to 45 seconds).</string>
+    <string name="saturation_could_not_collect_measurement">Could not fetch measurement.</string>
 
     <string name="save_file_data_saved_locally">Data saved locally</string>
     <string name="save_file_error">Error:</string>
@@ -193,6 +206,7 @@
 
     <string name="server_url">${server.url}</string>
     <string name="server_url_locked">${server.url.locked}</string>
+    <string name="report.server.url">${report.server.url}</string>
 
     <string name="set_alarm_alarm_set">Alarm set</string>
     <string name="set_alarm_server_ip">Set server-IP</string>
@@ -259,7 +273,7 @@
     <string name="video_saturation_disconnected">Disconnected.</string>
     <string name="video_saturation_equip_device">Place the device on your finger.</string>
     <string name="video_saturation_measurement_received">Measurement received.</string>
-    <string name="video_saturation_permanent_problem">Could not connect to device.</string>
+    <string name="video_saturation_first_timeout">Please try taking the device of and on again.</string>
     <string name="video_saturation_saturation">Oxygen Saturation</string>
     <string name="video_saturation_temporary_problem">Could not fetch measurement. Please try turning the device off and on again.</string>
     <string name="video_starting">Starting video-consultation. Please wait.</string>
@@ -272,6 +286,5 @@
     <string name="weight_temporary_problem">Could not fetch data. Please try again.</string>
     <string name="weight_turn_on_and_wait">Turn on the weight and await instructions.</string>
     <string name="weight_weight">Weight:</string>
-
 
 </resources>

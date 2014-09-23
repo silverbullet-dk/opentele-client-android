@@ -1,5 +1,18 @@
 package dk.silverbullet.telemed.device.monica;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.util.Log;
+import dk.silverbullet.telemed.device.*;
+import dk.silverbullet.telemed.device.monica.packet.IBlockMessage;
+import dk.silverbullet.telemed.device.monica.packet.MonicaMessage;
+import dk.silverbullet.telemed.device.monica.packet.MonicaPacketCollector;
+import dk.silverbullet.telemed.device.monica.packet.PacketReceiver;
+import dk.silverbullet.telemed.device.monica.packet.states.ReceiverState;
+import dk.silverbullet.telemed.utils.DataLogger;
+import dk.silverbullet.telemed.utils.Util;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,24 +21,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.UUID;
-
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.util.Log;
-import dk.silverbullet.telemed.device.AmbiguousDeviceException;
-import dk.silverbullet.telemed.device.BluetoothDisabledException;
-import dk.silverbullet.telemed.device.BluetoothNotAvailableException;
-import dk.silverbullet.telemed.device.DeviceInitialisationException;
-import dk.silverbullet.telemed.device.DeviceNotFoundException;
-import dk.silverbullet.telemed.device.MessageTimeout;
-import dk.silverbullet.telemed.device.monica.packet.IBlockMessage;
-import dk.silverbullet.telemed.device.monica.packet.MonicaMessage;
-import dk.silverbullet.telemed.device.monica.packet.MonicaPacketCollector;
-import dk.silverbullet.telemed.device.monica.packet.PacketReceiver;
-import dk.silverbullet.telemed.device.monica.packet.states.ReceiverState;
-import dk.silverbullet.telemed.utils.DataLogger;
-import dk.silverbullet.telemed.utils.Util;
 
 public class MonicaBluetoothIOController extends Thread implements PacketReceiver {
     private static final String TAG = Util.getTag(MonicaBluetoothIOController.class);
@@ -39,6 +34,7 @@ public class MonicaBluetoothIOController extends Thread implements PacketReceive
 
     private final BluetoothDevice device;
     private final BluetoothAdapter btAdapter;
+    private final String deviceName;
     private BluetoothSocket socket;
     private InputStream inputStream;
     private OutputStream outputStream;
@@ -58,6 +54,9 @@ public class MonicaBluetoothIOController extends Thread implements PacketReceive
         }
 
         device = getDevice();
+
+        this.deviceName = device.getName();
+
 
         // Increase the thread priority in order to minimize timing issues.
         setPriority((NORM_PRIORITY + MAX_PRIORITY) / 2);
@@ -180,7 +179,7 @@ public class MonicaBluetoothIOController extends Thread implements PacketReceive
     }
 
     public void writeMessage(byte[] bytes) throws IOException {
-        writeMessage(bytes, 30, 60000); // Randomly chosen timeout value
+        writeMessage(bytes, 30, 30000); // Sdo
     }
 
     public void writeMessage(byte[] bytes, int retries, long timeout) throws IOException {
@@ -311,5 +310,9 @@ public class MonicaBluetoothIOController extends Thread implements PacketReceive
         } catch (IOException e) {
             // Ignore!
         }
+    }
+
+    public String getDeviceName() {
+        return this.deviceName;
     }
 }

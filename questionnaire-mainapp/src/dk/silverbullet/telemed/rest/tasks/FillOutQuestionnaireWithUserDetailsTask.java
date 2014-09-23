@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.rest.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.MainQuestionnaire;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -56,6 +57,8 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
 
                 return LoginResult.SUCCESS;
             } catch (WrongHttpStatusCodeException e) {
+                OpenTeleApplication.instance().logException(e);
+
                 if (accountIsLocked(e.getResponse())) {
                     return LoginResult.ACCOUNT_LOCKED;
                 }
@@ -63,9 +66,12 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
                     return LoginResult.WRONG_PASSWORD;
                 }
                 Log.w(TAG, "Unknown status code:" + e.getStatusCode() + ", reason:" + e.getReason());
+
                 return LoginResult.FAILED;
             } catch (RestException e) {
                 Log.e(TAG, "Could not log in", e);
+                OpenTeleApplication.instance().logException(e);
+
                 return LoginResult.FAILED;
             }
         }

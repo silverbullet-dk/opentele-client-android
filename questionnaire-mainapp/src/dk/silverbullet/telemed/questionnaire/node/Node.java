@@ -40,4 +40,6 @@ public abstract class Node {
     public void setQuestionnaire(Questionnaire questionnaire) {
         this.questionnaire = questionnaire;
     }
+
+
 }

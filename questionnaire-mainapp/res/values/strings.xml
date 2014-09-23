@@ -8,6 +8,11 @@
     <string name="admin_change_server">Ret server-URL</string>
     <string name="admin_set_alarm">Sæt alarm</string>
     <string name="admin_show_upload_debug">Vis Upload-debug-node?</string>
+    <string name="admin_set_nonin_data_mode">Indstil Nonin dataformat</string>
+    <string name="admin_set_nonin_data_mode_8">Indstil til Dataformat #8</string>
+    <string name="admin_set_nonin_data_mode_13">Indstil til Dataformat #13</string>
+    <string name="admin_set_nonin_data_mode_setting">Skifter dataformat</string>
+    <string name="admin_set_nonin_data_mode_set">Dataformat skiftet</string>
 
     <string name="alarm_alarm">Alarm</string>
     <string name="alarm_user_prompt">Du skal besvare et spørgeskema</string>
@@ -111,7 +116,7 @@
     <string name="menu_complete_questionnaire">Gennemfør måling</string>
     <string name="menu_messages"><![CDATA[Beskeder{0,choice,0#|1#\' (\'én ny besked\')\'|1<\' (\'{0,number,integer} nye\')\'}]]></string>
     <string name="menu_my_measurements">Mine målinger</string>
-    <string name="menu_realtime_CTG">Løbende CTG måling</string>
+    <string name="menu_realtime_CTG">CTG måling - direkte</string>
 
     <string name="message_unread_new"><![CDATA[<font color=\'red\' >Ny</font>]]></string>
     <string name="message_create">Opret ny besked</string>
@@ -164,9 +169,14 @@
     <string name="monica_yellow">Gul (Y)</string>
 
     <string name="realtime_ctg_headline">Løbende CTG måling</string>
-    <string name="realtime_ctg_monica_status">Status</string>
+    <string name="realtime_ctg_monica_status">Gør dig klar til CTG. Påsæt elektroder. Tryk start og tænd derefter for Monicaen</string>
     <string name="realtime_ctg_stop_measurement">Stop</string>
     <string name="realtime_ctg_start_measurement">Start</string>
+    <string name="realtime_ctg_stopped_network_error">Måling afbrudt pga. netværksproblemer. Check netværk og prøv igen.</string>
+    <string name="realtime_ctg_stopping">Stopper</string>
+    <string name="realtime_ctg_stopping_detail">Stopper måling. Vent venligst mens de sidste målinger indsendes.</string>
+    <string name="realtime_ctg_starting">Starter</string>
+    <string name="realtime_ctg_starting_detail">Tjekker forbindelse. Vent venligst et øjeblik.</string>
 
 
     <string name="patient_measurements_my_measurements">Mine målinger</string>
@@ -175,7 +185,7 @@
 
     <string name="run_skema_do_you_want_to_send_data">Vil du indsende dine målinger?</string>
 
-    <string name="saturation__waiting_for_measurement">Venter på måling. Hold dig i ro.</string>
+    <string name="saturation__waiting_for_measurement">Venter på måling. Hold dig i ro. Du skal vente op mod 45 sekunder</string>
     <string name="saturation_connecting">Sæt iltmåleren på fingeren.</string>
     <string name="saturation_disconnected">Forbindelse afbrudt.</string>
     <string name="saturation_could_not_connect">Kunne ikke forbinde til måler.</string>
@@ -186,6 +196,8 @@
     <string name="saturation_permanent_problem">Der kan ikke skabes forbindelse.</string>
     <string name="saturation_saturation">Saturation</string>
     <string name="saturation_temporary_problem">Kunne ikke hente data. Sluk og tænd evt. iltmåleren.</string>
+    <string name="saturation_first_timeout">Kunne ikke hente data. Tag venligst ilmåleren af. Lad den slukke. Tag herefter iltmåleren på igen og vent på måling. (Du skal vente op mod 45 sekunder).</string>
+    <string name="saturation_could_not_collect_measurement">Kunne ikke hente måling.</string>
 
     <string name="save_file_data_saved_locally">Data gemmes lokalt</string>
     <string name="save_file_error">Fejl:</string>
@@ -194,6 +206,8 @@
 
     <string name="server_url">${server.url}</string>
     <string name="server_url_locked">${server.url.locked}</string>
+    <string name="report.server.url">${report.server.url}</string>
+    <string name="milou.realtime.server.url">${milou.realtime.server.url}</string>
 
     <string name="set_alarm_alarm_set">Alarm sat</string>
     <string name="set_alarm_server_ip">Sæt server-IP</string>
@@ -262,6 +276,7 @@
     <string name="video_saturation_measurement_received">Måling modtaget.</string>
     <string name="video_saturation_permanent_problem">Der kan ikke skabes forbindelse.</string>
     <string name="video_saturation_saturation">Iltmætning</string>
+    <string name="video_saturation_first_timeout">Prøv venligst at tage ilmåleren af og på igen.</string>
     <string name="video_saturation_temporary_problem">Kunne ikke hente data. Sluk og tænd evt. oxymeteret.</string>
     <string name="video_starting">Starter video-konsultation. Vent et øjeblik.</string>
     <string name="web_view_fetching">Henter</string>
@@ -273,5 +288,7 @@
     <string name="weight_temporary_problem">Kunne ikke hente data. Prøv evt. igen.</string>
     <string name="weight_turn_on_and_wait">Tænd for vægten og afvent ny besked i skærmbillede.</string>
     <string name="weight_weight">Vægt:</string>
+
+
 
 </resources>

@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.rest.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.rest.client.RestClient;
 import dk.silverbullet.telemed.rest.client.RestException;
@@ -27,6 +28,7 @@ public class RetrieveEntityTask<T>  extends AsyncTask<String, String, T> {
         try {
             return RestClient.getJson(questionnaire, path, clazz);
         } catch (RestException e) {
+            OpenTeleApplication.instance().logException(e);
             Log.w(TAG, "Could not retrieve acknowledgement list", e);
         }
         return null;
