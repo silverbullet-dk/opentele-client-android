@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.device.AmbiguousDeviceException;
 import dk.silverbullet.telemed.device.BluetoothDisabledException;
@@ -133,16 +132,16 @@ public class RealTimeCTGNode extends IONode implements MonicaDeviceCallback {
                 this.deviceName = device.getDeviceName();
             } catch (BluetoothDisabledException e) {
                 OpenTeleApplication.instance().logException(e);
-                Toast.makeText(questionnaire.getContext().getApplicationContext(), Util.getString(R.string.monica_bluetooth_off, questionnaire), Toast.LENGTH_LONG).show();
+                abort(Util.getString(R.string.realtime_monica_bluetooth_off, questionnaire));
             } catch (BluetoothNotAvailableException e) {
                 OpenTeleApplication.instance().logException(e);
-                Toast.makeText(questionnaire.getContext().getApplicationContext(), Util.getString(R.string.monica_bluetooth_unavaliable, questionnaire), Toast.LENGTH_LONG).show();
+                abort(Util.getString(R.string.realtime_monica_bluetooth_unavaliable, questionnaire));
             } catch (AmbiguousDeviceException e) {
                 OpenTeleApplication.instance().logException(e);
-                Toast.makeText(questionnaire.getContext().getApplicationContext(),Util.getString(R.string.monica_multiple_devices, questionnaire), Toast.LENGTH_LONG).show();
+                abort(Util.getString(R.string.realtime_monica_multiple_devices, questionnaire));
             } catch (DeviceInitialisationException e) {
                 OpenTeleApplication.instance().logException(e);
-                Toast.makeText(questionnaire.getContext().getApplicationContext(), Util.getString(R.string.monica_failed_to_start, questionnaire),Toast.LENGTH_LONG).show();
+                abort(Util.getString(R.string.realtime_monica_failed_to_start, questionnaire));
             }
         }
     }
@@ -386,7 +385,9 @@ public class RealTimeCTGNode extends IONode implements MonicaDeviceCallback {
             hasStopped = true;
 
             returnToMainMenu();
+            closeDevice();
             return;
+
         }
 
         this.questionnaire.getActivity().runOnUiThread(new Runnable() {
@@ -412,7 +413,10 @@ public class RealTimeCTGNode extends IONode implements MonicaDeviceCallback {
     }
 
     @Override
-    public void done(String message) {}
+    public void done(String message) {
+        //Called in error MonicaDeviceController in error siutations
+        abort(message);
+    }
 
     @Override
     public void done() {}

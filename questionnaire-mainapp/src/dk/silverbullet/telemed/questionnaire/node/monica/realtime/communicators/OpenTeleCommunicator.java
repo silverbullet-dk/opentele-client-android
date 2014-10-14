@@ -3,6 +3,7 @@ package dk.silverbullet.telemed.questionnaire.node.monica.realtime.communicators
 import android.util.Base64;
 import android.util.Log;
 import com.google.gson.Gson;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.node.monica.realtime.MilouSoapActions;
 import dk.silverbullet.telemed.utils.Util;
@@ -38,8 +39,10 @@ public class OpenTeleCommunicator extends Communicator {
             return new Gson().toJson(registration);
 
         } catch (UnsupportedEncodingException e) {
-            Log.e(getTag(), "Could not serialize document for milou", e);
+            OpenTeleApplication.instance().logException(e);
+            Log.e(getTag(), "Could not serialize document for OpenTele", e);
         }
+        OpenTeleApplication.instance().logMessage("Could not serialize xml document");
         return "<serializationError/>";
     }
 
@@ -64,8 +67,11 @@ public class OpenTeleCommunicator extends Communicator {
             transformer.transform(domSource, result);
             return writer.toString();
         } catch (TransformerException e) {
-            Log.e(getTag(), "Could not serialize document for milou", e);
+
+            OpenTeleApplication.instance().logException(e);
+            Log.e(getTag(), "Could not serialize document for OpenTele", e);
         }
+        OpenTeleApplication.instance().logMessage("Could not serialize xml document");
         return "<serializationError/>";
     }
 }

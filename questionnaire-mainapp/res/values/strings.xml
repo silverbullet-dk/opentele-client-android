@@ -135,25 +135,25 @@
     <string name="message_unread">(Ulæst)</string>
     <string name="message_write_instructions">For at skrive en besked skal du trykke på knappen \"Ny besked\".</string>
 
-    <string name="monica_bluetooth_off">Fejl: Bluetooth er slået fra!</string>
+    <string name="monica_bluetooth_off">Fejl: Bluetooth er slået fra</string>
     <string name="monica_accept_simulate">Ja tak, kør simuleret</string>
     <string name="monica_ask_simulate">Simulér Monica device?</string>
-    <string name="monica_battery_low">Der er ikke tilstrækkelig strøm på Monica-apparatet!</string>
+    <string name="monica_battery_low">Der er ikke tilstrækkelig strøm på Monica-apparatet.</string>
     <string name="monica_black">Sort (B)</string>
-    <string name="monica_bluetooth_unavaliable">Fejl: Bluetooth er ikke tilgængeligt!</string>
+    <string name="monica_bluetooth_unavaliable">Fejl: Bluetooth er ikke tilgængeligt</string>
     <string name="monica_checking_connection">Kontrollerer forbindelser. Sluk ikke for Monica-apparatet, men ret de forbindelser der ikke har et flueben.</string>
     <string name="monica_closing">Afslutter</string>
-    <string name="monica_communication_error">Kunne ikke kommunikere med Monica-apparatet!</string>
+    <string name="monica_communication_error">Kunne ikke kommunikere med Monica-apparatet</string>
     <string name="monica_decline_simulate">Nej tak, brug Monica-apparatet</string>
     <string name="monica_device">Monica device</string>
-    <string name="monica_device_initialisation_error">Det lykkedes ikke at starte Monica-apparatet korrekt.</string>
+    <string name="monica_device_initialisation_error">Det lykkedes ikke at starte Monica-apparatet korrekt. Sluk for apperartet og prøv igen.</string>
     <string name="monica_device_not_found">Der blev ikke fundet et apparat der kan benyttes med dette program.</string>
     <string name="monica_enter_duration">Angiv opsamlingstid i minutter:</string>
-    <string name="monica_failed_to_start">Opstart af Monica-apparatet fejlede!</string>
+    <string name="monica_failed_to_start">Opstart af Monica-apparatet fejlede. Sluk for apperartet og prøv igen.</string>
     <string name="monica_green">Grøn (G)</string>
-    <string name="monica_indcators_or_only_guides">Ovenstående indikatorer er kun vejledende. Det er altid måleapparatets indikatorer der er gældende!</string>
-    <string name="monica_missing_sample">Der opstod en datafejl under læsningen fra Monica-apparatet!</string>
-    <string name="monica_multiple_devices">Fejl: Der er tilknyttet mere end et Monica-apparater!</string>
+    <string name="monica_indcators_or_only_guides">Ovenstående indikatorer er kun vejledende. Det er altid måleapparatets indikatorer der er gældende.</string>
+    <string name="monica_missing_sample">Der opstod en datafejl under læsningen fra Monica-apparatet.</string>
+    <string name="monica_multiple_devices">Fejl: Der er tilknyttet mere end et Monica-apparater.</string>
     <string name="monica_orange">Orange (O)</string>
     <string name="monica_processing_data">Behandler data</string>
     <string name="monica_question_marks">\?\?</string>
@@ -162,13 +162,13 @@
     <string name="monica_set_time">Indstil tiden:</string>
     <string name="monica_switched_off">Monica-apparatet blev slukket!</string>
     <string name="monica_time_set_to">Indstillet til</string>
-    <string name="monica_unknown_firmware">Monica-apparatets version ( %1$s ) er ikke understøttet af dette program!</string>
+    <string name="monica_unknown_firmware">Monica-apparatets version ( %1$s ) er ikke understøttet af dette program.</string>
     <string name="monica_waiting_for_connection">Venter på forbindelse. (Tænd for Monica-apparatet, og hold tablet og Monica-apparatet indenfor 3 m fra hinanden)</string>
     <string name="monica_waiting_for_data">Venter på data...</string>
     <string name="monica_white">Hvid (W)</string>
     <string name="monica_yellow">Gul (Y)</string>
 
-    <string name="realtime_ctg_headline">Løbende CTG måling</string>
+    <string name="realtime_ctg_headline">CTG måling - direkte</string>
     <string name="realtime_ctg_monica_status">Gør dig klar til CTG. Påsæt elektroder. Tryk start og tænd derefter for Monicaen</string>
     <string name="realtime_ctg_stop_measurement">Stop</string>
     <string name="realtime_ctg_start_measurement">Start</string>
@@ -177,7 +177,10 @@
     <string name="realtime_ctg_stopping_detail">Stopper måling. Vent venligst mens de sidste målinger indsendes.</string>
     <string name="realtime_ctg_starting">Starter</string>
     <string name="realtime_ctg_starting_detail">Tjekker forbindelse. Vent venligst et øjeblik.</string>
-
+    <string name="realtime_monica_bluetooth_off">Bluetooth slået fra. Tænd for Bluetooth og prøv igen.</string>
+    <string name="realtime_monica_bluetooth_unavaliable">Kunne ikke benytte Bluetooth. Tænd for Bluetooth og prøv igen.</string>
+    <string name="realtime_monica_multiple_devices">Der er tilknyttet mere end en Monica. Fjern den ene og prøv igen.</string>
+    <string name="realtime_monica_failed_to_start">Kunne ikke starte Monica\'en. Tænd for Monica\'en og prøv igen.</string>
 
     <string name="patient_measurements_my_measurements">Mine målinger</string>
 

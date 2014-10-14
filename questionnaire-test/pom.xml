@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>dk.silverbullet.telemed</groupId>
 		<artifactId>questionnaire-parent</artifactId>
-		<version>1.27.0</version>
+		<version>1.28.1</version>
 	</parent>
 
 	<artifactId>questionnaire-test</artifactId>

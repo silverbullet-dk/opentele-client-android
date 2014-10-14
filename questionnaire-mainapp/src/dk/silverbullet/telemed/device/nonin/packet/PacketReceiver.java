@@ -8,4 +8,5 @@ public interface PacketReceiver {
     void error(IOException e);
 
     void sendChangeDataFormatCommand();
+    void sendChangeDataFormatCommand2();
 }

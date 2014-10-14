@@ -12,13 +12,24 @@ public class WaitForDataFormatAckState extends ReceiverState {
     }
 
     @Override
-    public void receive(int in) {
-        if(in == ACK) {
+    public boolean receive(int in) {
+        if(in == ACK || 0x15 == in) {
+            if(0x15 == in) Log.d(stateController.TAG, "!!! We got an 'unkown data format' response, but are continuing");
             noninPacketCollector.clearBuffer();
             noninPacketCollector.receivedDataFormatChanged();
+            return true;
         } else {
             Log.d(stateController.TAG, "Expected ACK but got:" + Integer.toHexString(in));
         }
+
+
+        return false;
+    }
+
+    @Override
+    public void entering()
+    {
+
     }
 
 }

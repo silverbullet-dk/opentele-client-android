@@ -25,6 +25,7 @@ public class NoninController extends Thread implements PacketReceiver, Saturatio
     private static final UUID SERIAL_SERVICE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final int FIRST_TRY_TIMEOUT_IN_SECONDS = 45;
     private static final int SECOND_TRY_TIMEOUT_IN_SECONDS = 55; //The device seems to take around 10 seconds to turn off
+    private static final int MS_MAX_DATA_WAIT_TIME = 5000; // Max time in 1/1000'th seconds to wait before giving up listening for an answer
 
     private final BluetoothConnector connector = new BluetoothConnector();
     private final BluetoothDevice device;
@@ -44,14 +45,64 @@ public class NoninController extends Thread implements PacketReceiver, Saturatio
     private ScheduledFuture<?> lastTimeout;
     private boolean timeoutStarted;
 
+    private static long timeOfLastDisconnectedSocket=0;
+    private static boolean shouldWaitWhenReconnecting=false;
+
+    // Must be called when we have connected on the socket interface to the nonin
+    private void socketConnected() {
+        // Remember we were connected to the Nonin
+        shouldWaitWhenReconnecting = true;
+    }
+
+    // Should be called when we detect a disconnected socket
+    private void socketDisconnected() {
+        if(shouldWaitWhenReconnecting) {
+            // Remember when we were disconnected from the Nonin
+            timeOfLastDisconnectedSocket = System.currentTimeMillis();
+        }
+    }
+
+    // Must be called before trying to connect to the Nonin, it will
+    // ensure that minimum 15s has passed since the connection was lost
+    // if socketDisconnected hasn't been called, it will just wait
+    // 15s
+    //
+    // NOTE: The function will max wait 15s since "socketConnected" was called
+    private void ensure15sSocketDelay() throws InterruptedException {
+        // Bail if we don't care about waiting
+        if(!shouldWaitWhenReconnecting) return;
+
+        // We have a default wait time of 15s
+        long waitTimeMS = 15000;
+
+        // Check that we have a valid timestamp (we might have been connected,
+        // but socketDisconnected wasn't called
+        if(0 != timeOfLastDisconnectedSocket) {
+            // The wait time, is the waitTimeMS minus the time already passed,
+            // note that the result might be negative
+            waitTimeMS -= System.currentTimeMillis() - timeOfLastDisconnectedSocket;
+        }
+
+        // Wait waitTimeMS if waitTime is positive
+        if(0<waitTimeMS) {
+            sleep(waitTimeMS);
+        }
+
+        // We are good as new, so reset everything
+        timeOfLastDisconnectedSocket = 0;
+        shouldWaitWhenReconnecting = false;
+    }
 
     public static SaturationController create(SaturationPulseListener listener) throws DeviceInitialisationException {
+        //Log.d(TAG, "Creating new noninController object!");
         return new NoninController(listener);
+
     }
 
     public NoninController(SaturationPulseListener listener) throws DeviceInitialisationException {
         this.listener = listener;
         connector.initiate();
+        // Checks that the device has a pairing
         device = connector.getDevice(DEVICE_NAME_PATTERN, MAC_ADDRESS_FOR_NONIN_MEDICAL_INC);
         start();
     }
@@ -82,7 +133,7 @@ public class NoninController extends Thread implements PacketReceiver, Saturatio
             cancelTimeouts();
         }
     }
-     private void pullDataFromDevice() {
+     private void pullDataFromDevice() throws InterruptedException {
         try {
             setupSocket();
             setupStreams();
@@ -90,15 +141,37 @@ public class NoninController extends Thread implements PacketReceiver, Saturatio
             packetCollector.reset();
             sendGetSerialNumberCommand();
 
-            int read = inputStream.read();
+            long timeOfLastCom = System.currentTimeMillis();
 
-            while (read >= 0 && running) {
-                packetCollector.receive(read);
-                read = inputStream.read();
+            while (running) {
+                // Check if there are data available, otherwise wait,
+                // but don't wait longer than max wait time
+                while(0 == inputStream.available())
+                {
+                    long waitTime = System.currentTimeMillis() - timeOfLastCom;
+                    if(waitTime > MS_MAX_DATA_WAIT_TIME) {
+                        throw new IOException("Device not responding, waited " + waitTime + "ms");
+                    }
+
+                    sleep(100);
+                }
+
+                int read = inputStream.read();
+                timeOfLastCom = System.currentTimeMillis();
+
+                if( read < 0) throw new IOException("Nothing to read");
+
+                // If the data wasn't as expected, try again
+                if(!packetCollector.receive(read))
+                {
+                    Log.d(TAG, "Unexpected data, aborting...");
+                    throw new IOException("Unexpected data received, resetting connection");
+                }
             }
         } catch (IOException ioe) { //Could not connect or the Nonin device has closed the connection.
             Log.d(TAG, "Reader exception: " + ioe);
         } finally {
+            // Close the BT socket
             closeBluetoothSocket();
         }
     }
@@ -118,12 +191,20 @@ public class NoninController extends Thread implements PacketReceiver, Saturatio
         }
     }
 
-    private void setupSocket() throws IOException {
+    private void setupSocket() throws IOException, InterruptedException {
         socket = device.createInsecureRfcommSocketToServiceRecord(SERIAL_SERVICE_UUID);
         if (socket == null) {
             throw new IOException("NullSocket!");
         }
+
+        // Make sure 15s has passed since a connection was lost
+        ensure15sSocketDelay();
+
+        // Try to connect to the socket, this will throw an exception if it fails
         socket.connect();
+
+        // We got a path to the Nonin, so remember this event
+        socketConnected();
     }
 
     private void sendGetSerialNumberCommand() {
@@ -164,8 +245,30 @@ public class NoninController extends Thread implements PacketReceiver, Saturatio
         }
     }
 
+    public void sendChangeDataFormatCommand2() {
+        Log.d(TAG, "sending change data format command2");
+        byte[] command = new byte[8];
+        command[0] = Byte.parseByte("02", 16);
+        command[1] = Byte.parseByte("70", 16);
+        command[2] = Byte.parseByte("04", 16);
+        command[3] = Byte.parseByte("02", 16);
+        command[4] = Byte.parseByte("08", 16);
+        command[5] = Byte.parseByte("00", 16);
+        command[6] = Byte.parseByte("7E", 16);
+        command[7] = Byte.parseByte("03", 16);
+
+        try {
+            outputStream.write(command);
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private synchronized void closeBluetoothSocket() {
         Log.i(TAG, "Closing Bluetooth socket");
+        // Remember that we have closed/lost the BT connection
+        socketDisconnected();
         try {
             if (socket != null) {
                 socket.close();
@@ -203,7 +306,10 @@ public class NoninController extends Thread implements PacketReceiver, Saturatio
         if(lastTimeout != null) {
             lastTimeout.cancel(true);
         }
-        firstTimeout.cancel(true);
+
+        if(firstTimeout != null) {
+            firstTimeout.cancel(true);
+        }
     }
 
     @Override

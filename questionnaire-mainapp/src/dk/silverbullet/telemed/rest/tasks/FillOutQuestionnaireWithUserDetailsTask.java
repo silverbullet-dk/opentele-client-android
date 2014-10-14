@@ -47,7 +47,12 @@ public class FillOutQuestionnaireWithUserDetailsTask extends AsyncTask<String, V
 
                 questionnaire.addVariable(new Variable<String>(Util.VARIABLE_REAL_NAME, loginBean.getFullName()));
                 questionnaire.addVariable(new Variable<Long>(Util.VARIABLE_USER_ID, loginBean.getId()));
-                questionnaire.addVariable(new Variable<Boolean>(Util.VARIABLE_SHOW_REALTIME_CTG_MENU, loginBean.getShowRealtimeCTG()));
+                if(loginBean.getShowRealtimeCTG() != null) {
+                    questionnaire.addVariable(new Variable<Boolean>(Util.VARIABLE_SHOW_REALTIME_CTG_MENU, loginBean.getShowRealtimeCTG()));
+                } else {
+                    questionnaire.addVariable(new Variable<Boolean>(Util.VARIABLE_SHOW_REALTIME_CTG_MENU, Boolean.FALSE));
+                }
+
 
                 ((MainQuestionnaire) questionnaire).notifyActivityOfUserLogin();
 

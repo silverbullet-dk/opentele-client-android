@@ -178,6 +178,10 @@
     <string name="realtime_ctg_stopping_detail">Stopping measurement. Please wait while the last measurements are being sent.</string>
     <string name="realtime_ctg_starting">Starting</string>
     <string name="realtime_ctg_starting_detail">Checking connection. Please wait a moment.</string>
+    <string name="realtime_monica_bluetooth_off">Bluetooth turned off. Turn on Bluetooth and try again.</string>
+    <string name="realtime_monica_bluetooth_unavaliable">Could not use Bluetooth. Turn on Bluetooht and try again.</string>
+    <string name="realtime_monica_multiple_devices">More than one Monica device connected. Disconnect one and try again.</string>
+    <string name="realtime_monica_failed_to_start">Could not start the Monica device. Turn on the Monica device and try again.</string>
 
     <string name="patient_measurements_my_measurements">My measurements</string>
 

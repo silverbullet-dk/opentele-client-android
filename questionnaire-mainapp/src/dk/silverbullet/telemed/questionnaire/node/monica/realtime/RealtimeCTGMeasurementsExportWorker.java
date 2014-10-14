@@ -77,7 +77,7 @@ public class RealtimeCTGMeasurementsExportWorker implements Runnable {
             }
 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //Ignored
         }
     }
 

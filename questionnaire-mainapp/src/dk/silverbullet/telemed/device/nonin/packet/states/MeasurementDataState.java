@@ -18,17 +18,31 @@ public class MeasurementDataState extends ReceiverState {
     }
 
     @Override
-    public void receive(int in) {
+    public boolean receive(int in) {
         stateController.addInt(in);
         Log.d(noninPacketCollector.TAG, in + "");
         try {
-            if(noninPacketCollector.getRead().length == 4) {  //Each measurement is 4 bytes long.
+            // TODO: Add some code that brings the read in sync, ie. MSB set to one for first packet
+            int length = noninPacketCollector.getRead().length;
+            // First byte must have MSB set, the reset must have it cleared
+            if((1 == length &&  in < 0x80) || (1 < length && in >= 0x80)) {
+                return false;
+            }
+            if(length == 4) {  //Each measurement is 4 bytes long.
                 NoninMeasurementPacket measurementPacket = NoninPacketFactory.measurementPacket(noninPacketCollector.getRead());
                 noninPacketCollector.clearBuffer();
                 noninPacketCollector.addMeasurement(measurementPacket);
             }
+            return true;
         } catch (IOException e) {
             Log.e(TAG, "Could not parse measurement", e);
         }
+        return false;
+    }
+
+    @Override
+    public void entering()
+    {
+
     }
 }

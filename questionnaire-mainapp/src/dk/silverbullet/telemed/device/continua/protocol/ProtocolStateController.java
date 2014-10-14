@@ -95,7 +95,7 @@ public abstract class ProtocolStateController<MeasurementType, ConfirmedMeasurem
             }
 
             currentState = State.DONE;
-            listener.finish();
+            listener.finishNow();
         } else {
             Log.e(TAG, "Unexpected protocol state (" + currentState + ") - resetting!");
             resetProtocol();

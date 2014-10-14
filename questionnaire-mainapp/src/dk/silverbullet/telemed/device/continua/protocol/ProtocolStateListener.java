@@ -12,6 +12,8 @@ public interface ProtocolStateListener<MeasurementType> {
 
     void finish();
 
+    void finishNow();
+
     void measurementReceived(SystemId systemId, MeasurementType measurement);
 
     void noMeasurementsReceived();

@@ -45,12 +45,18 @@ public class NoninPacketCollector {
     private PacketReceiver listener;
 
     private Date readTime;
+
+    public NoninPacketCollector()
+    {
+        reset();
+    }
+
     public void setListener(PacketReceiver listener) {
         this.listener = listener;
     }
 
-    public void receive(int i) {
-        currentState.receive(i);
+    public boolean receive(int i) {
+        return currentState.receive(i);
     }
 
     public void reset() {
@@ -67,8 +73,12 @@ public class NoninPacketCollector {
     }
 
     public void setState(ReceiverState newState) {
-        Log.d(TAG, newState.getClass().getName());
+        Log.d(TAG, "Switch to state: " + newState.getClass().getName());
         currentState = newState;
+        // Tell state that we are entering it
+        currentState.entering();
+        // Clear our own buffer (just in case)
+        clearBuffer();
     }
 
     public Integer[] getRead() {
@@ -93,6 +103,12 @@ public class NoninPacketCollector {
 
         setState(WAIT_FOR_DATAFORMAT_CHANGE_ACK_STATE);
         listener.sendChangeDataFormatCommand();
+    }
+
+    public void trySendingNewDataFormatCommand()
+    {
+        //setState(WAIT_FOR_DATAFORMAT_CHANGE_ACK_STATE);
+        listener.sendChangeDataFormatCommand2();
     }
 
     public void receivedDataFormatChanged() {

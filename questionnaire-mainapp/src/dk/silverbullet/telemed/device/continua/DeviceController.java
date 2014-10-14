@@ -90,11 +90,16 @@ public abstract class DeviceController<MeasurementType> implements ContinuaDevic
     }
 
     @Override
+    public void finishNow() {
+        close();
+    }
+
+    @Override
     public void finish() {
         new SingleShotTimer(1000, new StopwatchListener() {
             @Override
             public void timeout() {
-                close();
+                finishNow();
             }
         });
     }

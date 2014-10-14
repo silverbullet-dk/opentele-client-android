@@ -2,6 +2,7 @@ package dk.silverbullet.telemed.questionnaire.node.monica.realtime.communicators
 
 import android.content.Context;
 import android.util.Log;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.node.monica.realtime.MilouSoapActions;
 import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
@@ -76,10 +77,11 @@ public abstract class Communicator {
 
         for(int retryCount = 0; retryCount < MAX_RETRIES; retryCount++) {
             try {
-                httpClient.execute(httpPost, new BasicResponseHandler());  //Will throw exception if response code >= 300
+                httpClient.execute(httpPost, new BasicResponseHandler());  //Will throw exception if response code > 300
                 return true;
             } catch (Exception e) {
                 Log.w(getTag(), "Network problems while sending measurements", e);
+                OpenTeleApplication.instance().logException(e);
                 pauseBeforeRetry();
             }
         }
@@ -96,7 +98,7 @@ public abstract class Communicator {
         try {
             Thread.sleep(RETRY_WAIT_PERIOD_IN_MILLISECONDS);
         } catch (InterruptedException e1) {
-            e1.printStackTrace();
+            //ignored
         }
     }
 }

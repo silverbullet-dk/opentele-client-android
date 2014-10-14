@@ -10,11 +10,21 @@ public class WaitForSerialNumberState extends ReceiverState {
     }
 
     @Override
-    public void receive(int in) {
+    public boolean receive(int in) {
         if (in == STX) {
             stateController.clearBuffer();
             stateController.addInt(in);
             stateController.setState(stateController.SERIAL_NUMBER_DATA_STATE);
+            // Forward byte to new state (as it is actually the first byte of
+            // the serial packet
+            return stateController.receive(in);
         }
+        return false;
+    }
+
+    @Override
+    public void entering()
+    {
+
     }
 }

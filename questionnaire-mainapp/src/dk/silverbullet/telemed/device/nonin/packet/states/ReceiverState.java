@@ -14,7 +14,10 @@ public abstract class ReceiverState {
 
     protected final NoninPacketCollector stateController;
 
-    public abstract void receive(int in);
+    public abstract boolean receive(int in);
+
+    // Function called when the state is entered
+    public abstract void entering();
 
     public ReceiverState(NoninPacketCollector stateController) {
         this.stateController = stateController;
