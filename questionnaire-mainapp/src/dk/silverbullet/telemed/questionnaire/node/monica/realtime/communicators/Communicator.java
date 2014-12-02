@@ -48,6 +48,9 @@ public abstract class Communicator {
     protected abstract String getServerURL();
 
     public boolean sendMessagesDocument(Document document) {
+        if(document == null) {
+            return true;
+        }
         return processMessage(document, MilouSoapActions.NEW_MESSAGE);
     }
 

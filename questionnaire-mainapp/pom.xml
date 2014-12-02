@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>dk.silverbullet.telemed</groupId>
 		<artifactId>questionnaire-parent</artifactId>
-		<version>1.28.1</version>
+		<version>1.30.0</version>
 	</parent>
 
 	<artifactId>questionnaire-mainapp</artifactId>
@@ -40,19 +40,19 @@
             <groupId>dk.silverbullet.telemed</groupId>
             <artifactId>video-common-interfaces</artifactId>
             <scope>compile</scope>
-            <version>1.28.1</version>
+            <version>1.30.0</version>
         </dependency>
         <dependency>
             <groupId>dk.silverbullet.telemed</groupId>
             <artifactId>continuous-bloodsugar-common</artifactId>
             <scope>compile</scope>
-            <version>1.28.1</version>
+            <version>1.30.0</version>
         </dependency>
         <dependency>
             <groupId>dk.silverbullet.telemed</groupId>
             <artifactId>crash-reports-common-interfaces</artifactId>
             <scope>compile</scope>
-            <version>1.28.1</version>
+            <version>1.30.0</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -107,7 +107,7 @@
 				<artifactId>android-maven-plugin</artifactId>
 				<configuration>
 					<resourceDirectory>${project.build.directory}/res</resourceDirectory>
-					<!-- <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile> 
+					<!-- <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
 						<assetsDirectory>${project.basedir}/assets</assetsDirectory> <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory> -->
 					<sdk>
 						<platform>16</platform>
@@ -123,7 +123,7 @@
 		<profile>
 			<id>calabash</id>
 			<properties>
-				<server.url>http://10.0.1.14:8080/opentele-server/</server.url>
+				<server.url>http://opentele-devel.silverbullet.dk/opentele-server/</server.url>
                 <device.id>DUMMY</device.id>
 			</properties>
 			<build>

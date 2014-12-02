@@ -70,7 +70,7 @@ public class IONode extends Node {
     protected void showKeyboard(EditText editTextView) {
         InputMethodManager imm = (InputMethodManager)questionnaire.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editTextView, InputMethodManager.SHOW_IMPLICIT);
-    }
+     }
 
     protected void hideKeyboard(EditText editTextView) {
         InputMethodManager imm = (InputMethodManager)questionnaire.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -110,6 +110,9 @@ public class IONode extends Node {
         // text, any*, list, any2*, [buttons] -> { _text_ } {any*} list {any2} {buttons}
         // text1, text2, any*, [buttons] -> { _text_ } {tex2, any} {buttons}
 
+        boolean hasEditText = false;
+        EditTextElement lastEditTextElement = null;
+
         StringBuffer sb = new StringBuffer();
         for (Element e : elements) {
             char ch;
@@ -122,10 +125,17 @@ public class IONode extends Node {
             } else if (e instanceof ListViewElement) {
                 ch = 'L';
             } else {
+                if (e instanceof EditTextElement) {
+                    hasEditText = true;
+                    lastEditTextElement = (EditTextElement)e;
+                }
                 ch = 'Z';
             }
             sb.append(ch);
         }
+
+        if (lastEditTextElement != null)
+            lastEditTextElement.setLastElement(true);
 
         String types = sb.toString();
 
@@ -176,7 +186,10 @@ public class IONode extends Node {
             }
 
             if (types.matches("[^B]+B")) {
-                outerLayout.addView(elements.get(++last).getView());
+                if (hasEditText) //to make buttons scroll with input fields when soft keyboard is visible:
+                    innerLayout.addView(elements.get(++last).getView());
+                else
+                    outerLayout.addView(elements.get(++last).getView());
             }
 
         }

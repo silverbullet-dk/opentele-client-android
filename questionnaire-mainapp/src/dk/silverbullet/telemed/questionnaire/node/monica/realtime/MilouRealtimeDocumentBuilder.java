@@ -45,7 +45,11 @@ public class MilouRealtimeDocumentBuilder {
     }
 
     public Document finishDocument() {
-        return getDocumentForMessages(messages);
+        if(messages.size() > 0) {
+            return getDocumentForMessages(messages);
+        } else {
+            return null;
+        }
     }
 
     public Document buildStopDocument() {
@@ -106,6 +110,10 @@ public class MilouRealtimeDocumentBuilder {
 
         addPatientFields(messageElement, messagesDocument);
         addRegistrationIDField(messageElement, messagesDocument, registrationIdentifier);
+
+        Element tocoShift = messagesDocument.createElementNS(XMLNS_MIL, "tocoShiftField");
+        tocoShift.setTextContent("4"); //Prior to firmware 5.9 UA-Delay/tocoShift is always 4 seconds
+        messageElement.appendChild(tocoShift);
 
         return messagesDocument;
     }

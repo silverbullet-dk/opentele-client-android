@@ -55,7 +55,8 @@ public class NodeAdapter implements JsonSerializer<Node>, JsonDeserializer<Node>
                 WeightTestDeviceNode.class, //
                 HaemoglobinDeviceNode.class, //
                 ContinuousBloodSugarDeviceNode.class, //
-                ContinuousBloodSugarTestDeviceNode.class };
+                ContinuousBloodSugarTestDeviceNode.class
+                };
 
         JsonObject jsonObject = json.getAsJsonObject();
         String className = "";

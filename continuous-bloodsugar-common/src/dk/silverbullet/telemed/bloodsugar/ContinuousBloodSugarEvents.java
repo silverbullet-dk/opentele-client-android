@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ContinuousBloodSugarMeasurements {
+public class ContinuousBloodSugarEvents {
     @Expose
-    public String serialNumber;
+    public String deviceId;
+
     @Expose
     public Date transferTime;
+
     @Expose
-    public List<ContinuousBloodSugarMeasurement> measurements = new ArrayList<ContinuousBloodSugarMeasurement>();
+    public List<Event> events = new ArrayList<Event>();
 }

@@ -70,7 +70,13 @@ public class WebViewNode extends IONode {
         View webviewLayout = inflater.inflate(R.layout.webview_node, null);
         webView = (WebView) webviewLayout.findViewById(R.id.webView);
         WebSettings settings = webView.getSettings();
+
         settings.setJavaScriptEnabled(true);
+        settings.setUseWideViewPort(true);
+        settings.setSupportZoom(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setLoadWithOverviewMode(true);
+
         settings.setSaveFormData(false);
         settings.setSavePassword(false);
 

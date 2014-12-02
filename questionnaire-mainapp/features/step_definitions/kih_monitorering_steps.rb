@@ -1,12 +1,12 @@
 #encoding:utf-8
 When /^I am logged in as (.*) with password (.*)$/ do |user_name, password|
-  performAction('wait', 2)
-  performAction('wait_for_no_progress_bars')
+  sleep(2)
+  wait_for_element_does_not_exist("android.widget.ProgressBar")
   login user_name, password
 end
 
 Then /^I should not see the administration options$/ do
-  assert_text_not_pressent 'Vis Upload-debug-node?'
+  assert_text('Vis Upload-debug-node?', false)
 end
 
 Then /^I should see the administration options$/ do
@@ -20,11 +20,15 @@ Then /^I start the "(.*?)" questionnaire$/ do |questionnaire_name|
 end
 
 Then /^I answer "(.*)"$/ do |answer|
-  	enter_text_into_numbered_field answer, 1
+  enter_text_into_numbered_field answer, 1
 end
 
 Then /^I go to the next page$/ do
-  	press_button_with_text 'Næste'
+  press_button_with_text 'Næste'
+end
+
+Then /^I choose "(.*?)"$/ do |button_text|
+  press_button_with_text button_text
 end
 
 Then /^I read the text and proceed$/ do
@@ -40,7 +44,7 @@ Then /^I can send the results$/ do
 	press_button_with_text 'Ja'
 	wait_for_text 'Indsendt måling/svar er modtaget'
 	press_button_with_text 'OK'
-	assert_text 'Menu'
+	wait_for_text 'Menu'
 end
 
 Then /^I can create a new messsage to "(.*?)"$/ do |recipient|

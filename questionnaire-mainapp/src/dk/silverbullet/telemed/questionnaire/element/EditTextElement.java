@@ -38,6 +38,8 @@ public class EditTextElement extends Element {
 
     private boolean forMessageBody;
 
+    private boolean lastElement;
+
     private Integer decimals;
 
     public EditTextElement(final IONode node) {
@@ -80,8 +82,11 @@ public class EditTextElement extends Element {
                         | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
             } else {
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-                editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-            }
+                if (lastElement)
+                    editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                else
+                    editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+             }
 
             editText.setTextSize(TEXTSIZE);
 
@@ -212,5 +217,9 @@ public class EditTextElement extends Element {
 
     public void setForMessageBody(boolean forMessageBody) {
         this.forMessageBody = forMessageBody;
+    }
+
+    public void setLastElement(boolean lastElement) {
+        this.lastElement = lastElement;
     }
 }

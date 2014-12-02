@@ -3,7 +3,10 @@ package dk.silverbullet.telemed.questionnaire;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 import dk.silverbullet.telemed.questionnaire.expression.Constant;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -121,6 +124,7 @@ public class Questionnaire implements ServerInformation {
 
     public void back() {
         backPressed = true;
+        hideSoftKeyboard();
         if (getCurrentNode() == null) {
             if (!ioNodeStack.isEmpty()) {
 
@@ -144,6 +148,15 @@ public class Questionnaire implements ServerInformation {
                 }
             }
             goBack();
+        }
+    }
+
+    private void hideSoftKeyboard() {
+        Activity activity = getActivity();
+        View currentFocus = activity.getCurrentFocus();
+        if(currentFocus != null && currentFocus instanceof EditText) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
         }
     }
 

@@ -1,6 +1,8 @@
 package dk.silverbullet.telemed.questionnaire.element;
 
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -40,11 +42,20 @@ public class CheckBoxElement extends Element {
             Context context = getQuestionnaire().getContext();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             checkBox = (CheckBox) inflater.inflate(R.layout.checkbox, null);
+
+            setPadding();
             checkBox.setText(text);
         }
 
         checkBox.setChecked(outputVariable != null && outputVariable.getExpressionValue().getValue());
         return checkBox;
+    }
+
+    private void setPadding() {
+        // Samsung forced us... Sorry!
+        if (Build.MODEL.equals("GT-P5110")) {
+            checkBox.setPadding(checkBox.getPaddingLeft() + 40, checkBox.getPaddingTop(), checkBox.getPaddingRight(), checkBox.getPaddingBottom());
+        }
     }
 
     @Override

@@ -2,13 +2,12 @@ package dk.silverbullet.telemed.bloodsugar;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.Date;
+public class ContinuousBloodSugarMeasurement extends Event {
 
-public class ContinuousBloodSugarMeasurement {
     @Expose
-    public long recordId;
+    public final String eventType = "ContinuousBloodSugarMeasurement";
+
     @Expose
-    public Date timeOfMeasurement;
-    @Expose
-    public String value; //The reason this is a string is to ensure that values are sent with one decimal place.
+    public String glucoseValueInmmolPerl; //The reason this is a string is to ensure that values are sent with one decimal place.
+
 }

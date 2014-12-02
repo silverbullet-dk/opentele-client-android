@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.QuestionnaireFragmentContainer;
 import dk.silverbullet.telemed.questionnaire.R;
@@ -25,6 +26,9 @@ public class MainActivity extends Activity implements QuestionnaireFragmentConta
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
+        //Enable automatic scroll of input fields when soft keyboard is visible (not sufficient to use
+        //windowSoftInputMode in manifest):
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         hasBeenCreated = true;
     }
 

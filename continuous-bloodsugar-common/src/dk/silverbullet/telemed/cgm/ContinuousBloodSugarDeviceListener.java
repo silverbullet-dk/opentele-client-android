@@ -1,11 +1,11 @@
 package dk.silverbullet.telemed.cgm;
 
-import dk.silverbullet.telemed.bloodsugar.ContinuousBloodSugarMeasurements;
+import dk.silverbullet.telemed.bloodsugar.ContinuousBloodSugarEvents;
 
 public interface ContinuousBloodSugarDeviceListener {
     void connected();
 
-    void measurementsParsed(ContinuousBloodSugarMeasurements bloodSugarMeasurements);
+    void measurementsParsed(ContinuousBloodSugarEvents bloodSugarMeasurements);
 
     void userDeniedAccessToUSBDevice();
 

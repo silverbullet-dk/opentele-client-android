@@ -62,6 +62,7 @@ public class RealtimeCTGMeasurementsExportWorker implements Runnable {
                 }
             }
 
+
             Document messagesDocument = documentBuilder.finishDocument();
             boolean didSendToServer = communicator.sendMessagesDocument(messagesDocument);
 

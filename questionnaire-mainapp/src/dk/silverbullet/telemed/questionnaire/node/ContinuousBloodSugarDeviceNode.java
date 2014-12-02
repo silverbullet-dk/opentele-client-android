@@ -1,7 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node;
 
 import com.google.gson.annotations.Expose;
-import dk.silverbullet.telemed.bloodsugar.ContinuousBloodSugarMeasurements;
+import dk.silverbullet.telemed.bloodsugar.ContinuousBloodSugarEvents;
 import dk.silverbullet.telemed.cgm.CGMDriverException;
 import dk.silverbullet.telemed.cgm.ContinuousBloodSugarDeviceDriver;
 import dk.silverbullet.telemed.cgm.ContinuousBloodSugarDeviceListener;
@@ -24,7 +24,7 @@ public class ContinuousBloodSugarDeviceNode  extends DeviceNode implements Conti
     private TextViewElement infoElement;
     private TwoButtonElement be;
     @Expose
-    private Variable<ContinuousBloodSugarMeasurements> bloodSugarMeasurements;
+    private Variable<ContinuousBloodSugarEvents> events;
     @Expose
     String text;
 
@@ -61,7 +61,7 @@ public class ContinuousBloodSugarDeviceNode  extends DeviceNode implements Conti
     @Override
     public void linkVariables(Map<String, Variable<?>> variablePool) throws VariableLinkFailedException {
         super.linkVariables(variablePool);
-        bloodSugarMeasurements = Util.linkVariable(variablePool, bloodSugarMeasurements);
+        events = Util.linkVariable(variablePool, events);
     }
 
     @Override
@@ -73,8 +73,8 @@ public class ContinuousBloodSugarDeviceNode  extends DeviceNode implements Conti
     }
 
     @Override
-    public void measurementsParsed(ContinuousBloodSugarMeasurements bloodSugarMeasurements) {
-        this.bloodSugarMeasurements.setValue(bloodSugarMeasurements);
+    public void measurementsParsed(ContinuousBloodSugarEvents bloodSugarMeasurements) {
+        this.events.setValue(bloodSugarMeasurements);
         updateInfoElement(Util.getString(R.string.cgm_measurements_fetched, questionnaire));
 
         questionnaire.getActivity().runOnUiThread(new Runnable() {

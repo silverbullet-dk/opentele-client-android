@@ -99,7 +99,7 @@ public class SimulatedMonicaDevice implements Runnable, MonicaDevice {
             sampleCount++;
             samples = monicaDeviceCallback.getSampleTimeMinutes() * 60;
             try {
-                Thread.sleep(500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 return;
             }

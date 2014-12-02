@@ -76,7 +76,9 @@ public class MilouRealtimeDocumentBuilderTest {
         Assert.assertTrue(soapBodyContentsAreSchemaValid(document));
     }
 
-     @Test
+
+
+    @Test
     public void canBuildDocumentFromSingleSampleMessage() {
          MilouRealtimeDocumentBuilder builder = new MilouRealtimeDocumentBuilder(deviceName, registratonId, patientInfo);
 

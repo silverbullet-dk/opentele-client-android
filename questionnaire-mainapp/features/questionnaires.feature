@@ -11,7 +11,7 @@ Scenario: As a citizen I am able to complete the Hæmoglobin indhold i blod ques
 	Given I am logged in as Linda with password abcd1234
 	And I start the "Hæmoglobin indhold i blod" questionnaire
 	When I answer "1"
-	And I press "OK"
+	And I choose "OK"
 	Then I can send the results
 
 Scenario: Rejse-sætte-sig-test questionnaire

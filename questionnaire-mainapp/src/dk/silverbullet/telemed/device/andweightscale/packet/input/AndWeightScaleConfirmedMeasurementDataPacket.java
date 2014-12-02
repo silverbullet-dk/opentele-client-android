@@ -1,12 +1,12 @@
 package dk.silverbullet.telemed.device.andweightscale.packet.input;
 
-import java.io.IOException;
-
 import dk.silverbullet.telemed.device.UnexpectedPacketFormatException;
 import dk.silverbullet.telemed.device.andweightscale.Weight;
 import dk.silverbullet.telemed.device.andweightscale.Weight.Unit;
 import dk.silverbullet.telemed.device.continua.packet.input.ConfirmedMeasurementDataPacket;
 import dk.silverbullet.telemed.device.continua.packet.input.OrderedByteReader;
+
+import java.io.IOException;
 
 public class AndWeightScaleConfirmedMeasurementDataPacket extends ConfirmedMeasurementDataPacket {
     private static final int NUMBER_OF_DECIMALS_1 = 0xFF00;

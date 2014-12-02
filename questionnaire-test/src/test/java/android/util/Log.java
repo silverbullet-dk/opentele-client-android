@@ -1,7 +1,7 @@
 package android.util;
 
 /**
- * We don't want failing unit tests just because some code calls Log.d. We just want peace.
+ * We don't want failing units tests just because some code calls Log.d. We just want peace.
  */
 public class Log {
     public static int d(String tag, String message) {
