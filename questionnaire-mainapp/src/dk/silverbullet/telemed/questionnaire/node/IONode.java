@@ -124,6 +124,8 @@ public class IONode extends Node {
                 ch = 'M';
             } else if (e instanceof ListViewElement) {
                 ch = 'L';
+            } else if (e instanceof HelpTextElement) {
+                ch = 'H';
             } else {
                 if (e instanceof EditTextElement) {
                     hasEditText = true;
@@ -281,7 +283,7 @@ public class IONode extends Node {
     public void leave() {
         Log.d(TAG, "leave..");
         if (!enterCalled) {
-            throw new RuntimeException("Enter was not called!");
+            Log.e(TAG, "Enter was not called!");
         }
         enterCalled = false;
         if (null != elements && !elements.isEmpty()) {

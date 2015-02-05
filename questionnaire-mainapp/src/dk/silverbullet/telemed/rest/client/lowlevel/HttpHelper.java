@@ -1,5 +1,7 @@
 package dk.silverbullet.telemed.rest.client.lowlevel;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import dk.silverbullet.telemed.rest.client.RestException;
 import dk.silverbullet.telemed.rest.client.ServerInformation;
 import dk.silverbullet.telemed.rest.client.WrongHttpStatusCodeException;
@@ -17,9 +19,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Locale;
 
 /**
@@ -30,12 +30,16 @@ public class HttpHelper {
     private static final int CONNECTION_TIMEOUT = 10000;
     private static final int SOCKET_TIMEOUT = 60000;
 
-    public static HttpGet createHttpGetForPath(ServerInformation serverInformation, String path) {
+    public static HttpGet createHttpGetForPath(ServerInformation serverInformation, String path, Boolean useImageHeader) {
         String url = urlForPath(serverInformation, path);
 
         HttpGet result = new HttpGet(url);
-        Util.setHeaders(result, serverInformation);
+        Util.setHeaders(result, serverInformation, useImageHeader);
         return result;
+    }
+
+    public static HttpGet createHttpGetForPath(ServerInformation serverInformation, String path) {
+        return createHttpGetForPath(serverInformation, path, false);
     }
 
     public static HttpPost createHttpPostForPathWithEntity(ServerInformation serverInformation, String path, HttpEntity entity) {
@@ -95,6 +99,51 @@ public class HttpHelper {
     public static String parseResponseAsString(HttpResponse response) throws IOException {
         HttpEntity httpEntity = response.getEntity();
         return EntityUtils.toString(httpEntity);
+    }
+
+    public static Bitmap parseResponseAsImage(HttpResponse response) throws IOException {
+        HttpEntity httpEntity = response.getEntity();
+        if (httpEntity != null) {
+            //Note: Don't try to use EntityUtils.toByteArray(httpEntity) here! It has memory
+            //issues!
+            InputStream inputStream = null;
+            try {
+                inputStream = httpEntity.getContent();
+                return BitmapFactory.decodeStream(new FlushedInputStream(inputStream));
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                httpEntity.consumeContent();
+            }
+        }
+        return null;
+    }
+
+    //An InputStream that skips the exact number of bytes provided, unless it reaches EOF.
+    //From http://android-developers.blogspot.dk/2010/07/multithreading-for-performance.html
+    static class FlushedInputStream extends FilterInputStream {
+        public FlushedInputStream(InputStream inputStream) {
+            super(inputStream);
+        }
+
+        @Override
+        public long skip(long n) throws IOException {
+            long totalBytesSkipped = 0L;
+            while (totalBytesSkipped < n) {
+                long bytesSkipped = in.skip(n - totalBytesSkipped);
+                if (bytesSkipped == 0L) {
+                    int b = read();
+                    if (b < 0) {
+                        break;  // we reached EOF
+                    } else {
+                        bytesSkipped = 1; // we read one byte
+                    }
+                }
+                totalBytesSkipped += bytesSkipped;
+            }
+            return totalBytesSkipped;
+        }
     }
 
     private static String urlForPath(ServerInformation serverInformation, String path) {

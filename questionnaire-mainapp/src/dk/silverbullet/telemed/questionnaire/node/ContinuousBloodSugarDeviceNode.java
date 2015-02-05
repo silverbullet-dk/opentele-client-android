@@ -7,6 +7,7 @@ import dk.silverbullet.telemed.cgm.ContinuousBloodSugarDeviceDriver;
 import dk.silverbullet.telemed.cgm.ContinuousBloodSugarDeviceListener;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.questionnaire.element.HelpTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -43,6 +44,9 @@ public class ContinuousBloodSugarDeviceNode  extends DeviceNode implements Conti
 
 
         addElement(new TextViewElement(this, text));
+        if (hasHelp()) {
+            addElement(new HelpTextElement(this, getHelpText(), getHelpImage()));
+        }
 
         infoElement = new TextViewElement(this, Util.getString(R.string.default_please_wait, questionnaire));
         addElement(infoElement);

@@ -9,6 +9,7 @@ import dk.silverbullet.telemed.device.nonin.SaturationController;
 import dk.silverbullet.telemed.device.nonin.SaturationPulseListener;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.questionnaire.element.HelpTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -35,6 +36,9 @@ public class SaturationWithoutPulseDeviceNode extends DeviceNode implements Satu
     public void enter() {
         clearElements();
         addElement(new TextViewElement(this, text));
+        if (hasHelp()) {
+            addElement(new HelpTextElement(this, getHelpText(), getHelpImage()));
+        }
 
         statusElement = new TextViewElement(this, Util.getString(R.string.saturation_connecting, questionnaire));
         addElement(statusElement);

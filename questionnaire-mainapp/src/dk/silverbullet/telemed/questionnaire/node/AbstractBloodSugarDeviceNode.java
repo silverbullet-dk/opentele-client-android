@@ -5,6 +5,7 @@ import dk.silverbullet.telemed.device.accuchek.BloodSugarDeviceListener;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.questionnaire.element.HelpTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -16,6 +17,7 @@ import java.util.Map;
 public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements BloodSugarDeviceListener {
     private TextViewElement infoElement;
     private TwoButtonElement be;
+    private HelpTextElement helpTextElement;
     @Expose
     private Variable<BloodSugarMeasurements> bloodSugarMeasurements;
     @Expose
@@ -33,6 +35,11 @@ public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements
         infoElement = new TextViewElement(this,
                 Util.getString(R.string.bloodsugar_connect_device, questionnaire));
         addElement(infoElement);
+
+        if (hasHelp()) {
+            helpTextElement = new HelpTextElement(this, getHelpText(), getHelpImage());
+            addElement(helpTextElement);
+        }
 
         be = new TwoButtonElement(this);
         be.setLeftNextNode(getNextFailNode());
@@ -90,6 +97,9 @@ public abstract class AbstractBloodSugarDeviceNode extends DeviceNode implements
                 be.setRightText(Util.getString(R.string.default_next, questionnaire));
                 be.showRightButton();
                 be.setRightNextNode(getNextNode());
+
+                if (helpTextElement != null)
+                    helpTextElement.hideButton();
             }
         });
     }

@@ -5,10 +5,7 @@ import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurement;
 import dk.silverbullet.telemed.device.accuchek.BloodSugarMeasurements;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
-import dk.silverbullet.telemed.questionnaire.element.CheckBoxElement;
-import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
-import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
-import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
+import dk.silverbullet.telemed.questionnaire.element.*;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
@@ -46,6 +43,9 @@ public class BloodSugarManualDeviceNode extends DeviceNode {
         afterMealVariable.setValue(false);
 
         addElement(new TextViewElement(this, text));
+        if (hasHelp()) {
+            addElement(new HelpTextElement(this, getHelpText(), getHelpImage()));
+        }
 
         measurementElement = new EditTextElement(this);
         measurementElement.setDecimals(2);

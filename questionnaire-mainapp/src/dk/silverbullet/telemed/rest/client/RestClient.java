@@ -1,5 +1,6 @@
 package dk.silverbullet.telemed.rest.client;
 
+import android.graphics.Bitmap;
 import dk.silverbullet.telemed.rest.client.lowlevel.HttpHelper;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -36,6 +37,17 @@ public class RestClient {
         try {
             HttpResponse response = HttpHelper.get(serverInformation, httpGet);
             return HttpHelper.parseResponseAsJson(response, resultClass);
+        } catch (IOException e) {
+            throw new RestException("Could not GET from '" + httpGet.getURI() + "'", e);
+        }
+    }
+
+    public static Bitmap getImage(ServerInformation serverInformation, String path) throws RestException {
+        HttpGet httpGet = HttpHelper.createHttpGetForPath(serverInformation, path, true);
+
+        try {
+            HttpResponse response = HttpHelper.get(serverInformation, httpGet);
+            return HttpHelper.parseResponseAsImage(response);
         } catch (IOException e) {
             throw new RestException("Could not GET from '" + httpGet.getURI() + "'", e);
         }

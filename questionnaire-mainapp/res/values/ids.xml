@@ -13,6 +13,5 @@
 
     <item name="message_check_for_pending_measurement" type="id"/>
     <item name="message_check_for_pending_measurement_quit" type="id"/>
-    
-    
+
 </resources>

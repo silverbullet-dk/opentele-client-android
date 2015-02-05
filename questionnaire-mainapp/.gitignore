@@ -4,5 +4,4 @@
 /test_servers
 /AndroidManifest.xml
 out/
-*.png
 .irb-history

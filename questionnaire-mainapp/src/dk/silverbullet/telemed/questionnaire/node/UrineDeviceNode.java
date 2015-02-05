@@ -3,10 +3,7 @@ package dk.silverbullet.telemed.questionnaire.node;
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
-import dk.silverbullet.telemed.questionnaire.element.RadioButtonElement;
-import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
-import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
-import dk.silverbullet.telemed.questionnaire.element.ValueChoice;
+import dk.silverbullet.telemed.questionnaire.element.*;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
 import dk.silverbullet.telemed.questionnaire.expression.VariableLinkFailedException;
 import dk.silverbullet.telemed.utils.Util;
@@ -37,8 +34,11 @@ public class UrineDeviceNode extends DeviceNode {
     public void setView() {
         clearElements();
         addElement(new TextViewElement(this, text));
-        addElement(new TextViewElement(this, Util.getString(R.string.urine_enter_measurement, questionnaire)));
+        if (hasHelp()) {
+            addElement(new HelpTextElement(this, getHelpText(), getHelpImage()));
+        }
 
+        addElement(new TextViewElement(this, Util.getString(R.string.urine_enter_measurement, questionnaire)));
         RadioButtonElement<Integer> select = new RadioButtonElement<Integer>(this);
         {
             @SuppressWarnings("unchecked")

@@ -101,7 +101,7 @@ public class ContinuousBloodSugarTestDeviceNode extends DeviceNode {
         insulinEvent.recordId = 2006;
         insulinEvent.eventTime = Calendar.getInstance().getTime();
         insulinEvent.insulinType = InsulinEvent.InsulinType.INTERMEDIATE;
-        insulinEvent.units = "1000";
+        insulinEvent.units = "10";
         measurements.events.add(insulinEvent);
 
         MealEvent mealEvent = new MealEvent();
@@ -124,6 +124,11 @@ public class ContinuousBloodSugarTestDeviceNode extends DeviceNode {
         stateOfHealthEvent.eventTime = Calendar.getInstance().getTime();
         stateOfHealthEvent.stateOfHealth = StateOfHealthEvent.HealthState.ALLERGY;
         measurements.events.add(stateOfHealthEvent);
+
+        GenericEvent genericEvent = new GenericEvent();
+        genericEvent.indicatedEvent = "1";
+        genericEvent.eventTime = Calendar.getInstance().getTime();
+        measurements.events.add(genericEvent);
 
         events.setValue(measurements);
     }

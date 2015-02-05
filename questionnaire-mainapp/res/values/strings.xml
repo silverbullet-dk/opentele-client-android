@@ -291,7 +291,7 @@
     <string name="weight_temporary_problem">Kunne ikke hente data. Prøv evt. igen.</string>
     <string name="weight_turn_on_and_wait">Tænd for vægten og afvent ny besked i skærmbillede.</string>
     <string name="weight_weight">Vægt:</string>
-
+    <string name="close_help">Luk</string>
 
 
 </resources>

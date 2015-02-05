@@ -282,23 +282,37 @@ public final class Util {
         return new SimpleDateFormat("d/M HH:mm").format(date);
     }
 
-    public static void setHeaders(HttpRequestBase request, ServerInformation serverInformation) {
+    public static void setHeaders(HttpRequestBase request, ServerInformation serverInformation, Boolean useImageHeader) {
         String clientVersion = serverInformation.getContext().getString(R.string.client_version);
         String userName = serverInformation.getUserName();
         String password = serverInformation.getPassword();
 
-        setHeaders(request, clientVersion, userName, password);
+        setHeaders(request, clientVersion, userName, password, useImageHeader);
     }
 
-    public static void setHeaders(HttpRequestBase request, String clientVersion, String userName, String password) {
-        request.setHeader("Content-type", "application/json");
-        request.setHeader("Accept", "application/json");
-        request.setHeader("X-Requested-With", "json");
+    public static void setHeaders(HttpRequestBase request, ServerInformation serverInformation) {
+        setHeaders(request, serverInformation, false);
+    }
+
+    public static void setHeaders(HttpRequestBase request, String clientVersion, String userName, String password, Boolean useImageHeader) {
+        if (!useImageHeader) {
+            request.setHeader("Content-type", "application/json");
+            request.setHeader("Accept", "application/json");
+            request.setHeader("X-Requested-With", "json");
+        } else {
+            request.setHeader("Content-type", "application/octet-stream");
+            request.setHeader("Accept", "application/octet-stream");
+//            request.setHeader("X-Requested-With", "octet-stream");
+        }
         request.setHeader("Client-version", clientVersion);
         request.setHeader("User-Agent", userAgentString(clientVersion));
 
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(userName, password);
         request.setHeader(BasicScheme.authenticate(credentials, "UTF-8", false));
+    }
+
+    public static void setHeaders(HttpRequestBase request, String clientVersion, String userName, String password) {
+        setHeaders(request, clientVersion, userName, password, false);
     }
 
     public static String join(List<String> strings, String separator) {

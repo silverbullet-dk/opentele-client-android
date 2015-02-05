@@ -290,5 +290,6 @@
     <string name="weight_temporary_problem">Could not fetch data. Please try again.</string>
     <string name="weight_turn_on_and_wait">Turn on the weight and await instructions.</string>
     <string name="weight_weight">Weight:</string>
+    <string name="close_help">Close</string>
 
 </resources>

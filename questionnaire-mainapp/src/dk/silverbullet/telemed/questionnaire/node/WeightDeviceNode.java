@@ -11,6 +11,7 @@ import dk.silverbullet.telemed.device.continua.ContinuaListener;
 import dk.silverbullet.telemed.device.continua.android.AndroidHdpController;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.questionnaire.element.HelpTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Constant;
@@ -41,6 +42,9 @@ public class WeightDeviceNode extends DeviceNode implements ContinuaListener<Wei
         clearElements();
 
         addElement(new TextViewElement(this, text));
+        if (hasHelp()) {
+            addElement(new HelpTextElement(this, getHelpText(), getHelpImage()));
+        }
 
         statusText = new TextViewElement(this);
         setStatusText(Util.getString(R.string.weight_turn_on_and_wait, questionnaire));

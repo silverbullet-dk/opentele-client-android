@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.questionnaire.element.HelpTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Constant;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -105,6 +106,12 @@ public class CRPNode extends DeviceNode {
 
         TextView headline = (TextView) rootLayout.findViewById(R.id.headline);
         headline.setText(text);
+
+        if (hasHelp()) {
+            ViewGroup helpParent = (ViewGroup) rootLayout.findViewById(R.id.inner);
+            HelpTextElement helpTextElement = new HelpTextElement(this, getHelpText(), getHelpImage());
+            helpParent.addView(helpTextElement.getView());
+        }
 
         buttonParent = (ViewGroup) rootLayout.findViewById(R.id.button_parent);
         TwoButtonElement be = new TwoButtonElement(this, Util.getString(R.string.default_omit, questionnaire), Util.getString(R.string.default_next, questionnaire));

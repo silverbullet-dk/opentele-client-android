@@ -8,9 +8,6 @@ import java.io.IOException;
 public class NoninMeasurementPacket extends NoninPacket {
     private static final String TAG = Util.getTag(NoninMeasurementPacket.class);
 
-
-
-
     private static final int STATUS_1_POSITON = 0;
     private static final int PULSE_POSITION = 1;
     private static final int SPO2_POSITION = 2;
@@ -29,11 +26,10 @@ public class NoninMeasurementPacket extends NoninPacket {
     public int pulse;
     public boolean artifact, outOfTrack, lowPerfusion, marginalPerfusion, fingerRemoved, highQuality, lowBattery, measurementMissing;
 
-
     @SuppressWarnings("unused")
     public NoninMeasurementPacket(Integer[] data) throws IOException {
         this.data = data;
-        if(data == null) {
+        if (data == null) {
             throw new IOException("Got null data");
         }
         Log.d(TAG, "Building measurement packet");
@@ -78,7 +74,7 @@ public class NoninMeasurementPacket extends NoninPacket {
     }
 
     private int getPulse() {
-        int overflowedBits = (data[STATUS_1_POSITON] & 0x01) << 8;
+        int overflowedBits = (data[STATUS_1_POSITON] & 0x03) << 7;
         return overflowedBits + data[PULSE_POSITION];
     }
 }

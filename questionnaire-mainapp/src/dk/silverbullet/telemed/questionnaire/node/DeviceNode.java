@@ -32,6 +32,12 @@ public abstract class DeviceNode extends IONode {
     @Expose
     private Variable<String> endTime;
 
+    @Expose
+    private String helpText;
+
+    @Expose
+    private String helpImage;
+
     public DeviceNode(Questionnaire questionnaire, String nodeName) {
         super(questionnaire, nodeName);
     }
@@ -123,4 +129,25 @@ public abstract class DeviceNode extends IONode {
     public void setEndTime(Variable<String> endTime) {
         this.endTime = endTime;
     }
+
+    public String getHelpText() {
+        return helpText;
+    }
+
+    public String getHelpImage() {
+        return helpImage;
+    }
+
+    public void setText(String text) {
+        this.helpText = text;
+    }
+
+    public void setHelpImage(String helpImage) {
+        this.helpImage = helpImage;
+    }
+
+    public boolean hasHelp() {
+        return ((helpText != null && !helpText.isEmpty()) || (helpImage != null && helpImage.isEmpty()));
+    }
+
 }

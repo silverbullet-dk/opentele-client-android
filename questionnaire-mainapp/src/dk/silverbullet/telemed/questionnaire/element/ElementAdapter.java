@@ -28,7 +28,7 @@ public class ElementAdapter implements JsonSerializer<Element>, JsonDeserializer
             throws JsonParseException {
 
         Class[] classes = new Class[] { ButtonElement.class, EditTextElement.class, Element.class, MyTextView.class,
-                TestElement.class, TextViewElement.class, TwoButtonElement.class, RadioButtonElement.class };
+                TestElement.class, TextViewElement.class, TwoButtonElement.class, RadioButtonElement.class, HelpTextElement.class };
 
         JsonObject jsonObject = json.getAsJsonObject();
         for (Class c : classes) {

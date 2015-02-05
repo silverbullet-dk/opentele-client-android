@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@android:color/black">
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:layout_margin="1dp"
+            android:background="@android:color/black">
+
+        <Button
+                android:id="@+id/dismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/close_help"
+                android:textSize="20sp"
+                android:layout_gravity="right"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"/>
+        <ImageView
+                android:id="@+id/full_help_image"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+/>
+     </LinearLayout>
+</LinearLayout>

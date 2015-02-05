@@ -20,8 +20,6 @@ LOW BAT: Low Battery condition Low Batteries. Replace batteries as soon as possi
 
   */
 
-
-
     Integer[] validMeasurement = {
             Integer.parseInt("10000000", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
             0x39, //Pulse rate
@@ -51,8 +49,8 @@ LOW BAT: Low Battery condition Low Batteries. Replace batteries as soon as possi
     };
 
     Integer[] pulseOverflow =  {
-            Integer.parseInt("10001001", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
-            Integer.parseInt("11111111", 2), //Pulse rate
+            Integer.parseInt("10001011", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            Integer.parseInt("01111111", 2), //Pulse rate
             0x62, //SpO2-D
             Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
     };
@@ -65,7 +63,7 @@ LOW BAT: Low Battery condition Low Batteries. Replace batteries as soon as possi
     };
 
     Integer[] pulseOverflow2 =  {
-            Integer.parseInt("10001011", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
+            Integer.parseInt("10001010", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
             Integer.parseInt("01100010", 2), //Pulse rate
             0x62, //SpO2-D
             Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
@@ -101,7 +99,7 @@ LOW BAT: Low Battery condition Low Batteries. Replace batteries as soon as possi
 
     Integer[] dataMissingPulseIndicator = {
             Integer.parseInt("10001011", 2),//Status byte #1: 1 (always set), Reserved(0|1), OOT, LPRF, MPRF, ARTF, PR8, PR7
-            Integer.parseInt("11111111", 2), //Pulse rate
+            Integer.parseInt("01111111", 2), //Pulse rate
             0x62, //SpO2-D
             Integer.parseInt("00000000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
     };
@@ -112,9 +110,6 @@ LOW BAT: Low Battery condition Low Batteries. Replace batteries as soon as possi
             0x7f, //SpO2-D
             Integer.parseInt("00001000", 2)//Status #2: 0 (always clear), Reserved(0|1), SPA, Reserved(0|1), SNSA, Reserved(0|1), Reserved(0|1), LOW BAT
     };
-
-
-
 
 
 
@@ -137,7 +132,7 @@ LOW BAT: Low Battery condition Low Batteries. Replace batteries as soon as possi
         assertEquals(511, noninMeasurementPacket.pulse);
 
         NoninMeasurementPacket noninMeasurementPacket1 = new NoninMeasurementPacket(pulseOverflow1);
-        assertEquals(363, noninMeasurementPacket1.pulse);
+        assertEquals(235, noninMeasurementPacket1.pulse);
 
         NoninMeasurementPacket noninMeasurementPacket2 = new NoninMeasurementPacket(pulseOverflow2);
         assertEquals(354, noninMeasurementPacket2.pulse);

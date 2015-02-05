@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.element.EditTextElement;
+import dk.silverbullet.telemed.questionnaire.element.HelpTextElement;
 import dk.silverbullet.telemed.questionnaire.element.TextViewElement;
 import dk.silverbullet.telemed.questionnaire.element.TwoButtonElement;
 import dk.silverbullet.telemed.questionnaire.expression.Variable;
@@ -31,6 +32,10 @@ public class HaemoglobinDeviceNode extends DeviceNode {
     public void enter() {
         clearElements();
         addElement(new TextViewElement(this, text));
+        if (hasHelp()) {
+            addElement(new HelpTextElement(this, getHelpText(), getHelpImage()));
+        }
+
         TextViewElement tve = new TextViewElement(this);
         tve.setText(Util.getString(R.string.haemoglobin_enter_value, questionnaire));
         addElement(tve);
