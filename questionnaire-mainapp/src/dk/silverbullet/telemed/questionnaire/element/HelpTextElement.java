@@ -141,13 +141,10 @@ public class HelpTextElement extends Element {
                     popupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
                     if (imageFile != null && !imageFile.isEmpty()) {
-                        Bitmap retrievingImg;
-                        retrievingImg = BitmapFactory.decodeResource(context.getResources(), R.drawable.retrieving_image);
-
+                        Bitmap retrievingImg = BitmapFactory.decodeResource(context.getResources(), R.drawable.retrieving_image);
                         ivHelpImage.setImageBitmap(retrievingImg);
-
-                        RetrieveImageTask task = new RetrieveImageTask(getQuestionnaire(), ivHelpImage);
-                        task.execute("rest/helpImage/downloadimage/" + imageFile);
+                        RetrieveImageTask task = new RetrieveImageTask(context, getQuestionnaire(), ivHelpImage);
+                        task.execute("rest/helpImage/" + imageFile);
                     }
                 };
             });

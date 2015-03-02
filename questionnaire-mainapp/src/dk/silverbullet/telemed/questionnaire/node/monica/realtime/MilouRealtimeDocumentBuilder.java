@@ -1,5 +1,6 @@
 package dk.silverbullet.telemed.questionnaire.node.monica.realtime;
 
+import android.util.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -165,7 +166,7 @@ public class MilouRealtimeDocumentBuilder {
         sampleElement.appendChild(sqField);
 
         Element timeField = document.createElementNS(XMLNS_MIL, "timeField");
-        timeField.setTextContent(calendarToXSDDateTime(message.timeStamp));
+        timeField.setTextContent(calendarToXSDDateTime(message.readTime));
         sampleElement.appendChild(timeField);
 
         Element tocoField = document.createElementNS(XMLNS_MIL, "tocoField");

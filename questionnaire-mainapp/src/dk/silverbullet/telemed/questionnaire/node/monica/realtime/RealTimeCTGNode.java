@@ -297,10 +297,10 @@ public class RealTimeCTGNode extends IONode implements MonicaDeviceCallback {
 
 
     @Override
-    public void addSamples(float[] mhr, float[] fhr, int[] qfhr, float[] toco) {
+    public void addSamples(float[] mhr, float[] fhr, int[] qfhr, float[] toco, Date readTime) {
         Log.d(TAG, "Got sample");
         sampleCount++;
-        boolean didAddMessage = measurementsQueue.offer(new SampleMessage(mhr, fhr, qfhr, toco, sampleCount));
+        boolean didAddMessage = measurementsQueue.offer(new SampleMessage(mhr, fhr, qfhr, toco, sampleCount, readTime));
 
         if(!didAddMessage) {
             abort(Util.getString(R.string.realtime_ctg_stopped_network_error, questionnaire.getContext()));

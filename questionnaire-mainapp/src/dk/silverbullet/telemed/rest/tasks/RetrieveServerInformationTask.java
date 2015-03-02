@@ -46,7 +46,7 @@ public class RetrieveServerInformationTask extends AsyncTask<Void, Void, String>
     protected String doInBackground(Void... params) {
         try {
             Log.d(TAG, "Getting server version...");
-            return RestClient.getString(questionnaire, SERVER_VERSION_PATH);
+            return RestClient.getStringFromUnauthenticatedResource(questionnaire, SERVER_VERSION_PATH);
         } catch (RestException e) {
             Log.e(TAG, "Failed to fetch version information", e);
             OpenTeleApplication.instance().logException(e);

@@ -27,10 +27,7 @@ import dk.silverbullet.telemed.questionnaire.node.monica.SimulatedMonicaDevice;
 import dk.silverbullet.telemed.utils.ProgressiveProgress;
 import dk.silverbullet.telemed.utils.Util;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static dk.silverbullet.telemed.utils.Json.ISO8601_DATE_TIME_FORMAT;
 import static dk.silverbullet.telemed.utils.Util.linkVariable;
@@ -237,7 +234,7 @@ public class MonicaDeviceNode extends DeviceNode implements MonicaDeviceCallback
     }
 
     @Override
-    public void addSamples(float[] mhr, float[] fhr, int[] qfhr, float[] toco) {
+    public void addSamples(float[] mhr, float[] fhr, int[] qfhr, float[] toco, Date readTime) {
         this.mhrBuf.add(mhr);
         this.fhrBuf.add(fhr);
         this.qfhrBuf.add(qfhr);

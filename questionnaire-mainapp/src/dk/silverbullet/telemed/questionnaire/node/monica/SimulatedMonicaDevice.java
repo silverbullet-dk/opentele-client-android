@@ -3,6 +3,7 @@ package dk.silverbullet.telemed.questionnaire.node.monica;
 import android.util.Log;
 import dk.silverbullet.telemed.device.monica.MonicaDevice;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -81,7 +82,7 @@ public class SimulatedMonicaDevice implements Runnable, MonicaDevice {
             float[] mhr = makeFloats(4, 60, 70);
             float[] toco = makeFloats(4, 10, 30);
 
-            monicaDeviceCallback.addSamples(mhr, fhr, qfhr, toco);
+            monicaDeviceCallback.addSamples(mhr, fhr, qfhr, toco, Calendar.getInstance().getTime());
             if (i % 20 == 0) {
                 monicaDeviceCallback.addFetalHeight(r.nextInt(65536));
                 monicaDeviceCallback.addSignalToNoise(r.nextInt(65536));

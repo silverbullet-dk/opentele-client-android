@@ -3,7 +3,6 @@ package dk.silverbullet.telemed.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,15 +13,14 @@ import android.widget.Toast;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.expression.*;
-import dk.silverbullet.telemed.rest.client.ServerInformation;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.auth.BasicScheme;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @SuppressLint("SimpleDateFormat")
 public final class Util {
@@ -282,39 +280,6 @@ public final class Util {
         return new SimpleDateFormat("d/M HH:mm").format(date);
     }
 
-    public static void setHeaders(HttpRequestBase request, ServerInformation serverInformation, Boolean useImageHeader) {
-        String clientVersion = serverInformation.getContext().getString(R.string.client_version);
-        String userName = serverInformation.getUserName();
-        String password = serverInformation.getPassword();
-
-        setHeaders(request, clientVersion, userName, password, useImageHeader);
-    }
-
-    public static void setHeaders(HttpRequestBase request, ServerInformation serverInformation) {
-        setHeaders(request, serverInformation, false);
-    }
-
-    public static void setHeaders(HttpRequestBase request, String clientVersion, String userName, String password, Boolean useImageHeader) {
-        if (!useImageHeader) {
-            request.setHeader("Content-type", "application/json");
-            request.setHeader("Accept", "application/json");
-            request.setHeader("X-Requested-With", "json");
-        } else {
-            request.setHeader("Content-type", "application/octet-stream");
-            request.setHeader("Accept", "application/octet-stream");
-//            request.setHeader("X-Requested-With", "octet-stream");
-        }
-        request.setHeader("Client-version", clientVersion);
-        request.setHeader("User-Agent", userAgentString(clientVersion));
-
-        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(userName, password);
-        request.setHeader(BasicScheme.authenticate(credentials, "UTF-8", false));
-    }
-
-    public static void setHeaders(HttpRequestBase request, String clientVersion, String userName, String password) {
-        setHeaders(request, clientVersion, userName, password, false);
-    }
-
     public static String join(List<String> strings, String separator) {
         StringBuilder builder = new StringBuilder();
         boolean isFirst = true;
@@ -325,6 +290,7 @@ public final class Util {
             isFirst = false;
             builder.append(s);
         }
+
         return builder.toString();
     }
 
@@ -344,17 +310,5 @@ public final class Util {
         return Util.getString(resourceId, questionnaire.getContext(), formatArgs);
     }
 
-    private static String userAgentString(String clientVersion) {
-        // We'll construct a User-Agent string which resembles browser strings a bit.
-        // Have a look here:
-        // http://user-agents.my-addr.com/user_agent_request/user_agent_examples-and-user_agent_types.php
-        return "Android/" + Build.VERSION.RELEASE +
-                " [" + Locale.getDefault().getLanguage() + "]" +
-                " (" + Build.MANUFACTURER + ";" +
-                " " + Build.MODEL + ";" +
-                " " + Build.PRODUCT + ";" +
-                " " + Build.BRAND + ";" +
-                " " + Build.DEVICE + ")" +
-                " OpenTeleClient/" + clientVersion;
-    }
+
 }

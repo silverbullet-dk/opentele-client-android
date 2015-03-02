@@ -1,14 +1,8 @@
 package dk.silverbullet.telemed.device.monica;
 
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
-
-import java.util.Date;
-
+import dk.silverbullet.telemed.device.monica.packet.CBlockMessage;
+import dk.silverbullet.telemed.device.monica.packet.CBlockMessageTest;
+import dk.silverbullet.telemed.questionnaire.node.monica.MonicaDeviceCallback;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +10,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import dk.silverbullet.telemed.device.monica.packet.CBlockMessage;
-import dk.silverbullet.telemed.device.monica.packet.CBlockMessageTest;
-import dk.silverbullet.telemed.questionnaire.node.monica.MonicaDeviceCallback;
+import java.util.Date;
+
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MessageProcessorTest {
@@ -31,6 +26,7 @@ public class MessageProcessorTest {
     ArgumentCaptor<float[]> fhrCaptor = ArgumentCaptor.forClass(float[].class);
     ArgumentCaptor<int[]> qfhrCaptor = ArgumentCaptor.forClass(int[].class);
     ArgumentCaptor<float[]> tocoCaptor = ArgumentCaptor.forClass(float[].class);
+    ArgumentCaptor<Date> dateCaptor = ArgumentCaptor.forClass(Date.class);
 
     @Before
     public void before() {
@@ -93,7 +89,7 @@ public class MessageProcessorTest {
         processor.process(cBlockWithHeartRateAfter(5));
 
         verify(callback, times(18)).addSamples(mhrCaptor.capture(), fhrCaptor.capture(), qfhrCaptor.capture(),
-                tocoCaptor.capture());
+                tocoCaptor.capture(), dateCaptor.capture());
         verify(callback, times(18)).updateProgress(anyInt(), anyInt());
         verify(callback, times(18)).getSampleTimeMinutes();
         verify(callback).setStartTimeValue(new Date(startTime));
@@ -110,7 +106,7 @@ public class MessageProcessorTest {
         processor.process(cBlockWithHeartRateAfter(5));
 
         verify(callback, times(6)).addSamples(mhrCaptor.capture(), fhrCaptor.capture(), qfhrCaptor.capture(),
-                tocoCaptor.capture());
+                tocoCaptor.capture(), dateCaptor.capture());
         verify(callback, times(6)).updateProgress(anyInt(), anyInt());
         verify(callback, times(6)).getSampleTimeMinutes();
         verify(callback).setStartTimeValue(new Date(startTime));
@@ -134,7 +130,7 @@ public class MessageProcessorTest {
         processor.process(cBlockWithHeartRateAfter(0));
 
         verify(callback, times(6)).addSamples(mhrCaptor.capture(), fhrCaptor.capture(), qfhrCaptor.capture(),
-                tocoCaptor.capture());
+                tocoCaptor.capture(), dateCaptor.capture());
     }
 
     @Test(expected = MonicaSamplesMissingException.class)
@@ -184,7 +180,7 @@ public class MessageProcessorTest {
         processor.process(cBlockWithHeartRateAfter(2));
 
         verify(callback, times(16)).addSamples(mhrCaptor.capture(), fhrCaptor.capture(), qfhrCaptor.capture(),
-                tocoCaptor.capture());
+                tocoCaptor.capture(), dateCaptor.capture());
     }
 
     @Test(expected = MonicaSamplesMissingException.class)

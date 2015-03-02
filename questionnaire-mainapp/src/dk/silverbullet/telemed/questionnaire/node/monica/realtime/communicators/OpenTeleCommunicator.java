@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.node.monica.realtime.MilouSoapActions;
+import dk.silverbullet.telemed.rest.client.lowlevel.HttpHeaderBuilder;
 import dk.silverbullet.telemed.utils.Util;
 import org.apache.http.client.methods.HttpPost;
 import org.w3c.dom.Document;
@@ -53,7 +54,10 @@ public class OpenTeleCommunicator extends Communicator {
 
     @Override
     protected void setHeaders(HttpPost post, MilouSoapActions action) {
-        Util.setHeaders(post, questionnaire);
+        new HttpHeaderBuilder(post, questionnaire)
+                .withAuthentication()
+                .withAcceptTypeJSON()
+                .withContentTypeJSON();
     }
 
 

@@ -2,9 +2,9 @@ package dk.silverbullet.telemed.video.measurement;
 
 import android.util.Log;
 import dk.silverbullet.telemed.questionnaire.R;
+import dk.silverbullet.telemed.rest.client.lowlevel.HttpHeaderBuilder;
 import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
-import dk.silverbullet.telemed.utils.Util;
 import dk.silverbullet.telemed.video.VideoActivity;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -82,11 +82,8 @@ class PendingMeasurementPoller {
     }
 
     private void setHeaders(HttpRequestBase requestBase) {
-        VideoActivity videoActivity = (VideoActivity) parentFragment.getActivity();
-        String clientVersion = parentFragment.getString(R.string.client_version);
-        String userName = videoActivity.getUsername();
-        String password = videoActivity.getPassword();
-
-        Util.setHeaders(requestBase, clientVersion, userName, password);
+        new HttpHeaderBuilder(requestBase, parentFragment)
+                .withAcceptTypeJSON()
+                .withAuthentication();
     }
 }

@@ -7,7 +7,6 @@ import dk.silverbullet.telemed.rest.client.ServerInformation;
 import dk.silverbullet.telemed.rest.client.WrongHttpStatusCodeException;
 import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
-import dk.silverbullet.telemed.utils.Util;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -30,23 +29,40 @@ public class HttpHelper {
     private static final int CONNECTION_TIMEOUT = 10000;
     private static final int SOCKET_TIMEOUT = 60000;
 
-    public static HttpGet createHttpGetForPath(ServerInformation serverInformation, String path, Boolean useImageHeader) {
+    public static HttpGet createHttpGetForPath(ServerInformation serverInformation, String path) {
         String url = urlForPath(serverInformation, path);
 
         HttpGet result = new HttpGet(url);
-        Util.setHeaders(result, serverInformation, useImageHeader);
+
+        new HttpHeaderBuilder(result, serverInformation)
+                .withAuthentication()
+                .withAcceptTypeJSON();
+
         return result;
     }
 
-    public static HttpGet createHttpGetForPath(ServerInformation serverInformation, String path) {
-        return createHttpGetForPath(serverInformation, path, false);
+    public static HttpGet createHttpGetForPathWithoutAuthentication(ServerInformation serverInformation, String path) {
+        String url = urlForPath(serverInformation, path);
+
+        HttpGet result = new HttpGet(url);
+
+        new HttpHeaderBuilder(result, serverInformation)
+                .withAcceptTypeJSON();
+
+        return result;
     }
+
 
     public static HttpPost createHttpPostForPathWithEntity(ServerInformation serverInformation, String path, HttpEntity entity) {
         String url = urlForPath(serverInformation, path);
 
         HttpPost result = new HttpPost(url);
-        Util.setHeaders(result, serverInformation);
+
+        new HttpHeaderBuilder(result, serverInformation)
+                .withContentTypeJSON()
+                .withAcceptTypeJSON()
+                .withAuthentication();
+
         result.setEntity(entity);
         return result;
     }

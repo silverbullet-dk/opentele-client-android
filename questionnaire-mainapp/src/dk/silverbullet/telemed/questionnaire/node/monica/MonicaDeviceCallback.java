@@ -1,10 +1,11 @@
 package dk.silverbullet.telemed.questionnaire.node.monica;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public interface MonicaDeviceCallback {
 
-    void addSamples(float[] mhr, float[] fhr, int[] qfhr, float[] toco);
+    void addSamples(float[] mhr, float[] fhr, int[] qfhr, float[] toco, Date readTime);
 
     void updateProgress(int i, int samples);
 

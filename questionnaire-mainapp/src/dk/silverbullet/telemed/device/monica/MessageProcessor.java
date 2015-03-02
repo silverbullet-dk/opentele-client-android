@@ -1,9 +1,5 @@
 package dk.silverbullet.telemed.device.monica;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.util.Log;
 import dk.silverbullet.telemed.device.monica.packet.CBlockMessage;
 import dk.silverbullet.telemed.device.monica.packet.FetalHeightAndSignalToNoise;
@@ -11,6 +7,10 @@ import dk.silverbullet.telemed.device.monica.packet.MmMessage;
 import dk.silverbullet.telemed.device.monica.packet.MonicaMessage;
 import dk.silverbullet.telemed.questionnaire.node.monica.MonicaDeviceCallback;
 import dk.silverbullet.telemed.utils.Util;
+
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MessageProcessor {
 
@@ -123,7 +123,7 @@ public class MessageProcessor {
             if (m instanceof CBlockMessage) {
                 estimatedTime += 1000;
                 CBlockMessage cb = (CBlockMessage) m;
-                monicaCallback.addSamples(cb.getMHR(), cb.getFHR1(), cb.getQFHR1(), cb.getTOCO());
+                monicaCallback.addSamples(cb.getMHR(), cb.getFHR1(), cb.getQFHR1(), cb.getTOCO(), cb.getReadTime());
             } else if (m instanceof MmMessage) {
                 monicaCallback.addSignal(new Date(estimatedTime + 500));
             } else if (m instanceof FetalHeightAndSignalToNoise) {

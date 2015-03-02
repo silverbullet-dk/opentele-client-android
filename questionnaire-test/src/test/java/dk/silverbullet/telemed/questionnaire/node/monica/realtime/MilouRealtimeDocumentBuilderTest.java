@@ -87,7 +87,7 @@ public class MilouRealtimeDocumentBuilderTest {
          int[] qfhr = {9, 10, 11, 12};
          float[] toco = {13f, 14f, 15f, 16f};
 
-         SampleMessage sampleMessage = new SampleMessage(mhr, fhr, qfhr, toco, 0);
+         SampleMessage sampleMessage = new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime());
          builder.startNewMessagesDocument();
          builder.addMessageToDocument(sampleMessage);
          Document document = builder.finishDocument();
@@ -107,25 +107,25 @@ public class MilouRealtimeDocumentBuilderTest {
         float[] toco = {13f, 14f, 15f, 16f};
 
         List<RealTimeCTGMessage> messages = new ArrayList<RealTimeCTGMessage>();
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
         messages.add(new SignalMessage(Calendar.getInstance().getTime()));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
         messages.add(new SignalMessage(Calendar.getInstance().getTime()));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
         messages.add(new SignalMessage(Calendar.getInstance().getTime()));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
         messages.add(new SignalMessage(Calendar.getInstance().getTime()));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
-        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
+        messages.add(new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime()));
         messages.add(new SignalMessage(Calendar.getInstance().getTime()));
 
         builder.startNewMessagesDocument();
@@ -183,7 +183,7 @@ public class MilouRealtimeDocumentBuilderTest {
         int[] qfhr = {9, 10, 11, 12};
         float[] toco = {13f, 14f, 15f, 16f};
 
-        SampleMessage sampleMessage = new SampleMessage(mhr, fhr, qfhr, toco, 0);
+        SampleMessage sampleMessage = new SampleMessage(mhr, fhr, qfhr, toco, 0, Calendar.getInstance().getTime());
         builder.startNewMessagesDocument();
         builder.addMessageToDocument(sampleMessage);
         Document document = builder.finishDocument();

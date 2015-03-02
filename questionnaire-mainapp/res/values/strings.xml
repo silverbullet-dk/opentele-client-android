@@ -130,7 +130,7 @@
     <string name="message_read_write">Her kan du læse og skrive beskeder.</string>
     <string name="message_received">modtaget</string>
     <string name="message_send">Send</string>
-    <string name="message_sending">Indsender besvarelser - vent venligst...</string>
+    <string name="message_sending">Indsender besked - vent venligst...</string>
     <string name="message_sent">sendt</string>
     <string name="message_unread">(Ulæst)</string>
     <string name="message_write_instructions">For at skrive en besked skal du trykke på knappen \"Ny besked\".</string>

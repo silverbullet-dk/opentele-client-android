@@ -4,9 +4,9 @@ import android.util.Log;
 import com.google.gson.annotations.Expose;
 import dk.silverbullet.telemed.MainActivity;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
+import dk.silverbullet.telemed.rest.client.lowlevel.HttpHeaderBuilder;
 import dk.silverbullet.telemed.rest.httpclient.HttpClientFactory;
 import dk.silverbullet.telemed.utils.Json;
-import dk.silverbullet.telemed.utils.Util;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
@@ -74,7 +74,10 @@ public class JoinConferencePoller {
 
             URL url = new URL(mainActivity.getServerURL());
             httpGet = new HttpGet(new URL(url, "rest/conference/patientHasPendingConference").toExternalForm());
-            Util.setHeaders(httpGet, mainQuestionnaire);
+            new HttpHeaderBuilder(httpGet, mainQuestionnaire)
+                    .withAuthentication()
+                    .withAcceptTypeJSON()
+                    .withContentTypeJSON();
 
             HttpClient httpClient = createHttpClientWithInfiniteTimeout();
             String result = httpClient.execute(httpGet, new BasicResponseHandler());

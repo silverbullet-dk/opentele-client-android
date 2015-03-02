@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.rest.client;
 
 import android.graphics.Bitmap;
+import dk.silverbullet.telemed.rest.client.lowlevel.HttpHeaderBuilder;
 import dk.silverbullet.telemed.rest.client.lowlevel.HttpHelper;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -31,6 +32,21 @@ public class RestClient {
         }
     }
 
+    public static String getStringFromUnauthenticatedResource(ServerInformation serverInformation, String path) throws RestException {
+        HttpGet httpGet = HttpHelper.createHttpGetForPathWithoutAuthentication(serverInformation, path);
+
+        try {
+            HttpResponse response = HttpHelper.get(serverInformation, httpGet);
+            return HttpHelper.parseResponseAsString(response);
+        } catch (IOException e) {
+            throw new RestException("Could not GET from '" + httpGet.getURI() + "'", e);
+        }
+    }
+
+
+
+
+
     public static<T> T getJson(ServerInformation serverInformation, String path, Class<T> resultClass) throws RestException {
         HttpGet httpGet = HttpHelper.createHttpGetForPath(serverInformation, path);
 
@@ -43,7 +59,9 @@ public class RestClient {
     }
 
     public static Bitmap getImage(ServerInformation serverInformation, String path) throws RestException {
-        HttpGet httpGet = HttpHelper.createHttpGetForPath(serverInformation, path, true);
+        HttpGet httpGet = HttpHelper.createHttpGetForPath(serverInformation, path);
+
+        new HttpHeaderBuilder(httpGet, serverInformation).withAcceptTypeOctetStream();
 
         try {
             HttpResponse response = HttpHelper.get(serverInformation, httpGet);
