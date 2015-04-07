@@ -75,6 +75,7 @@ public class ChangePasswordNode extends IONode implements ChangePasswordListener
     public void changePasswordFailed(List<String> errorTexts) {
         errorTextView.setText(Util.join(errorTexts, "\n"));
         showForm();
+        hideKeyboard(passwordInput);
     }
 
     @Override

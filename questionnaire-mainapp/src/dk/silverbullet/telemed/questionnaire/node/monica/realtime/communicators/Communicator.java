@@ -19,14 +19,16 @@ import java.io.UnsupportedEncodingException;
 
 public abstract class Communicator {
 
-    protected static final int MAX_RETRIES = 20;
-    protected static final long RETRY_WAIT_PERIOD_IN_MILLISECONDS = 1500;
+    private static int maxRetries = 20;
+    private static long retryWaitPeriodInMilliseconds = 1500;
     protected static HttpClient httpClient;
     protected Context context;
     protected Questionnaire questionnaire;
+    protected OpenTeleApplication openTeleApplication;
 
-    public Communicator(Questionnaire questionnaire) {
+    public Communicator(Questionnaire questionnaire, OpenTeleApplication openTeleApplication) {
         this.questionnaire = questionnaire;
+        this.openTeleApplication = openTeleApplication;
         this.context = questionnaire.getContext();
         createHttpClient(context);
     }
@@ -78,19 +80,32 @@ public abstract class Communicator {
 
         HttpPost httpPost = getHttpPostForDocumentAndAction(document, action);
 
-        for(int retryCount = 0; retryCount < MAX_RETRIES; retryCount++) {
+        for(int retryCount = 0; retryCount < maxRetries; retryCount++) {
             try {
                 httpClient.execute(httpPost, new BasicResponseHandler());  //Will throw exception if response code > 300
                 return true;
             } catch (Exception e) {
                 Log.w(getTag(), "Network problems while sending measurements", e);
-                OpenTeleApplication.instance().logException(e);
-                pauseBeforeRetry();
+                openTeleApplication.logException(e);
+                if (stopNow(e)) {
+                    return false;
+                }
             }
         }
 
         return false;
     }
+
+    private boolean stopNow(Exception exception) {
+        if (shouldRetry(exception)) {
+            pauseBeforeRetry();
+            return false;
+        }
+
+        return true;
+    }
+
+    protected abstract boolean shouldRetry(Exception exception);
 
     HttpPost getHttpPostForDocumentAndAction(Document document, MilouSoapActions action) {
         HttpEntity entity = getHttpEntityForDocument(document, action);
@@ -99,9 +114,17 @@ public abstract class Communicator {
 
     private void pauseBeforeRetry() {
         try {
-            Thread.sleep(RETRY_WAIT_PERIOD_IN_MILLISECONDS);
+            Thread.sleep(retryWaitPeriodInMilliseconds);
         } catch (InterruptedException e1) {
             //ignored
         }
+    }
+
+    protected void setMaxRetries(int maxRetries) {
+        Communicator.maxRetries = maxRetries;
+    }
+
+    protected void setRetryWaitPeriodInMilliseconds(int milliseconds) {
+        Communicator.retryWaitPeriodInMilliseconds = milliseconds;
     }
 }

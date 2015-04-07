@@ -1,6 +1,7 @@
 package dk.silverbullet.telemed.questionnaire.node.monica.realtime.communicators;
 
 import android.util.Log;
+import dk.silverbullet.telemed.OpenTeleApplication;
 import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.R;
 import dk.silverbullet.telemed.questionnaire.node.monica.realtime.MilouSoapActions;
@@ -17,8 +18,8 @@ import java.io.StringWriter;
 
 public class MilouCommunicator extends Communicator {
 
-    MilouCommunicator(Questionnaire questionnaire) {
-        super(questionnaire);
+    public MilouCommunicator(Questionnaire questionnaire, OpenTeleApplication openTeleApplication) {
+        super(questionnaire, openTeleApplication);
     }
 
     @Override
@@ -30,6 +31,11 @@ public class MilouCommunicator extends Communicator {
     protected void setHeaders(HttpPost post, MilouSoapActions action) {
         post.addHeader("Content-Type", "text/xml");  //Using application/xml causes internal server-error from the milou server
         post.addHeader("SOAPAction", action.getActionString());
+    }
+
+    @Override
+    protected boolean shouldRetry(Exception exception) {
+        return true;
     }
 
     protected String getStringFromDocument(Document doc, MilouSoapActions action) {

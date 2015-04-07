@@ -19,9 +19,9 @@ public class CommunicatorFactory {
     public static Communicator getCommunicator(Questionnaire questionnaire) {
         CommunicatorFactory.questionnaire = questionnaire;
         if(canConnectToMilou()) {
-            return new MilouCommunicator(questionnaire);
+            return new MilouCommunicator(questionnaire, OpenTeleApplication.instance());
         } else {
-            return  new OpenTeleCommunicator(questionnaire);
+            return  new OpenTeleCommunicator(questionnaire, OpenTeleApplication.instance());
         }
     }
 

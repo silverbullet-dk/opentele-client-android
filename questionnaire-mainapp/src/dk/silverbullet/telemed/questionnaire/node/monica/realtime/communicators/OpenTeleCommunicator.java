@@ -8,6 +8,7 @@ import dk.silverbullet.telemed.questionnaire.Questionnaire;
 import dk.silverbullet.telemed.questionnaire.node.monica.realtime.MilouSoapActions;
 import dk.silverbullet.telemed.rest.client.lowlevel.HttpHeaderBuilder;
 import dk.silverbullet.telemed.utils.Util;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpPost;
 import org.w3c.dom.Document;
 
@@ -21,8 +22,8 @@ import java.io.UnsupportedEncodingException;
 
 public class OpenTeleCommunicator extends Communicator {
 
-    OpenTeleCommunicator(Questionnaire questionnaire) {
-        super(questionnaire);
+    public OpenTeleCommunicator(Questionnaire questionnaire, OpenTeleApplication openTeleApplication) {
+        super(questionnaire, openTeleApplication);
     }
 
     @Override
@@ -40,10 +41,10 @@ public class OpenTeleCommunicator extends Communicator {
             return new Gson().toJson(registration);
 
         } catch (UnsupportedEncodingException e) {
-            OpenTeleApplication.instance().logException(e);
+            openTeleApplication.logException(e);
             Log.e(getTag(), "Could not serialize document for OpenTele", e);
         }
-        OpenTeleApplication.instance().logMessage("Could not serialize xml document");
+        openTeleApplication.logMessage("Could not serialize xml document");
         return "<serializationError/>";
     }
 
@@ -60,6 +61,16 @@ public class OpenTeleCommunicator extends Communicator {
                 .withContentTypeJSON();
     }
 
+    @Override
+    protected boolean shouldRetry(Exception exception) {
+        HttpResponseException httpError = (exception instanceof HttpResponseException ? (HttpResponseException)exception : null);
+        if (httpError != null && httpError.getStatusCode() == 429) {
+            return false;
+        }
+
+        return true;
+    }
+
 
     private String documentToString(Document doc) {
         try {
@@ -72,10 +83,10 @@ public class OpenTeleCommunicator extends Communicator {
             return writer.toString();
         } catch (TransformerException e) {
 
-            OpenTeleApplication.instance().logException(e);
+            openTeleApplication.logException(e);
             Log.e(getTag(), "Could not serialize document for OpenTele", e);
         }
-        OpenTeleApplication.instance().logMessage("Could not serialize xml document");
+        openTeleApplication.logMessage("Could not serialize xml document");
         return "<serializationError/>";
     }
 }
